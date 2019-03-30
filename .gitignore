@@ -2,3 +2,6 @@ Library
 Logs
 Packages
 ProjectSettings
+.vs
+Temp
+obj
