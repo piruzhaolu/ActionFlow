@@ -289,14 +289,14 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/PackageCache/com.unity.analytics@3.3.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/PackageCache/com.unity.collections@0.0.9-preview.16/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/PackageCache/com.unity.purchasing@2.0.1/UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/PackageCache/com.unity.purchasing@2.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/PackageCache/com.unity.collections@0.0.9-preview.16/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0b8/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
