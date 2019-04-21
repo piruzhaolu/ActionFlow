@@ -62,14 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ActionFlow\Scripts\Attribute\INodePort.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\ActionFlowContext.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\ActionFlowGraphAsset.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\ActionFlowStateData.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\GameTime.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\NodeAssetBase.cs" />
-    <Compile Include="Assets\ActionFlow\Scripts\Core\NodeInterface.cs" />
-    <None Include="Assets\ActionFlow\ActionFlowAssembly.asmdef" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\INodePort.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionFlowContext.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionFlowGraphAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionFlowStateData.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\GameTime.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeAssetBase.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeInterface.cs" />
+    <None Include="Packages\lipi.action-flow\Runtime\ActionFlowAssembly.asmdef" />
     <Reference Include="Unity.Entities">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
     </Reference>
