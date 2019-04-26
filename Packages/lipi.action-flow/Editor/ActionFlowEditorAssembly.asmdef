@@ -1,0 +1,16 @@
+{
+    "name": "ActionFlowEditorAssembly",
+    "references": [
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:11e06bc6d7d45d44ea13a5939c54a6a8"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

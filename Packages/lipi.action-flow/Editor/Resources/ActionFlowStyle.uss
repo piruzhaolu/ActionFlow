@@ -1,0 +1,41 @@
+﻿ActionGraphView {
+    background-color: #212121;
+}
+
+.node-field{
+    flex-direction:row
+}
+
+.node-field-label {
+    width: 70;
+    flex-grow: 0;
+}
+
+.node-field-input {
+    flex-grow: 1;
+    width: 100;
+}
+
+
+/* -------------*/
+EditorNodeElement {
+    padding: 2;
+}
+EditorActionNode #title {
+    height: 24;
+}
+
+EditorActionNode #contents > #top > #input {
+    padding-top: 2;
+    padding-bottom: 2;
+}
+
+EditorActionNode #contents > #top > #output {
+    padding-top: 2;
+    padding-bottom: 2;
+}
+
+EditorActionNode .port {
+    height: 20;
+}
+/* -------------*/

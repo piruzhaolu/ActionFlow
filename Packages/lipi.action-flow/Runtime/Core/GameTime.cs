@@ -4,8 +4,6 @@ namespace ActionFlow
 {
     public struct GameTime : IComponentData
     {
-
-
         public float DeltaTime;
 
         public float Time;

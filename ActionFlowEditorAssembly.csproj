@@ -11,10 +11,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{16928EEA-8A3A-03D7-2816-9F14F681F4BF}</ProjectGuid>
+    <ProjectGuid>{A9784323-A453-C0AE-195A-F6904BF4834E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>ActionFlowAssembly</AssemblyName>
+    <AssemblyName>ActionFlowEditorAssembly</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -49,7 +49,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
-    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2019.1.0f2</UnityVersion>
   </PropertyGroup>
@@ -62,17 +62,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\INodePort.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeInfoAttribute.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeInputAttribute.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeOutputAttribute.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Core\Context.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Core\GameTime.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Core\GraphAsset.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Core\INode.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeBase.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\EntryNode.cs" />
-    <None Include="Packages\lipi.action-flow\Runtime\ActionFlowAssembly.asmdef" />
+    <Compile Include="Packages\lipi.action-flow\Editor\GraphEditor.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\DefaltEditorNodeDraw.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorActionNode.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorNodeCreator.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorNodeElement.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\IEditorNodeDraw.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\NodeTypeInfo.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\UIControls\ActionGraphView.cs" />
+    <None Include="Packages\lipi.action-flow\Editor\ActionFlowEditorAssembly.asmdef" />
+    <None Include="Packages\lipi.action-flow\Editor\Resources\ActionFlowStyle.uss" />
     <Reference Include="Unity.Entities">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
     </Reference>
@@ -643,6 +642,12 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0f2/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="ActionFlowAssembly.csproj">
+      <Project>{16928EEA-8A3A-03D7-2816-9F14F681F4BF}</Project>
+      <Name>ActionFlowAssembly</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
