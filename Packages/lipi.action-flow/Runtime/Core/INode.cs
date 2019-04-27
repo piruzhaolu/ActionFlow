@@ -21,6 +21,12 @@ namespace ActionFlow {
     }
 
 
+    public interface INodeAsset
+    {
+        INode GetValue();
+    }
+
+
     #region 输入输出
 
     /// <summary>

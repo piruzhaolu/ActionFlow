@@ -13,6 +13,11 @@ namespace ActionFlow
 
         public static NodeTypeInfo GetNodeTypeInfo(Type type)
         {
+            if(typeof(NodeAsset<>) != type.BaseType.GetGenericTypeDefinition())
+            {
+                throw new Exception("type需要是NodeAsset<>的子类");
+            }
+            Debug.Log(Unity.Collections.LowLevel.Unsafe.UnsafeUtility.SizeOf<ActionStateData>());
             if (_typeInfos == null) _typeInfos = new Dictionary<Type, NodeTypeInfo>();
             if (_typeInfos.TryGetValue(type, out var info))
             {
@@ -62,8 +67,10 @@ namespace ActionFlow
         private void buildOutputInfo(Type type)
         {
             Outputs = new List<IOInfo>();
+            
+            var valueType = type.GetField("Value").FieldType;
 
-            var methods = type.GetMethods();
+            var methods = valueType.GetMethods();
             for (int i = 0; i < methods.Length; i++)
             {
                 var arris = methods[i].GetCustomAttributes(typeof(NodeOutputAttribute),false);
@@ -86,8 +93,8 @@ namespace ActionFlow
         private void buildInputInfo(Type type)
         {
             Inputs = new List<IOInfo>();
-
-            var methods = type.GetMethods();
+            var valueType = type.GetField("Value").FieldType;
+            var methods = valueType.GetMethods();
             for (int i = 0; i < methods.Length; i++)
             {
                 if (methods[i].Name == "OnInput")

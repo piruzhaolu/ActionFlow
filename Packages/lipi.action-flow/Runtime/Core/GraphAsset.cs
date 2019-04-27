@@ -11,16 +11,17 @@ namespace ActionFlow
     [CreateAssetMenu(menuName = "GraphAsset")]
     public class GraphAsset : ScriptableObject
     {
+
+        #region 运行时数据
         public List<ScriptableObject> Nodes = new List<ScriptableObject>();
 
         public int Entry;
 
-
         public List<GraphNodeInfo> NodeInfo = new List<GraphNodeInfo>();
+        #endregion
 
 
-
-
+        #region 编辑器数据
         [System.NonSerialized]
         public string guid;
 
@@ -28,6 +29,8 @@ namespace ActionFlow
 
         public Vector2 ViewPosition = Vector2.zero;
         public Vector3 ViewScale = Vector3.one;
+        #endregion
+
 
 
         public int Add(ScriptableObject so, Vector2 pos)
@@ -61,6 +64,8 @@ namespace ActionFlow
 
     }
 
+
+    //=================================
 
     [System.Serializable]
     public struct GraphNodeEditorInfo

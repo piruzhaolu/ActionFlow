@@ -1,5 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8409738184877583000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40952f1d1e5518346a38bc9d6720c616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value:
+    RoleName: 33ee
+    Age: 0
 --- !u!114 &-4530862459044495329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,8 +27,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40952f1d1e5518346a38bc9d6720c616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoleName: 
-  Age: 0
+  Value:
+    RoleName: 
+    Age: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,6 +48,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 8967079218898726008}
   - {fileID: -4530862459044495329}
+  - {fileID: -8409738184877583000}
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -44,10 +61,19 @@ MonoBehaviour:
     Childs: []
     ParentIndex: 0
   - CurrentIndex: 3
-    Childs: []
+    Childs:
+    - FromID: 0
+      Index: 4
+      ToID: 0
     ParentIndex: 0
   - CurrentIndex: 4
     Childs: []
+    ParentIndex: 0
+  - CurrentIndex: 5
+    Childs:
+    - FromID: 0
+      Index: 4
+      ToID: 0
     ParentIndex: 0
   NodeEditorInfo:
   - Index: 0
@@ -57,10 +83,12 @@ MonoBehaviour:
   - Index: 2
     Pos: {x: 929, y: 395}
   - Index: 3
-    Pos: {x: 215, y: 157}
+    Pos: {x: 134, y: -15}
   - Index: 4
-    Pos: {x: 547, y: 176}
-  ViewPosition: {x: -11.333328, y: -11.333334}
+    Pos: {x: 499, y: 167}
+  - Index: 5
+    Pos: {x: 130, y: 121}
+  ViewPosition: {x: 265.33334, y: 158.66667}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &8967079218898726008
 MonoBehaviour:
@@ -74,5 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40952f1d1e5518346a38bc9d6720c616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoleName: 
-  Age: 0
+  Value:
+    RoleName: 
+    Age: 0

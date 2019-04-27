@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//using UnityEngine;
+//using System.Collections;
 
-namespace ActionFlow
-{
-    public class NodeBase : ScriptableObject
-    {
+//namespace ActionFlow
+//{
+//    public class NodeBase : ScriptableObject
+//    {
 
-        public string Name;
-    }
+//        public string Name;
+//    }
 
-}
+//}

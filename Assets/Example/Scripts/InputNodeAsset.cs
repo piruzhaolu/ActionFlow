@@ -4,8 +4,8 @@ using UnityEngine;
 using ActionFlow;
 
 
-[NodeInfo("输入测试")]
-public class InputNode : ScriptableObject, INode, INodeInput
+[System.Serializable]
+public class InputNode :INode, INodeInput
 {
     public string RoleName;
     public int Age;
@@ -21,4 +21,9 @@ public class InputNode : ScriptableObject, INode, INodeInput
     }
 
 
+}
+
+[NodeInfo("输入测试")]
+public class InputNodeAsset : NodeAsset<InputNode>
+{
 }

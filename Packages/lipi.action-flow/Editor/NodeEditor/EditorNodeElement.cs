@@ -27,7 +27,9 @@ namespace ActionFlow
         private void CreateFieldElement()
         {
             var type = _so.GetType();
-            var fields = type.GetFields();
+
+            var value =  type.GetField("Value");
+            var fields = value.FieldType.GetFields();
             var mSO = new SerializedObject(_so);
             for (int i = 0; i < fields.Length; i++)
             {
@@ -39,7 +41,7 @@ namespace ActionFlow
                 ve.Add(labelField);
 
                 var be = DrawField(fields[i].FieldType);
-                be.bindingPath = fields[i].Name;
+                be.bindingPath = $"Value.{fields[i].Name}";
                 be.Bind(mSO);
                 be.AddToClassList("node-field-input");
                 ve.Add(be);
