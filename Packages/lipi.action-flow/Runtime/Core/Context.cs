@@ -4,7 +4,7 @@ using Unity.Entities;
 
 namespace ActionFlow
 {
-    public struct Context 
+    public struct Context
     {
         /// <summary>
         /// 当前执行Action的Entity
@@ -16,6 +16,8 @@ namespace ActionFlow
         /// </summary>
         public Entity TargetEntity { set; get; }
 
+
+        public ActionStateData StateData { set; get; }
 
         public EntityManager EM { set; get; }
 
@@ -29,6 +31,70 @@ namespace ActionFlow
 
 
         //====================================
+
+
+        public void Active()
+        {
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Active);
+        }
+
+        public void Inactive()
+        {
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Inactive);
+        }
+        public void Sleeping()
+        {
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+        }
+
+
+
+        public void NodeOutput(int outputID = 0)
+        {
+            var nodeInfo = Graph.NodeInfo[Index];
+            if (nodeInfo.Childs == null) return;
+
+            for (int i = 0; i < nodeInfo.Childs.Count; i++)
+            {
+                var child = nodeInfo.Childs[i];
+
+                if (child.FromID == outputID)
+                {
+                    var tIndex = child.Index;
+                    INodeInput nodeInput = Graph.RuntimeNodes[tIndex] as INodeInput;
+                    if (nodeInput != null)
+                    {
+                        var copyValue = this;
+                        copyValue.Index = tIndex;
+                        nodeInput.OnInput(ref copyValue);
+                    }
+                }
+            }
+        }
+
+
+        public void NodeOutput<T>(T value, int outputID = 0) where T:struct
+        {
+            var nodeInfo = Graph.NodeInfo[Index];
+            if (nodeInfo.Childs == null) return;
+
+            for (int i = 0; i < nodeInfo.Childs.Count; i++)
+            {
+                var child = nodeInfo.Childs[i];
+
+                if (child.FromID == outputID)
+                {
+                    var tIndex = child.Index;
+                    INodeInput<T> nodeInput = Graph.RuntimeNodes[tIndex] as INodeInput<T>;
+                    if (nodeInput != null)
+                    {
+                        var copyValue = this;
+                        copyValue.Index = tIndex;
+                        nodeInput.OnInput(ref copyValue, value);
+                    }
+                }
+            }
+        }
 
 
 

@@ -29,6 +29,11 @@ namespace ActionFlow
             var type = _so.GetType();
 
             var value =  type.GetField("Value");
+            if (value.FieldType.IsSerializable == false)
+            {
+                throw new Exception($"{value.FieldType.Name} no add Serializable Attribute");
+            }
+
             var fields = value.FieldType.GetFields();
             var mSO = new SerializedObject(_so);
             for (int i = 0; i < fields.Length; i++)

@@ -49,6 +49,7 @@ MonoBehaviour:
   - {fileID: 8967079218898726008}
   - {fileID: -4530862459044495329}
   - {fileID: -8409738184877583000}
+  - {fileID: 5724716087036447869}
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -75,6 +76,9 @@ MonoBehaviour:
       Index: 4
       ToID: 0
     ParentIndex: 0
+  - CurrentIndex: 6
+    Childs: []
+    ParentIndex: 0
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 579, y: 219}
@@ -87,9 +91,23 @@ MonoBehaviour:
   - Index: 4
     Pos: {x: 499, y: 167}
   - Index: 5
-    Pos: {x: 130, y: 121}
+    Pos: {x: 102, y: 149}
+  - Index: 6
+    Pos: {x: 131, y: 311}
   ViewPosition: {x: 265.33334, y: 158.66667}
   ViewScale: {x: 1, y: 1, z: 1}
+--- !u!114 &5724716087036447869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c847e87ca1f3fff4cac8633d6e9f7244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8967079218898726008
 MonoBehaviour:
   m_ObjectHideFlags: 0

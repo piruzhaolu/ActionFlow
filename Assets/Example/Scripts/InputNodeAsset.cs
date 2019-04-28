@@ -23,7 +23,7 @@ public class InputNode :INode, INodeInput
 
 }
 
-[NodeInfo("输入测试")]
+[NodeInfo("Example/Input")]
 public class InputNodeAsset : NodeAsset<InputNode>
 {
 }

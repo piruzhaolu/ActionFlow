@@ -31,20 +31,20 @@ namespace ActionFlow
         {
             var _allocator = Allocator.Persistent;
             var data = new ActionStateData();
-            var capacity = 1024;
+            var count = graph.Nodes.Count;
+            var capacity = count * 12;
 
             var v = (byte*)UnsafeUtility.Malloc(capacity, 4, _allocator);
             data._ptr = v;
-
-            var count = graph.Nodes.Count;
             data.Length = count;
+
 
             int offset = NodeSizeOf * count;
 
             for (int i = 0; i < count; i++)
             {
                 var asset = graph.Nodes[i] as INodeAsset;
-                var nodeObject = asset.GetValue() as IStatusNode;
+                var nodeObject = asset?.GetValue() as IStatusNode;
                 var node = new Node() { Cycle = NodeCycle.Inactive, offset = offset };
                 UnsafeUtility.CopyStructureToPtr(ref node, data._ptr + i * NodeSizeOf);
 
@@ -92,7 +92,7 @@ namespace ActionFlow
         /// <returns></returns>
         public T GetValue<T>(int index) where T : struct
         {
-            var offset = index * NodeSizeOf + intSizeOf;
+            var offset = index * NodeSizeOf;
             UnsafeUtility.CopyPtrToStructure<Node>(_ptr + offset, out var node);
             var valueOffset = node.offset;
             UnsafeUtility.CopyPtrToStructure<T>(_ptr + valueOffset, out var value);
@@ -107,7 +107,7 @@ namespace ActionFlow
         /// <param name="value"></param>
         public void SetValue<T>(int index, T value) where T : struct
         {
-            var offset = index * NodeSizeOf + intSizeOf;
+            var offset = index * NodeSizeOf;
             UnsafeUtility.CopyPtrToStructure<Node>(_ptr + offset, out var node);
             var valueOffset = node.offset;
             UnsafeUtility.CopyStructureToPtr(ref value, _ptr + valueOffset);
@@ -156,7 +156,23 @@ namespace ActionFlow
             return node.Cycle;
         }
 
-        public bool AllSpeeding { get => Sleeping > 0 && Active == 0; }
+
+        public int GetAllActiveOrSleepingIndex(ref NativeArray<int> nativeArray)
+        {
+            var count = 0;
+            for (int i = 0; i < Length; i++)
+            {
+                if (GetNodeCycle(i) != NodeCycle.Inactive)
+                {
+                    nativeArray[count] = i;
+                    count++;
+                }
+            }
+            return count;
+        }
+
+
+        public bool AllSleeping { get => Sleeping > 0 && Active == 0; }
 
         public bool AllInactive { get => Sleeping == 0 && Active == 0; }
 

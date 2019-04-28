@@ -3,6 +3,9 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace ActionFlow
 {
+
+    public struct NullStatus { }
+
     /// <summary>
     /// 带状态node的抽象类
     /// </summary>
@@ -28,7 +31,16 @@ namespace ActionFlow
         }
 
 
+        public T GetValue(ref Context context)
+        {
+            return context.StateData.GetValue<T>(context.Index);
+        }
 
+
+        public void SetValue(ref Context context, T value)
+        {
+            context.StateData.SetValue(context.Index, value);
+        }
 
         
     }

@@ -18,6 +18,29 @@ namespace ActionFlow
         public int Entry;
 
         public List<GraphNodeInfo> NodeInfo = new List<GraphNodeInfo>();
+
+
+        private INode[] _RuntimeNodes = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public INode[] RuntimeNodes
+        {
+            get
+            {
+                if (_RuntimeNodes == null)
+                {
+                    _RuntimeNodes = new INode[Nodes.Count];
+                    for (int i = 0; i < Nodes.Count; i++)
+                    {
+                        if (Nodes[i] != null) _RuntimeNodes[i] = (Nodes[i] as INodeAsset)?.GetValue();
+                    }
+                }
+                return _RuntimeNodes;
+            }
+        }
+
         #endregion
 
 
