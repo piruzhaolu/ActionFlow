@@ -14,7 +14,7 @@ namespace ActionFlow
 
         public NodeInputAttribute()
         {
-
+            
         }
         public NodeInputAttribute(int id)
         {

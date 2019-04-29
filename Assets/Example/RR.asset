@@ -25,7 +25,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    RotateValue: 0.1
+    RotateValue: 0.05
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,6 +41,7 @@ MonoBehaviour:
   Nodes:
   - {fileID: -3969532750795772896}
   - {fileID: -3611072481175728382}
+  - {fileID: 779602116415456438}
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -50,6 +51,12 @@ MonoBehaviour:
       ToID: 0
     ParentIndex: 0
   - CurrentIndex: 1
+    Childs:
+    - FromID: 1000
+      Index: 2
+      ToID: 1000
+    ParentIndex: 0
+  - CurrentIndex: 2
     Childs: []
     ParentIndex: 0
   NodeEditorInfo:
@@ -57,5 +64,21 @@ MonoBehaviour:
     Pos: {x: 206, y: 209}
   - Index: 1
     Pos: {x: 517, y: 197}
+  - Index: 2
+    Pos: {x: 170, y: 326}
   ViewPosition: {x: -86, y: -64}
   ViewScale: {x: 1, y: 1, z: 1}
+--- !u!114 &779602116415456438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc6990c6c25ad343824d0a86a10a19f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value:
+    Value: 1

@@ -9,6 +9,7 @@ namespace ActionFlow
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class NodeOutputAttribute:Attribute
     {
+
         public string Name = string.Empty;
         public int ID;
         public Type Type;

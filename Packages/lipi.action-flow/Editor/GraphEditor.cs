@@ -22,8 +22,15 @@ namespace ActionFlow
             }
 
             window.Repaint();
-           // window.RefreshView();
-            
+            // window.RefreshView();
+            object t = null;
+            if (t is int a)
+            {
+                Debug.Log(a);
+            }
+
+            //Debug.Log(t?.Length);
+           
 
         }
 

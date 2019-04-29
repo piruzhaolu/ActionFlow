@@ -38,4 +38,30 @@ EditorActionNode #contents > #top > #output {
 EditorActionNode .port {
     height: 20;
 }
+
+EditorActionNode EditorNodeElement .outputparm-field{
+    width:16;
+    padding-left:0;
+    padding-right:0;
+
+}
+
+EditorActionNode EditorNodeElement .outputparm-field #type {
+    margin-left:0;
+    margin-right:0;
+}
+
+EditorActionNode EditorNodeElement .outputparm-method{
+    justify-content:flex-end;
+}
+
+EditorActionNode EditorNodeElement .outputparm-method Port {
+    padding-left:0;
+    padding-right:0;
+}
+EditorActionNode EditorNodeElement .outputparm-method #type {
+    margin-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+}
 /* -------------*/

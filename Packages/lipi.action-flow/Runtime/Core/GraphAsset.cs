@@ -108,6 +108,8 @@ namespace ActionFlow
     [System.Serializable]
     public struct NodeLink
     {
+        public static readonly int ParmIDPre = 1000;
+
         public int FromID;
         public int Index;
         public int ToID;

@@ -12,8 +12,9 @@ public struct RotateRandom
 [System.Serializable]
 public class RotateNode : StatusNodeBase<RotateRandom>, INodeInput
 {
-
+    [NodeInputParm]
     public float RotateValue = 0.1f;
+
     public void OnInput(ref Context context)
     {
         context.Active();
@@ -25,9 +26,10 @@ public class RotateNode : StatusNodeBase<RotateRandom>, INodeInput
 
     public override void OnTick(ref Context context)
     {
+        var rv = context.GetParameter(RotateValue);
         var randomVal = GetValue(ref context);
         var r = context.EM.GetComponentData<Rotation>(context.CurrentEntity);
-        r.Value = math.mul(r.Value , quaternion.RotateY(RotateValue + randomVal.Value));
+        r.Value = math.mul(r.Value , quaternion.RotateY(rv + randomVal.Value));
         context.EM.SetComponentData(context.CurrentEntity, r);
     }
 }
@@ -35,6 +37,6 @@ public class RotateNode : StatusNodeBase<RotateRandom>, INodeInput
 
 [NodeInfo("Example/Rotate")]
 public class RotateNodeAsset : NodeAsset<RotateNode>
-{   
+{
 
 }

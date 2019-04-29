@@ -37,7 +37,6 @@ namespace ActionFlow
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Active);
         }
-
         public void Inactive()
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Inactive);
@@ -46,7 +45,6 @@ namespace ActionFlow
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
         }
-
 
 
         public void NodeOutput(int outputID = 0)
@@ -61,8 +59,7 @@ namespace ActionFlow
                 if (child.FromID == outputID)
                 {
                     var tIndex = child.Index;
-                    INodeInput nodeInput = Graph.RuntimeNodes[tIndex] as INodeInput;
-                    if (nodeInput != null)
+                    if (Graph.RuntimeNodes[tIndex] is INodeInput nodeInput)
                     {
                         var copyValue = this;
                         copyValue.Index = tIndex;
@@ -85,8 +82,7 @@ namespace ActionFlow
                 if (child.FromID == outputID)
                 {
                     var tIndex = child.Index;
-                    INodeInput<T> nodeInput = Graph.RuntimeNodes[tIndex] as INodeInput<T>;
-                    if (nodeInput != null)
+                    if (Graph.RuntimeNodes[tIndex] is INodeInput<T> nodeInput)
                     {
                         var copyValue = this;
                         copyValue.Index = tIndex;
@@ -95,6 +91,40 @@ namespace ActionFlow
                 }
             }
         }
+
+
+        public T GetParameter<T>(int index, int id, T defaultValue)
+        {
+            id = id + NodeLink.ParmIDPre;
+            var info = Graph.NodeInfo[index];
+            var childs = info.Childs;
+            if (childs == null || childs.Count == 0) return defaultValue;
+
+            for (int i = 0; i < childs.Count; i++)
+            {
+                if (childs[i].FromID == id)
+                {
+                    var tIndex = childs[i].Index;
+                    var tNode = Graph.RuntimeNodes[tIndex];
+                    if (tNode is IParameterType<T> n)
+                    {
+                        return n.GetValue(ref this, tIndex);
+                    }
+                }
+            }
+            return defaultValue;
+        }
+
+        public T GetParameter<T>(T defaultValue)
+        {
+            return GetParameter(Index, 0, defaultValue);
+        }
+        public T GetParameter<T>(int id, T defaultValue)
+        {
+            return GetParameter(Index, id, defaultValue);
+        }
+
+
 
 
 

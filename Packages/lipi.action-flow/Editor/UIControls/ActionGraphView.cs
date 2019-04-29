@@ -91,18 +91,35 @@ namespace ActionFlow
             if (nodeInfo.Childs == null) return;
             foreach (var link in nodeInfo.Childs)
             {
-                Port port1 = cNode?.GetPort(link.FromID, NodeTypeInfo.IOMode.Output);// cNode.Query<Port>().Where((port) => ((NodeTypeInfo.OutputInfo)port.source).ID == link.FromID).First();
+                //Port port1 = cNode?.GetPort(link.FromID, NodeTypeInfo.IOMode.Output);// cNode.Query<Port>().Where((port) => ((NodeTypeInfo.OutputInfo)port.source).ID == link.FromID).First();
                 
-                var tNode = GetNode(link.Index);
-                Port port2 = tNode?.GetPort(link.ToID, NodeTypeInfo.IOMode.Input);
-                if (port1 != null && port2 != null)
-                {
-                    var edge = port1.ConnectTo (port2);
-                    AddElement(edge);
-                }
+                //var tNode = GetNode(link.Index);
+                //Port port2 = tNode?.GetPort(link.ToID, NodeTypeInfo.IOMode.Input);
+                //if (port1 != null && port2 != null)
+                //{
+                //    var edge = port1.ConnectTo (port2);
+                //    AddElement(edge);
+                //}
+                var e1 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.Output, NodeTypeInfo.IOMode.Input);
+                if (e1 != null) AddElement(e1);
+                var e2 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.InputParm, NodeTypeInfo.IOMode.OutputParm);
+                if (e2 != null) AddElement(e2);
             }
-
         }
+
+        private Edge CreateEdge(EditorActionNode cNode, NodeLink link, NodeTypeInfo.IOMode a, NodeTypeInfo.IOMode b)
+        {
+            Port port1 = cNode?.GetPort(link.FromID, a);
+            var tNode = GetNode(link.Index);
+            Port port2 = tNode?.GetPort(link.ToID, b);
+            if (port1 != null && port2 != null)
+            {
+                var edge = port1.ConnectTo(port2);
+                return edge;
+            }
+            return null;
+        }
+
 
 
 
@@ -233,12 +250,21 @@ namespace ActionFlow
                 var inputInfo = lists[i].input.source as NodeTypeInfo.IOInfo;
                 var outputInfo = lists[i].output.source as NodeTypeInfo.IOInfo;
 
-                if (outputNode.NodeInfo.Childs == null) outputNode.NodeInfo.Childs = new List<NodeLink>();
-                outputNode.NodeInfo.Childs.Add(new NodeLink()
+                EditorActionNode mainNode = outputNode;
+                bool reverse = false;
+                if (outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
                 {
-                    FromID = outputInfo.ID,
-                    Index = inputNode.Index,
-                    ToID = inputInfo.ID
+                    mainNode = inputNode;
+                    reverse = true;
+                }
+
+                
+                if (mainNode.NodeInfo.Childs == null) mainNode.NodeInfo.Childs = new List<NodeLink>();
+                mainNode.NodeInfo.Childs.Add(new NodeLink()
+                {
+                    FromID = reverse?inputInfo.ID: outputInfo.ID,
+                    Index = reverse?outputNode.Index:inputNode.Index,
+                    ToID = reverse?outputInfo.ID: inputInfo.ID
                 });
             }
             

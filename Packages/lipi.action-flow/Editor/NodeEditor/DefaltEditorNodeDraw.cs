@@ -21,6 +21,7 @@ namespace ActionFlow
             InputDraw(node, asset);
             OutputDraw(node, asset);
             ExtensionDraw(node, asset);
+            node.RefreshExpandedState();
         }
 
         public virtual void DoubleClick(EditorActionNode node, ScriptableObject asset)

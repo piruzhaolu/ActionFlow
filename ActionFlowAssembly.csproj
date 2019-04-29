@@ -65,7 +65,9 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\INodePort.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeInfoAttribute.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeInputAttribute.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeInputParmAttribute.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeOutputAttribute.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Attribute\NodeOutputParmAttribute.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\ActionGraphAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\ActionRunState.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\GameTime.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\StatusNodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\EntryNodeAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Parm\ParmFloatNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionCreateSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRemoveSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRunSystem.cs" />

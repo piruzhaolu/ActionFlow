@@ -1,11 +1,11 @@
-﻿using System;
+﻿//using System;
 
-namespace ActionFlow
-{
+//namespace ActionFlow
+//{
     
 
-    public interface INodePort
-    {
-        bool Match(INodePort port);
-    }
-}
+//    public interface INodePort
+//    {
+//        bool Match(INodePort port);
+//    }
+//}
