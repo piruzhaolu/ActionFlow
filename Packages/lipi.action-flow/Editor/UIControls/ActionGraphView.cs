@@ -91,15 +91,6 @@ namespace ActionFlow
             if (nodeInfo.Childs == null) return;
             foreach (var link in nodeInfo.Childs)
             {
-                //Port port1 = cNode?.GetPort(link.FromID, NodeTypeInfo.IOMode.Output);// cNode.Query<Port>().Where((port) => ((NodeTypeInfo.OutputInfo)port.source).ID == link.FromID).First();
-                
-                //var tNode = GetNode(link.Index);
-                //Port port2 = tNode?.GetPort(link.ToID, NodeTypeInfo.IOMode.Input);
-                //if (port1 != null && port2 != null)
-                //{
-                //    var edge = port1.ConnectTo (port2);
-                //    AddElement(edge);
-                //}
                 var e1 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.Output, NodeTypeInfo.IOMode.Input);
                 if (e1 != null) AddElement(e1);
                 var e2 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.InputParm, NodeTypeInfo.IOMode.OutputParm);
@@ -126,7 +117,8 @@ namespace ActionFlow
         public void CreatedHandler(Type type, Vector2 pos)
         {
             var nodePos = pos - CurrentWindow.position.min - contentViewContainer.worldBound.position;
-            var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), nodePos);
+            var scaleNodePos = new Vector2(nodePos.x / viewTransform.scale.x, nodePos.y / viewTransform.scale.y);
+            var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
 
             DrawNode(index);
         }
@@ -217,10 +209,17 @@ namespace ActionFlow
             var inputNode = edge.input.node as EditorActionNode;
             var outputNode = edge.output.node as EditorActionNode;
 
-            var nodeInfo = outputNode.NodeInfo;
+            bool reverse = false; //对于参数类连接port，input outpu和实际逻辑相反
+
+            if (outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
+            {
+                reverse = true;
+            }
+            var nodeInfo = reverse? inputNode.NodeInfo: outputNode.NodeInfo;
             for (int i = 0; i < nodeInfo.Childs.Count; i++)
             {
-                if (nodeInfo.Childs[i].FromID == outputInfo.ID)
+                var m_id = reverse ? inputInfo.ID : outputInfo.ID;
+                if (nodeInfo.Childs[i].FromID == m_id)
                 {
                     nodeInfo.Childs.RemoveAt(i);
                     break;
@@ -246,7 +245,6 @@ namespace ActionFlow
                 var inputNode = lists[i].input.node as EditorActionNode;
                 var outputNode = lists[i].output.node as EditorActionNode;
 
-
                 var inputInfo = lists[i].input.source as NodeTypeInfo.IOInfo;
                 var outputInfo = lists[i].output.source as NodeTypeInfo.IOInfo;
 
@@ -257,7 +255,6 @@ namespace ActionFlow
                     mainNode = inputNode;
                     reverse = true;
                 }
-
                 
                 if (mainNode.NodeInfo.Childs == null) mainNode.NodeInfo.Childs = new List<NodeLink>();
                 mainNode.NodeInfo.Childs.Add(new NodeLink()

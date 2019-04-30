@@ -22,7 +22,7 @@ EditorNodeElement {
     padding: 2;
 }
 EditorActionNode #title {
-    height: 24;
+    height: 22;
 }
 
 EditorActionNode #contents > #top > #input {
@@ -34,6 +34,7 @@ EditorActionNode #contents > #top > #output {
     padding-top: 2;
     padding-bottom: 2;
 }
+
 
 EditorActionNode .port {
     height: 20;
@@ -51,8 +52,12 @@ EditorActionNode EditorNodeElement .outputparm-field #type {
     margin-right:0;
 }
 
-EditorActionNode EditorNodeElement .outputparm-method{
-    justify-content:flex-end;
+EditorActionNode EditorNodeElement .inputparm-field{
+    padding-left:2;
+}
+
+EditorActionNode EditorNodeElement .outputparm-method {
+    justify-content: flex-end;
 }
 
 EditorActionNode EditorNodeElement .outputparm-method Port {

@@ -68,9 +68,6 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Entities.Properties">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.Properties.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Properties.Codegen">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Properties.Codegen.dll</HintPath>
     </Reference>
@@ -80,23 +77,11 @@
     <Reference Include="Unity.Jobs.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Jobs.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Entities.Editor">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Entities.StaticTypeRegistry">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.StaticTypeRegistry.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Properties">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Properties.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Scenes.Hybrid">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Scenes.Hybrid.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Scenes.Editor">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Scenes.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Physics">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Physics.dll</HintPath>
@@ -104,14 +89,8 @@
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Mathematics.Extensions">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Mathematics.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics.Extensions.Hybrid">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Mathematics.Extensions.Hybrid.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
@@ -128,26 +107,11 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Entities.BuildUtils">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.BuildUtils.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Entities.Hybrid">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.Hybrid.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Physics.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Physics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Entities">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Transforms">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Transforms.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Transforms.Editor">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Transforms.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Burst.Editor.dll</HintPath>
@@ -160,9 +124,6 @@
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Transforms.Hybrid">
-      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Transforms.Hybrid.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -710,9 +671,61 @@
       <Project>{A9784323-A453-C0AE-195A-F6904BF4834E}</Project>
       <Name>ActionFlowEditorAssembly</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.Entities.Properties.csproj">
+      <Project>{A014B62E-6A1B-DA64-1C87-88434993481B}</Project>
+      <Name>Unity.Entities.Properties</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Entities.Editor.csproj">
+      <Project>{833C140E-2A8A-9400-1FBF-78FE2A7D1D33}</Project>
+      <Name>Unity.Entities.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Entities.StaticTypeRegistry.csproj">
+      <Project>{5978E77D-B864-4D74-37E2-ABAC4C299506}</Project>
+      <Name>Unity.Entities.StaticTypeRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Scenes.Hybrid.csproj">
+      <Project>{29AFEF41-8987-3A78-B685-7CFCB1A16C69}</Project>
+      <Name>Unity.Scenes.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Scenes.Editor.csproj">
+      <Project>{9CFAD903-3D8A-2F6F-2E18-9AC467DD4A07}</Project>
+      <Name>Unity.Scenes.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Mathematics.Extensions.csproj">
+      <Project>{85794009-432B-2A1E-7CDD-E7897C51C721}</Project>
+      <Name>Unity.Mathematics.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="ActionFlowAssembly.csproj">
       <Project>{16928EEA-8A3A-03D7-2816-9F14F681F4BF}</Project>
       <Name>ActionFlowAssembly</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Mathematics.Extensions.Hybrid.csproj">
+      <Project>{D455D5A5-D07C-ECE2-0C33-86DBBE1EA24D}</Project>
+      <Name>Unity.Mathematics.Extensions.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Entities.BuildUtils.csproj">
+      <Project>{3E7E7080-AD02-BF98-547D-881EC5D00B11}</Project>
+      <Name>Unity.Entities.BuildUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Entities.Hybrid.csproj">
+      <Project>{6527545A-508F-14EF-D880-D164084C2990}</Project>
+      <Name>Unity.Entities.Hybrid</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Entities.csproj">
+      <Project>{916147E4-529C-4F4A-F636-5BEA8069CF1B}</Project>
+      <Name>Unity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Transforms.csproj">
+      <Project>{FAFE8D2D-EF10-C98F-5191-D9DCBBAF271C}</Project>
+      <Name>Unity.Transforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Transforms.Editor.csproj">
+      <Project>{ABF9B427-632D-F8AF-FC0A-B810BAFB3DC4}</Project>
+      <Name>Unity.Transforms.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.Transforms.Hybrid.csproj">
+      <Project>{E2032A94-A316-980A-2D3C-F724BCC68D6B}</Project>
+      <Name>Unity.Transforms.Hybrid</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

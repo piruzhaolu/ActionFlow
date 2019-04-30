@@ -65,8 +65,8 @@ MonoBehaviour:
   - Index: 1
     Pos: {x: 517, y: 197}
   - Index: 2
-    Pos: {x: 170, y: 326}
-  ViewPosition: {x: -86, y: -64}
+    Pos: {x: 214, y: 283}
+  ViewPosition: {x: -86.666664, y: -64}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &779602116415456438
 MonoBehaviour:
@@ -81,4 +81,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    Value: 1
+    Value: 0.1

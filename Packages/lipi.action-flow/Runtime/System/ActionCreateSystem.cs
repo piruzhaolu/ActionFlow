@@ -8,12 +8,21 @@ namespace ActionFlow
     public class ActionCreateSystem : ComponentSystem
     {
 
-        protected override void OnUpdate()
+
+        EntityQuery m_Group;
+
+        protected override void OnCreate()
         {
-            EntityQuery m_Group = GetEntityQuery(new EntityQueryDesc {
+            m_Group = GetEntityQuery(new EntityQueryDesc
+            {
                 None = new ComponentType[] { typeof(ActionGraphCreated) },
                 All = new ComponentType[] { ComponentType.ReadOnly<ActionGraphAsset>() }
             });
+        }
+
+
+        protected override void OnUpdate()
+        {
 
             Entities.With(m_Group).ForEach((Entity e, ActionGraphAsset asset) =>
             {

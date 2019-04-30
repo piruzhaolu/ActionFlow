@@ -44,6 +44,7 @@ namespace ActionFlow
                         var portIn = _node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, null);
                         portIn.source = item.IOInfo;
                         portIn.portName = item.IOInfo.Name;
+                        portIn.AddToClassList("inputparm-field");
                         ve.Add(portIn);
                     } else if(item.IOInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
                     {

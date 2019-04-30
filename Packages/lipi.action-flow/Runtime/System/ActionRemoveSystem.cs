@@ -9,7 +9,9 @@ namespace ActionFlow
     {
         protected override void OnUpdate()
         {
-
+            ArchetypeChunk a;
+            var bb = a.Archetype.GetComponentTypes();
+            
         }
     }
 
