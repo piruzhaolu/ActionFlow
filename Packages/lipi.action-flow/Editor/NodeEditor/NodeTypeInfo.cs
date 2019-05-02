@@ -9,7 +9,7 @@ namespace ActionFlow
     {
         public static bool Match(this NodeTypeInfo.IOMode a, NodeTypeInfo.IOMode b)
         {
-            var av = (int)a >> 4;
+            var av = (int)a >> 6;
             var bm = (int)b & (int)NodeTypeInfo.IOMode.Mask;
             if ((av & bm) == av) return true;
             else return false;
@@ -47,11 +47,13 @@ namespace ActionFlow
         }
         public enum IOMode //前一半为标志位，后一半为匹配位
         {
-            Input       = 0b_0001_0010,
-            Output      = 0b_0010_0001,
-            InputParm   = 0b_0100_1000,
-            OutputParm  = 0b_1000_0100,
-            Mask        = 0b_0000_1111,
+            Input       = 0b_000001_000010,
+            Output      = 0b_000010_000001,
+            InputParm   = 0b_000100_001000,
+            OutputParm  = 0b_001000_000100,
+            BTInput     = 0b_010000_100000,
+            BTOutput    = 0b_100000_010000,
+            Mask        = 0b_000000_111111,
         }
 
         
@@ -61,9 +63,24 @@ namespace ActionFlow
             {
                 case IOMode.Output: return "output" + typeName;
                 case IOMode.Input: return "input" + typeName;
+                case IOMode.BTInput:return "BT input";
+                case IOMode.BTOutput:return "BT output";
             }
             return string.Empty;
         }
+
+        public static Color IOModeColor(IOMode mode)
+        {
+            switch (mode)
+            {
+                case IOMode.BTInput:
+                case IOMode.BTOutput:
+                    return new Color(0.25f, 0.5f, 0.25f);
+                default:return Color.white;
+            }
+        }
+
+
 
         public static ulong TypeInfoHash(Type type, IOMode mode = IOMode.Input, int childID = 0)
         {
@@ -100,13 +117,16 @@ namespace ActionFlow
             buildOutputInfo();
             buildFieldInfo();
             buildOutputParmInfo();
-            //buildInputParameterInfo(type);
+            buildBTInputInfo();
+            buildBTOutputInfo();
         }
 
-        public List<IOInfo> Inputs;
-        public List<IOInfo> Outputs;
-        public List<FieldInfo> FieldInfos;
-        public List<IOInfo> OutputParm;
+        public List<IOInfo> Inputs; //输入项列表
+        public List<IOInfo> Outputs; //输出项列表
+        public List<FieldInfo> FieldInfos; //所有field的信息，包括field上的输入参数和输出参数
+        public List<IOInfo> OutputParm; // 以method为输出参数
+        public List<IOInfo> BTInputs; //行为树输入
+        public BTOutputInfo BTOutput; //行为树输出
 
         private Type _valueType;
 
@@ -160,13 +180,28 @@ namespace ActionFlow
                         Name = item.Name
                     };
                 }
+                int maxLink = -1;
+                IOInfo btIOInfo = null;
+
+                var attrs = item.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                if (attrs != null && attrs.Length > 0  && attrs[0] is NodeOutputBTAttribute BTAttribute)
+                {
+                    maxLink = BTAttribute.MaxLink;
+                    btIOInfo = new IOInfo()
+                    {
+                        ID = NodeLink.BTIDPre,
+                        Mode = IOMode.BTOutput
+                    };
+                }
 
                 FieldInfos.Add(new FieldInfo()
                 {
                     Path = $"Value.{item.Name}",
                     FieldType = item.FieldType,
                     Name = item.Name,
-                    IOInfo = ioInfo
+                    MaxLink = maxLink,
+                    IOInfo = ioInfo,
+                    BT_IOInfo = btIOInfo
                 });
             }
 
@@ -241,6 +276,69 @@ namespace ActionFlow
         }
 
 
+        private void buildBTInputInfo()
+        {
+            BTInputs = new List<IOInfo>();
+            var methods = _valueType.GetMethods();
+            foreach (var method in methods)
+            {
+                if (method.Name == "BehaviorInput")
+                {
+                    var info = new IOInfo();
+                    info.Mode = IOMode.BTInput;
+                    info.ID = NodeLink.BTIDPre;
+                    BTInputs.Add(info);
+                }
+            }
+
+        }
+
+        private void buildBTOutputInfo()
+        {
+            BTOutput = null;
+
+            var fields = _valueType.GetFields();
+            foreach (var field in fields)
+            {
+                var attri = field.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                if (attri == null || attri.Length == 0) continue;
+                if (attri[0] is NodeOutputBTAttribute outputBT)
+                {
+                    var isArray = field.FieldType.IsArray ? 100 : 0;
+                    BTOutput = new BTOutputInfo()
+                    {
+                        MaxLink = outputBT.MaxLink,
+                        IOInfo = new IOInfo()
+                        {
+                            Mode = IOMode.BTOutput,
+                            ID = NodeLink.BTIDPre + isArray
+                        }
+                    };
+                }
+            }
+
+            //var methods = _valueType.GetMethods();
+            //foreach (var method in methods)
+            //{
+            //    var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute),false);
+            //    if (attri == null) continue;
+            //    foreach (var item in attri)
+            //    {
+            //        if (item is NodeOutputBTAttribute btAttri)
+            //        {
+            //            BTOutputs.Add(new BTOutputInfo()
+            //            {
+            //                MaxLink = btAttri.MaxLink,
+            //                IOInfo = new IOInfo()
+            //                {
+            //                    Mode = IOMode.BTOutput,
+            //                    ID = NodeLink.BTIDPre
+            //                }
+            //            });
+            //        }
+            //    }
+            //}
+        }
 
 
 
@@ -266,12 +364,20 @@ namespace ActionFlow
         }
 
        
+        public class BTOutputInfo
+        {
+            public int MaxLink = 1;
+            public IOInfo IOInfo;
+        }
+
         public class FieldInfo
         {
             public string Path;
             public Type FieldType;
             public string Name;
+            public int MaxLink = -1;
             public IOInfo IOInfo;
+            public IOInfo BT_IOInfo;
         }
 
 

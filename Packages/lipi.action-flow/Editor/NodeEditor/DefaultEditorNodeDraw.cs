@@ -3,12 +3,13 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System;
+using System.Collections.Generic;
 
 namespace ActionFlow
 {
-    public class DefaltEditorNodeDraw : IEditorNodeDraw
+    public class DefaultEditorNodeDraw : IEditorNodeDraw
     {
-        private static DefaltEditorNodeDraw Defalt = new DefaltEditorNodeDraw();
+        private static DefaultEditorNodeDraw Defalt = new DefaultEditorNodeDraw();
 
         public static IEditorNodeDraw GetEditor(Type type)
         {
@@ -42,12 +43,15 @@ namespace ActionFlow
         public virtual void InputDraw(EditorActionNode node, ScriptableObject asset)
         {
             var nodeTypeInfo = NodeTypeInfo.GetNodeTypeInfo(asset.GetType());
+            List<NodeTypeInfo.IOInfo> list = new List<NodeTypeInfo.IOInfo>();
+            list.AddRange(nodeTypeInfo.Inputs);
+            list.AddRange(nodeTypeInfo.BTInputs);
 
-            for (int i = 0; i < nodeTypeInfo.Inputs.Count; i++)
+            foreach (var inputInfo in list)
             {
-                var inputInfo = nodeTypeInfo.Inputs[i];
-                var portIn = node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, null);
-               // portIn.portColor = NodePortColor.Uint2color(attrItem.PortColor);
+                Port.Capacity capacity = (inputInfo.Mode == NodeTypeInfo.IOMode.BTInput) ? Port.Capacity.Single : Port.Capacity.Multi;
+                var portIn = node.InstantiatePort(Orientation.Horizontal, Direction.Input, capacity, null);
+                portIn.portColor = NodeTypeInfo.IOModeColor(inputInfo.Mode);
                 portIn.portName = inputInfo.GetName();
                 portIn.source = inputInfo;
                 node.inputContainer.Add(portIn);
@@ -66,9 +70,10 @@ namespace ActionFlow
                 port.portName = outputInfo.GetName();
                 port.source = outputInfo;
                 node.outputContainer.Add(port);
-
-
             }
+            
+
+
         }
     }
 }

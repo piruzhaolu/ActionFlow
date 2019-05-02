@@ -57,22 +57,28 @@ namespace ActionFlow
                     }
                     
                 }
-                if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
+                
+                if (item.FieldType.IsArray && (item.MaxLink != -1 )) //|| item.IOInfo != null
                 {
-                    var labelField = new Label(item.Name);
-                    labelField.AddToClassList("node-field-label");
-                    ve.Add(labelField);
+                    var arrayField = new NodeArrayField(mSO, item.Path, item, _node);
+                    ve.Add(arrayField);
                 }
-                var be = DrawField(item.FieldType);
-                be.bindingPath = item.Path;// $"Value.{fields[i].Name}";
-                be.Bind(mSO);
-                be.AddToClassList("node-field-input");
-                ve.Add(be);
-                if (outPort != null)
+                else
                 {
-                    ve.Add(outPort);
-                }
+                    if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
+                    {
+                        var labelField = new Label(item.Name);
+                        labelField.AddToClassList("node-field-label");
+                        ve.Add(labelField);
+                    }
 
+                    AddField(ve, item.FieldType, mSO, item.Path);
+                    if (outPort != null)
+                    {
+                        ve.Add(outPort);
+                    }
+                }
+               
                 Add(ve);
             }
 
@@ -90,8 +96,20 @@ namespace ActionFlow
                 ve.Add(port);
                 Add(ve);
             }
-
         }
+
+
+
+
+        private void AddField(VisualElement parent, Type fieldType, SerializedObject so, string path)
+        {
+            var be = DrawField(fieldType);
+            be.bindingPath = path;// $"Value.{fields[i].Name}";
+            be.Bind(so);
+            be.AddToClassList("node-field-input");
+            parent.Add(be);
+        }
+
 
 
         private BindableElement DrawField(Type type)
@@ -110,3 +128,10 @@ namespace ActionFlow
 
     }
 }
+
+
+//var be = DrawField(item.FieldType);
+//be.bindingPath = item.Path;// $"Value.{fields[i].Name}";
+//be.Bind(mSO);
+//be.AddToClassList("node-field-input");
+//ve.Add(be);

@@ -95,6 +95,8 @@ namespace ActionFlow
                 if (e1 != null) AddElement(e1);
                 var e2 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.InputParm, NodeTypeInfo.IOMode.OutputParm);
                 if (e2 != null) AddElement(e2);
+                var e3 = CreateEdge(cNode, link, NodeTypeInfo.IOMode.BTOutput, NodeTypeInfo.IOMode.BTInput);
+                if (e3 != null) AddElement(e3);
             }
         }
 
@@ -222,9 +224,12 @@ namespace ActionFlow
                 if (nodeInfo.Childs[i].FromID == m_id)
                 {
                     nodeInfo.Childs.RemoveAt(i);
+                    
                     break;
                 }
             }
+            //var mainNode = reverse ? inputNode : outputNode;
+            //mainNode.EdgeAddOrRemove();
         }
 
 
@@ -263,6 +268,7 @@ namespace ActionFlow
                     Index = reverse?outputNode.Index:inputNode.Index,
                     ToID = reverse?outputInfo.ID: inputInfo.ID
                 });
+                mainNode.EdgeAddOrRemove();
             }
             
         }

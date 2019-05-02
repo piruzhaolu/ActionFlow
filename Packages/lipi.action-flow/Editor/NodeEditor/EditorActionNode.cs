@@ -9,6 +9,7 @@ namespace ActionFlow
 
     public class EditorActionNode : Node
     {
+        public delegate void EdgeChange();
 
         public EditorActionNode(ScriptableObject nodeAsset, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
         {
@@ -31,7 +32,7 @@ namespace ActionFlow
                 title = nodeAsset.name;
             }
 
-            var drawer = DefaltEditorNodeDraw.GetEditor(nodeAsset.GetType());
+            var drawer = DefaultEditorNodeDraw.GetEditor(nodeAsset.GetType());
             drawer.Create(this, nodeAsset);
         }
 
@@ -42,6 +43,13 @@ namespace ActionFlow
         public int Index { private set; get; }
 
 
+        public event EdgeChange EdgeChangeHandler;
+
+
+        public void EdgeAddOrRemove()
+        {
+            EdgeChangeHandler?.Invoke();
+        }
 
         public Port GetPort(int id, NodeTypeInfo.IOMode mode)
         {

@@ -17,7 +17,7 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("ActionFlow/Parm_float")]
+    [NodeInfo("Parm/float")]
     public class ParmFloatNodeAsset : NodeAsset<ParmFloatNode>
     {
 

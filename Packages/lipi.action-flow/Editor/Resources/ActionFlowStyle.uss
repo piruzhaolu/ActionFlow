@@ -70,3 +70,16 @@ EditorActionNode EditorNodeElement .outputparm-method #type {
     padding-right: 0;
 }
 /* -------------*/
+
+
+.node-array-label {
+    flex-direction:row;
+    justify-content:space-between;
+}
+
+.node-array-label Button{
+    height:16;
+}
+.node-array-content{
+    /*padding-left:10;*/
+}

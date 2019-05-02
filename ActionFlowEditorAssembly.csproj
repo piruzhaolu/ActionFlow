@@ -63,15 +63,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\lipi.action-flow\Editor\GraphEditor.cs" />
-    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\DefaltEditorNodeDraw.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\DefaultEditorNodeDraw.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorActionNode.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorNodeCreator.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\EditorNodeElement.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\IEditorNodeDraw.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\NodeEditor\NodeTypeInfo.cs" />
     <Compile Include="Packages\lipi.action-flow\Editor\UIControls\ActionGraphView.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\UIControls\ElementGenerate.cs" />
+    <Compile Include="Packages\lipi.action-flow\Editor\UIControls\NodeArrayField.cs" />
     <None Include="Packages\lipi.action-flow\Editor\ActionFlowEditorAssembly.asmdef" />
     <None Include="Packages\lipi.action-flow\Editor\Resources\ActionFlowStyle.uss" />
+    <Reference Include="Unity.Entities">
+      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
     </Reference>
@@ -641,10 +646,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Unity.Entities.csproj">
-      <Project>{916147E4-529C-4F4A-F636-5BEA8069CF1B}</Project>
-      <Name>Unity.Entities</Name>
-    </ProjectReference>
     <ProjectReference Include="ActionFlowAssembly.csproj">
       <Project>{16928EEA-8A3A-03D7-2816-9F14F681F4BF}</Project>
       <Name>ActionFlowAssembly</Name>
