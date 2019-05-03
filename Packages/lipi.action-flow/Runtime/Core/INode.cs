@@ -60,9 +60,11 @@ namespace ActionFlow {
     #region 行为树节点
     public enum BehaviorStatus
     {
+        None = 0,
         Success = 1,
         Failure = 2,
-        Running = 3
+        Running = 3,
+        
     }
 
 
@@ -76,11 +78,12 @@ namespace ActionFlow {
         BehaviorStatus BehaviorInput(ref Context context);
 
         /// <summary>
-        /// 当前Node的子节点从Running状态结束时调用
+        /// 当前Node的子节点从Running状态结束时调用,作用是子节点运行完成时候返回的通知
         /// </summary>
         /// <param name="context"></param>
         /// <param name="index">Running结束的Node的索引</param>
-        void Completed(ref Context context, int index);
+        /// <returns>true则继续向上传递</returns>
+        (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result);
     }
 
     #endregion

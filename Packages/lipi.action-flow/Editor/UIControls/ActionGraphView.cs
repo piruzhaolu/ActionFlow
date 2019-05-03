@@ -254,10 +254,12 @@ namespace ActionFlow
                 var outputInfo = lists[i].output.source as NodeTypeInfo.IOInfo;
 
                 EditorActionNode mainNode = outputNode;
+                EditorActionNode childNode = inputNode;
                 bool reverse = false;
                 if (outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
                 {
                     mainNode = inputNode;
+                    childNode = outputNode;
                     reverse = true;
                 }
                 
@@ -268,6 +270,8 @@ namespace ActionFlow
                     Index = reverse?outputNode.Index:inputNode.Index,
                     ToID = reverse?outputInfo.ID: inputInfo.ID
                 });
+                childNode.NodeInfo.ParentIndex = mainNode.Index;
+
                 mainNode.EdgeAddOrRemove();
             }
             

@@ -36,28 +36,6 @@ namespace ActionFlow
                 var ve = new VisualElement();
                 ve.AddToClassList("node-field");
 
-                Port outPort = null;
-                if (item.IOInfo != null)
-                {
-                    if (item.IOInfo.Mode == NodeTypeInfo.IOMode.InputParm)
-                    {
-                        var portIn = _node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, null);
-                        portIn.source = item.IOInfo;
-                        portIn.portName = item.IOInfo.Name;
-                        portIn.AddToClassList("inputparm-field");
-                        ve.Add(portIn);
-                    } else if(item.IOInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
-                    {
-                        var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, null);
-                        port.source = item.IOInfo;
-                        port.portName = "";// item.IOInfo.Name;
-                        port.AddToClassList("outputparm-field");
-                        outPort = port;
-                        
-                    }
-                    
-                }
-                
                 if (item.FieldType.IsArray && (item.MaxLink != -1 )) //|| item.IOInfo != null
                 {
                     var arrayField = new NodeArrayField(mSO, item.Path, item, _node);
@@ -65,6 +43,30 @@ namespace ActionFlow
                 }
                 else
                 {
+                    Port outPort = null;
+                    if (item.IOInfo != null)
+                    {
+                        if (item.IOInfo.Mode == NodeTypeInfo.IOMode.InputParm)
+                        {
+                            var portIn = _node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, null);
+                            portIn.source = item.IOInfo;
+                            portIn.portName = item.IOInfo.Name;
+                            portIn.portColor = NodeTypeInfo.IOModeColor(NodeTypeInfo.IOMode.InputParm);
+                            portIn.AddToClassList("inputparm-field");
+                            ve.Add(portIn);
+                        }
+                        else if (item.IOInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
+                        {
+                            var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, null);
+                            port.source = item.IOInfo;
+                            port.portName = "";// item.IOInfo.Name;
+                            port.portColor = NodeTypeInfo.IOModeColor(NodeTypeInfo.IOMode.OutputParm);
+                            port.AddToClassList("outputparm-field");
+                            outPort = port;
+
+                        }
+
+                    }
                     if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
                     {
                         var labelField = new Label(item.Name);

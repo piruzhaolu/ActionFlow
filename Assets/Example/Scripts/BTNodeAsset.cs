@@ -12,12 +12,19 @@ public class BTNode : INode, IBehaviorNode
         return BehaviorStatus.Success;
     }
 
-    public void Completed(ref Context context, int index)
+    public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
     {
+        throw new NotImplementedException();
     }
+
+    //public bool Completed(ref Context context, int index)
+    //{
+    //    return false;
+    //}
 
 
     [NodeOutputBT(5)]
+    [NodeInputParm]
     [SerializeField]
     public float[] Weights;
 

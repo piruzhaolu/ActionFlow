@@ -74,6 +74,12 @@ namespace ActionFlow
         private NodeLink[] BTLinks()
         {
             var links = _node.NodeInfo.Childs;
+            if (links == null)
+            {
+                links = new List<NodeLink>();
+                _node.NodeInfo.Childs = links;
+            }
+
             var maxIndex = -1;
             Dictionary<int, NodeLink> btLinkMap = new Dictionary<int, NodeLink>();
             for (int i = 0; i < links.Count; i++)
@@ -149,19 +155,29 @@ namespace ActionFlow
             var arrItem = new VisualElement();
             arrItem.AddToClassList("node-field");
 
-            var label = new Label(_fieldInfo.Name);
-            label.AddToClassList("node-field-label");
-            arrItem.Add(label);
+            if (_fieldInfo.IOInfo != null)
+            {
+                var portIn = _node.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, null);
+                portIn.source = Clone(_fieldInfo.IOInfo, i);
+                portIn.portName = _fieldInfo.Name;
+                portIn.portColor = NodeTypeInfo.IOModeColor(NodeTypeInfo.IOMode.InputParm);
+                portIn.AddToClassList("inputparm-field");
+                arrItem.Add(portIn);
+            }
+            else
+            {
+                var label = new Label(_fieldInfo.Name);
+                label.AddToClassList("node-field-label");
+                arrItem.Add(label);
+            }
 
             var arrayItem = _sp.GetArrayElementAtIndex(i);
             var be = ElementGenerate.Generate(_elementType, _so, arrayItem.propertyPath);// $"{_fieldInfo.Path}.Array.Data[{i}]");
-            arrItem.Add(be);
+            if (be != null) arrItem.Add(be);
 
 
             var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
-            var ioInfo = Clone(_fieldInfo.BT_IOInfo);
-            ioInfo.ID += i * 100;
-            port.source = ioInfo;
+            port.source = Clone(_fieldInfo.BT_IOInfo, i);
             port.portColor = NodeTypeInfo.IOModeColor(_fieldInfo.BT_IOInfo.Mode);
             port.portName = "";// item.IOInfo.Name;
             port.AddToClassList("outputparm-field");
@@ -169,11 +185,11 @@ namespace ActionFlow
             return arrItem;
         }
 
-        private NodeTypeInfo.IOInfo Clone(NodeTypeInfo.IOInfo info)
+        private NodeTypeInfo.IOInfo Clone(NodeTypeInfo.IOInfo info, int arrayIndex)
         {
             return new NodeTypeInfo.IOInfo
             {
-                ID = info.ID,
+                ID = info.ID + arrayIndex*100, //ID的值在百位数加上数组的索引以区分每个链接
                 Name = info.Name,
                 Mode = info.Mode,
                 Type = info.Type

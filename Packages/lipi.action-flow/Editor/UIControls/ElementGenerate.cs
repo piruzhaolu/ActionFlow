@@ -50,6 +50,7 @@ namespace ActionFlow
 
         public static BindableElement Generate(Type type, SerializedObject so, string bindingPath)
         {
+            if (type == typeof(NullStatus)) return null;
             var be = GetField(type);
             be.bindingPath = bindingPath;
             be.Bind(so);

@@ -102,7 +102,7 @@ namespace ActionFlow
     {
         public int CurrentIndex;
         public List<NodeLink> Childs;
-        public int ParentIndex;
+        public int ParentIndex = -1;
     }
 
     [System.Serializable]

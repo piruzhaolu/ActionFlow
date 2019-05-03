@@ -3,7 +3,7 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace ActionFlow
 {
-
+    [Serializable]
     public struct NullStatus { }
 
     /// <summary>

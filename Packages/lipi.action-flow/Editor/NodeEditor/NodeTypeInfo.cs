@@ -75,33 +75,16 @@ namespace ActionFlow
             {
                 case IOMode.BTInput:
                 case IOMode.BTOutput:
-                    return new Color(0.25f, 0.5f, 0.25f);
+                    return new Color(0.3f, 0.6f, 0.3f);
+                case IOMode.InputParm:
+                case IOMode.OutputParm:
+                    return new Color(0.7f, 0.85f, 0.7f);
                 default:return Color.white;
             }
         }
 
 
-
-        public static ulong TypeInfoHash(Type type, IOMode mode = IOMode.Input, int childID = 0)
-        {
-            var text = type.AssemblyQualifiedName;
-            text = $"{text}_{IOModeToString(mode)}_{childID}";
-
-            // Using http://www.isthe.com/chongo/tech/comp/fnv/index.html#FNV-1a
-            // with basis and prime:
-            const ulong offsetBasis = 14695981039346656037;
-            const ulong prime = 1099511628211;
-
-            ulong result = offsetBasis;
-            foreach (var c in text)
-            {
-                result = prime * (result ^ (byte)(c & 255));
-                result = prime * (result ^ (byte)(c >> 8));
-            }
-            return result;
-        }
-
-
+       
         #endregion
         //======================================================
 

@@ -1,32 +1,51 @@
 ﻿using System;
+using UnityEngine;
 
 namespace ActionFlow
 {
     [Serializable]
-    public class BTRoot : INode, IBehaviorNode, INodeInput
+    public class BTRoot : StatusNodeBase<NullStatus>, IBehaviorNode, INodeInput
     {
 
         public void OnInput(ref Context context)
         {
-
+            OnTick(ref context);
         }
 
-
+        [NodeOutputBT(1)]
+        public NullStatus[] Childs;
 
         public BehaviorStatus BehaviorInput(ref Context context)
         {
-
-            return BehaviorStatus.Success;
+            throw new Exception("Root 暂时不支持做为行为树子节点");
         }
 
 
-        public void Completed(ref Context context, int index)
+        public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
         {
-            
+            if (result == BehaviorStatus.Running)
+            {
+                context.Inactive();
+            }
+            else
+            {
+                context.Active();
+            }
+            return (false, BehaviorStatus.None);
         }
 
-        
-
+        public override void OnTick(ref Context context)
+        {
+            var res = context.BTNodeOutput();
+            if (res == BehaviorStatus.Running)
+            {
+                context.Inactive();
+            }
+            else
+            {
+                context.Active();
+            }
+        }
     }
 
 
