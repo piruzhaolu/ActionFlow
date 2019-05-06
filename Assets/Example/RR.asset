@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    RotateValue: 0.05
+    RotateValue: 0.2
     TimeLength: 3
 --- !u!114 &-2290415718796586285
 MonoBehaviour:
@@ -119,10 +119,10 @@ MonoBehaviour:
       Index: 1
       ToID: 100000
     - FromID: 100100
-      Index: 5
+      Index: 6
       ToID: 100000
     - FromID: 100200
-      Index: 6
+      Index: 5
       ToID: 100000
     ParentIndex: 3
   - CurrentIndex: 5
@@ -143,7 +143,7 @@ MonoBehaviour:
   - Index: 4
     Pos: {x: 390, y: 243}
   - Index: 5
-    Pos: {x: 571, y: 332}
+    Pos: {x: 580, y: 326}
   - Index: 6
     Pos: {x: 574, y: 462}
   ViewPosition: {x: -80, y: -67.333336}
@@ -161,5 +161,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    RotateValue: -0.1
+    RotateValue: -0.2
     TimeLength: 3

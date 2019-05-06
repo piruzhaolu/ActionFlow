@@ -26,6 +26,8 @@ namespace ActionFlow
                 context.StateData = stateData;
                 context.Graph = asset.Asset;
                 context.EM = EntityManager;
+                context.PostCommand = PostUpdateCommands;
+
 
                 var count = stateData.GetAllActiveOrSleepingIndex(ref actives);
 

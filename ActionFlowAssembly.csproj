@@ -73,6 +73,7 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\GameTime.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\GraphAssetMonoComponent.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\NodeSleeping.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Components\NodeTimer.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionStateData.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\Context.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\GraphAsset.cs" />
@@ -82,17 +83,22 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\StatusNodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTRootAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSequenceAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\DelayNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\EntryNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Parm\ParmFloatNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionCreateSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRemoveSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRunSystem.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionWakeSystem.cs" />
     <None Include="Packages\lipi.action-flow\Runtime\ActionFlowAssembly.asmdef" />
     <Reference Include="Unity.Entities">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Hybrid">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.Hybrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

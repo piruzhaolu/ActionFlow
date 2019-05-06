@@ -21,6 +21,8 @@ namespace ActionFlow
 
         public EntityManager EM { set; get; }
 
+        public EntityCommandBuffer PostCommand;
+
 
         public int Index { set; get; }
 
@@ -41,10 +43,58 @@ namespace ActionFlow
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Inactive);
         }
+
+
         public void Sleeping()
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
         }
+
+        /// <summary>
+        /// 将node的运行转移到system,并让node进入睡眠状态
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="component"></param>
+        public void TransferToSystemAndSleep<T>(T component) where T:struct, IComponentData
+        {
+            DynamicBuffer<NodeSleeping> buffers;
+            if (EM.HasComponent<NodeSleeping>(TargetEntity))
+            {
+                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
+            }
+            else
+            {
+                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
+            }
+            buffers.Add(new NodeSleeping()
+            {
+                Entity = CurrentEntity,
+                NodeIndex = Index,
+                ComponentType = ComponentType.ReadWrite<T>()
+            });
+            PostCommand.AddComponent(TargetEntity, component);
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+        }
+
+        public void SetWakeTimerAndSleep(float t)
+        {
+            DynamicBuffer<NodeTimer> buffers;
+            if (EM.HasComponent<NodeTimer>(CurrentEntity))
+            {
+                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
+            } else
+            {
+                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
+            }
+            buffers.Add(new NodeTimer()
+            {
+                Time = t,
+                NodeIndex = Index
+            });
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+        }
+
+
 
         public void NodeOutput(int outputID = 0)
         {

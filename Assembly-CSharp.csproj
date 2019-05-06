@@ -65,6 +65,8 @@
     <Compile Include="Assets\Example\Scripts\BTNodeAsset.cs" />
     <Compile Include="Assets\Example\Scripts\InputNodeAsset.cs" />
     <Compile Include="Assets\Example\Scripts\RotateNodeAsset.cs" />
+    <Compile Include="Assets\Example\Scripts\SleepComponentSystem.cs" />
+    <Compile Include="Assets\Example\Scripts\SleepingNodeAsset.cs" />
     <Compile Include="Assets\Scenes\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

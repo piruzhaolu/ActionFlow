@@ -162,7 +162,7 @@ namespace ActionFlow
             var count = 0;
             for (int i = 0; i < Length; i++)
             {
-                if (GetNodeCycle(i) != NodeCycle.Inactive)
+                if (GetNodeCycle(i) == NodeCycle.Active)
                 {
                     nativeArray[count] = i;
                     count++;
