@@ -242,7 +242,7 @@ MonoBehaviour:
     Pos: {x: 878, y: 447}
   - Index: 19
     Pos: {x: 767.8167, y: 601.8334}
-  ViewPosition: {x: -106.666664, y: -12.666667}
+  ViewPosition: {x: -106.5, y: -12.5}
   ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
 --- !u!114 &377676156053463064
 MonoBehaviour:

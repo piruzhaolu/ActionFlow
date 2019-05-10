@@ -20,8 +20,8 @@ public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorN
 
     public BehaviorStatus BehaviorInput(ref Context context)
     {
-        context.Active();
-        SetValue(ref context, new RotateNodeData()
+        context.Active(this);
+        context.SetValue(this, new RotateNodeData()
         {
             Value = 0,//UnityEngine.Random.Range(0.1f, 0.2f),
             StartTime = Time.time
@@ -29,15 +29,10 @@ public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorN
         return BehaviorStatus.Running;
     }
 
-    public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public void OnInput(ref Context context)
     {
-        context.Active();
-        SetValue(ref context, new RotateNodeData()
+        context.Active(this);
+        context.SetValue(this, new RotateNodeData()
         {
             Value = UnityEngine.Random.Range(0.1f, 0.2f)
         });
@@ -46,14 +41,14 @@ public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorN
     public override void OnTick(ref Context context)
     {
         var rv = context.GetParameter(RotateValue);
-        var data = GetValue(ref context);
+        var data = context.GetValue(this);
         var r = context.EM.GetComponentData<Rotation>(context.CurrentEntity);
         r.Value = math.mul(r.Value, quaternion.RotateY(rv + data.Value));
         context.EM.SetComponentData(context.CurrentEntity, r);
         if (Time.time - data.StartTime > TimeLength)
         {
             context.BehaviorRunningCompleted( BehaviorStatus.Success);
-            context.Inactive();
+            context.Inactive(this);
         }
 
     }

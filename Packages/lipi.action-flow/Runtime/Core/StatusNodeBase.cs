@@ -10,7 +10,7 @@ namespace ActionFlow
     /// 带状态node的抽象类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class StatusNodeBase<T> : IStatusNode where T:struct
+    public abstract class StatusNodeBase<T> : IStatusNode<T> where T:struct
     {
         public abstract void OnTick(ref Context context);
 
@@ -31,16 +31,16 @@ namespace ActionFlow
         }
 
 
-        public T GetValue(ref Context context)
-        {
-            return context.StateData.GetValue<T>(context.Index);
-        }
+        //public T GetValue(ref Context context)
+        //{
+        //    return context.StateData.GetValue<T>(context.Index);
+        //}
 
 
-        public void SetValue(ref Context context, T value)
-        {
-            context.StateData.SetValue(context.Index, value);
-        }
+        //public void SetValue(ref Context context, T value)
+        //{
+        //    context.StateData.SetValue(context.Index, value);
+        //}
 
         
     }

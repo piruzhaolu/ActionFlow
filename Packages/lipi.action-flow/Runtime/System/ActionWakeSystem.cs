@@ -49,7 +49,7 @@ namespace ActionFlow
                         if (isDel)
                         {
                             buffers.RemoveAt(j);
-                            ActionRunStates[sleepingItem.Entity].State.SetNodeCycle(sleepingItem.NodeIndex, ActionStateData.NodeCycle.Active);
+                            ActionRunStates[sleepingItem.Entity].State.SetNodeCycle(sleepingItem.NodeIndex, ActionStateData.NodeCycle.Waking);
                         }
                         
                     }
@@ -95,7 +95,7 @@ namespace ActionFlow
                     v.Time -= dt;
                     if (v.Time < 0)
                     {
-                        c0.State.SetNodeCycle(v.NodeIndex, ActionStateData.NodeCycle.Active);
+                        c0.State.SetNodeCycle(v.NodeIndex, ActionStateData.NodeCycle.Waking);
                         nodeTimers.RemoveAt(i);
                     } else
                     {

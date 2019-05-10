@@ -2,10 +2,13 @@
 using System.Collections;
 using Unity.Entities;
 
+#pragma warning disable IDE0060 // 删除未使用的参数
 namespace ActionFlow
 {
+   
     public struct Context
     {
+
         /// <summary>
         /// 当前执行Action的Entity
         /// </summary>
@@ -32,69 +35,17 @@ namespace ActionFlow
         public GraphAsset Graph { set; get; }
 
 
+
         //====================================
 
-
-        public void Active()
+        public void Active(IStatusNode node)
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Active);
         }
-        public void Inactive()
+        public void Inactive(IStatusNode node)
         {
             StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Inactive);
         }
-
-
-        public void Sleeping()
-        {
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
-        }
-
-        /// <summary>
-        /// 将node的运行转移到system,并让node进入睡眠状态
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="component"></param>
-        public void TransferToSystemAndSleep<T>(T component) where T:struct, IComponentData
-        {
-            DynamicBuffer<NodeSleeping> buffers;
-            if (EM.HasComponent<NodeSleeping>(TargetEntity))
-            {
-                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
-            }
-            else
-            {
-                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
-            }
-            buffers.Add(new NodeSleeping()
-            {
-                Entity = CurrentEntity,
-                NodeIndex = Index,
-                ComponentType = ComponentType.ReadWrite<T>()
-            });
-            PostCommand.AddComponent(TargetEntity, component);
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
-        }
-
-        public void SetWakeTimerAndSleep(float t)
-        {
-            DynamicBuffer<NodeTimer> buffers;
-            if (EM.HasComponent<NodeTimer>(CurrentEntity))
-            {
-                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
-            } else
-            {
-                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
-            }
-            buffers.Add(new NodeTimer()
-            {
-                Time = t,
-                NodeIndex = Index
-            });
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
-        }
-
-
 
         public void NodeOutput(int outputID = 0)
         {
@@ -164,7 +115,7 @@ namespace ActionFlow
         }
 
 
-
+        #region get set Value
         /// <summary>
         /// 从其它节点读取参数输入
         /// </summary>
@@ -202,6 +153,78 @@ namespace ActionFlow
         }
 
 
+        public T GetValue<T>(IStatusNode<T> node)  where T: struct
+        {
+            return StateData.GetValue<T>(Index);
+        }
+
+        /// <summary>
+        /// node为当前处理的节点 如SetValue(this,value)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node"></param>
+        /// <param name="value"></param>
+        public void SetValue<T>(IStatusNode<T> node, T value) where T: struct
+
+        {
+            StateData.SetValue(Index, value);
+        }
+
+        #endregion
+
+
+        #region sleep
+
+        /// <summary>
+        /// 将node的运行转移到system,并让node进入睡眠状态. 
+        /// component 是 System与ActionFlow的关联, 当被添加到entity system系统执行, system将它删除时node会被唤醒
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="component"></param>
+        public void TransferToSystemAndSleep<T>(ISleepable node, T component) where T : struct, IComponentData
+        {
+            DynamicBuffer<NodeSleeping> buffers;
+            if (EM.HasComponent<NodeSleeping>(TargetEntity))
+            {
+                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
+            }
+            else
+            {
+                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
+            }
+            buffers.Add(new NodeSleeping()
+            {
+                Entity = CurrentEntity,
+                NodeIndex = Index,
+                ComponentType = ComponentType.ReadWrite<T>()
+            });
+            PostCommand.AddComponent(TargetEntity, component);
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+        }
+
+
+        public void SetWakeTimerAndSleep(ISleepable node, float t)
+        {
+            DynamicBuffer<NodeTimer> buffers;
+            if (EM.HasComponent<NodeTimer>(CurrentEntity))
+            {
+                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
+            }
+            else
+            {
+                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
+            }
+            buffers.Add(new NodeTimer()
+            {
+                Time = t,
+                NodeIndex = Index
+            });
+            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+        }
+        #endregion
+
+
+        #region 父节点操作和RunningCompleted冒泡
         /// <summary>
         /// 取当前节点（只能是行为树）的节点父节点
         /// </summary>
@@ -219,19 +242,20 @@ namespace ActionFlow
             return null;
         }
 
+
         private void _BehaviorRunningCompleted(ref Context context, BehaviorStatus result)
         {
             var pIndex = Graph.NodeInfo[context.Index].ParentIndex;
             if (pIndex < 0) return;
             if (pIndex < Graph.RuntimeNodes.Length)
             {
-                if (Graph.RuntimeNodes[pIndex] is IBehaviorNode node)
+                if (Graph.RuntimeNodes[pIndex] is IBehaviorCompositeNode node)
                 {
                     var childIndex = context.Index;
                     context.Index = pIndex;
                     var (b, res) = node.Completed(ref context, childIndex, result);
                     if (b)
-                    {
+                    { //向 parent node 递归
                         _BehaviorRunningCompleted(ref context, res);
                     }
                 }
@@ -244,8 +268,9 @@ namespace ActionFlow
             var c = this;
             _BehaviorRunningCompleted(ref c, result);
         }
-
+        #endregion
 
     }
 
 }
+#pragma warning restore IDE0060 // 删除未使用的参数

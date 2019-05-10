@@ -143,10 +143,10 @@ MonoBehaviour:
   - Index: 4
     Pos: {x: 390, y: 243}
   - Index: 5
-    Pos: {x: 580, y: 326}
+    Pos: {x: 593, y: 458}
   - Index: 6
-    Pos: {x: 574, y: 462}
-  ViewPosition: {x: -80, y: -67.333336}
+    Pos: {x: 582, y: 327}
+  ViewPosition: {x: -80, y: -67.5}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &3331784061959709084
 MonoBehaviour:

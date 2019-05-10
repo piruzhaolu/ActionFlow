@@ -72,8 +72,8 @@ MonoBehaviour:
     Pos: {x: 539, y: 208}
   - Index: 4
     Pos: {x: 399, y: 152}
-  ViewPosition: {x: 0, y: 0}
-  ViewScale: {x: 1, y: 1, z: 1}
+  ViewPosition: {x: -8, y: 0}
+  ViewScale: {x: 1.15, y: 1.15, z: 1}
 --- !u!114 &1102837773446750335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    Time: 2
+    Time: 15
 --- !u!114 &1431509261823254659
 MonoBehaviour:
   m_ObjectHideFlags: 0

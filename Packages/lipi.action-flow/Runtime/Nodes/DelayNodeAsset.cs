@@ -8,25 +8,22 @@ namespace ActionFlow
 {
 
     [Serializable]
-    public class DelayNode : StatusNodeBase<NullStatus>, IBehaviorNode
+    public class DelayNode : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>
     {
         public float Time;
 
         public BehaviorStatus BehaviorInput(ref Context context)
         {
-            context.SetWakeTimerAndSleep(Time);
+            context.SetWakeTimerAndSleep(this, Time);
             return BehaviorStatus.Running;
         }
 
-        public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
-        {
-            throw new NotImplementedException();
-        }
 
-        public override void OnTick(ref Context context)
+
+        public void Wake(ref Context context)
         {
             context.BehaviorRunningCompleted(BehaviorStatus.Success);
-            context.Inactive();
+           
         }
     }
 

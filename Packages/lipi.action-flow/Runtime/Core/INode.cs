@@ -20,11 +20,27 @@ namespace ActionFlow {
         int CreateNodeDataTo(byte* b);
     }
 
+    public interface IStatusNode<T> : IStatusNode
+    {
+
+    }
+
 
     public interface INodeAsset
     {
         INode GetValue();
     }
+
+    /// <summary>
+    /// 会进入Sleep状态的对象
+    /// </summary>
+    public interface ISleepable
+    {
+        void Wake(ref Context context);
+    }
+
+
+
 
 
     #region 输入输出
@@ -67,7 +83,9 @@ namespace ActionFlow {
         
     }
 
-
+    /// <summary>
+    /// 行为树节点
+    /// </summary>
     public interface IBehaviorNode
     {
         /// <summary>
@@ -77,6 +95,21 @@ namespace ActionFlow {
         /// <returns></returns>
         BehaviorStatus BehaviorInput(ref Context context);
 
+        /// <summary>
+        /// 当前Node的子节点从Running状态结束时调用,作用是子节点运行完成时候返回的通知
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="index">Running结束的Node的索引</param>
+        /// <returns>true则继续向上传递</returns>
+        //[Obsolete]
+        //(bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result);
+    }
+
+    /// <summary>
+    /// 行为树中的流程节点。继承IBehaviorNode带输出逻辑
+    /// </summary>
+    public interface IBehaviorCompositeNode:IBehaviorNode
+    {
         /// <summary>
         /// 当前Node的子节点从Running状态结束时调用,作用是子节点运行完成时候返回的通知
         /// </summary>

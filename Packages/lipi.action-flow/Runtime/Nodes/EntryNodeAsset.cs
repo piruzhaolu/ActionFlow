@@ -12,7 +12,7 @@ namespace ActionFlow
         public override void OnTick(ref Context context)
         {
             context.NodeOutput();
-            context.Inactive();
+            context.Inactive(this);
         }
     }
 

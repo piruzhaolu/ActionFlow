@@ -10,26 +10,20 @@ public struct SleepComponent:IComponentData
 
 
 [System.Serializable]
-public class SleepingNode : StatusNodeBase<NullStatus>, IBehaviorNode
+public class SleepingNode : INode, IBehaviorNode, ISleepable
 {
     public BehaviorStatus BehaviorInput(ref Context context)
     {
-        context.TransferToSystemAndSleep(new SleepComponent()
+        context.TransferToSystemAndSleep(this, new SleepComponent()
         {
             t = Time.time
         });
         return BehaviorStatus.Running;
     }
 
-    public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
+   
+    public void Wake(ref Context context)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override void OnTick(ref Context context)
-    {
-        Debug.Log("Tick");
-        context.Inactive();
         context.BehaviorRunningCompleted(BehaviorStatus.Success);
     }
 }

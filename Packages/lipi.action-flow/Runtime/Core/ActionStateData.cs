@@ -2,9 +2,29 @@
 using System.Collections;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
+using Cycle = ActionFlow.ActionStateData.NodeCycle;
 
 namespace ActionFlow
 {
+
+    public static class NodeCycleExt
+    {
+        public static bool Has(this Cycle self, Cycle cycle)
+        {
+            return (self & cycle) == cycle;
+        }
+        public static Cycle Add(this Cycle self, Cycle cycle)
+        {
+            return self | cycle;
+        }
+
+        public static Cycle Remove(this Cycle self, Cycle cycle)
+        {
+            return self & ~cycle;
+        }
+
+    }
+
     /// <summary>
     /// 存储Action动态状态的数据类
     /// </summary>
@@ -12,16 +32,23 @@ namespace ActionFlow
     {
         public enum NodeCycle
         {
-            Inactive,
-            Sleeping,
-            Active
+            Inactive    = 0,
+            Sleeping    = 0b001,
+            Active      = 0b010,
+            Waking      = 0b100
         }
+
+        
+
 
         public struct Node
         {
-            public NodeCycle Cycle;
+            public Cycle Cycle;
             public int offset;
         }
+
+       
+
 
         private static readonly int intSizeOf = UnsafeUtility.SizeOf<int>();
         private static readonly int NodeSizeOf = UnsafeUtility.SizeOf<Node>();
@@ -45,7 +72,7 @@ namespace ActionFlow
             {
                 var asset = graph.Nodes[i] as INodeAsset;
                 var nodeObject = asset?.GetValue() as IStatusNode;
-                var node = new Node() { Cycle = NodeCycle.Inactive, offset = offset };
+                var node = new Node() { Cycle = Cycle.Inactive, offset = offset };
                 UnsafeUtility.CopyStructureToPtr(ref node, data._ptr + i * NodeSizeOf);
 
                 if (nodeObject != null)
@@ -73,6 +100,7 @@ namespace ActionFlow
         public int Length { private set; get; }
         public int Sleeping { private set; get; }
         public int Active { private set; get; }
+        public int Waking { private set; get; }
 
         private byte* _ptr;
 
@@ -115,41 +143,78 @@ namespace ActionFlow
         }
 
 
-        public void SetNodeCycle(int index, NodeCycle cycle)
+        public void SetNodeCycle(int index, Cycle cycle)
         {
             var cPtr = _ptr + index * NodeSizeOf;
             UnsafeUtility.CopyPtrToStructure<Node>(cPtr, out var node);
-            if (node.Cycle != cycle)
-            {
-                if (cycle == NodeCycle.Active)
-                {
-                    if (node.Cycle == NodeCycle.Inactive) Active += 1;
-                    else
-                    {
-                        Active += 1;
-                        Sleeping -= 1;
-                    }
-                } else if (cycle == NodeCycle.Sleeping)
-                {
-                    if (node.Cycle == NodeCycle.Inactive) Sleeping += 1;
-                    else
-                    {
-                        Active -= 1;
-                        Sleeping += 1;
-                    }
-                }
-                else
-                {
-                    if (node.Cycle == NodeCycle.Active) Active -= 1;
-                    else Sleeping -= 1;
-                }
 
-                node.Cycle = cycle;
-                UnsafeUtility.CopyStructureToPtr(ref node, cPtr);
+            var currCycle = node.Cycle;
+
+            switch (cycle)
+            {
+                case Cycle.Active:
+                    if (!currCycle.Has(Cycle.Active))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Active += 1;
+                    }
+                    break;
+                case Cycle.Sleeping:
+                    if (!currCycle.Has(Cycle.Sleeping))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Sleeping += 1;
+                        if (currCycle.Has(Cycle.Waking))
+                        {
+                            currCycle = currCycle.Remove(Cycle.Waking);
+                            Waking -= 1;
+                        }
+                    }
+                    break;
+                case Cycle.Waking:
+                    if (!currCycle.Has(Cycle.Waking))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Waking += 1;
+                        if (currCycle.Has(Cycle.Sleeping))
+                        {
+                            currCycle = currCycle.Remove(Cycle.Sleeping);
+                            Sleeping -= 1;
+                        }
+                    }
+                    break;
+                case Cycle.Inactive:
+                    if (currCycle.Has(Cycle.Active)) Active -= 1;
+                    if (currCycle.Has(Cycle.Waking)) Waking -= 1;
+                    if (currCycle.Has(Cycle.Sleeping)) Sleeping -= 1;
+                    currCycle = cycle;
+                    break;
             }
+            node.Cycle = currCycle;
+            UnsafeUtility.CopyStructureToPtr(ref node, cPtr);
         }
 
-        public NodeCycle GetNodeCycle(int index)
+        public void RemoveNodeCycle(int index, Cycle cycle)
+        {
+            var cPtr = _ptr + index * NodeSizeOf;
+            UnsafeUtility.CopyPtrToStructure<Node>(cPtr, out var node);
+            var currCycle = node.Cycle;
+            if (currCycle.Has(cycle))
+            {
+                currCycle = currCycle.Remove(cycle);
+                switch (cycle)
+                {
+                    case Cycle.Active: Active -= 1;break;
+                    case Cycle.Sleeping: Sleeping -= 1;break;
+                    case Cycle.Waking: Waking -= 1;break;
+                }
+            }
+            
+            node.Cycle = currCycle;
+            UnsafeUtility.CopyStructureToPtr(ref node, cPtr);
+        }
+
+        public Cycle GetNodeCycle(int index)
         {
             var cPtr = _ptr + index * NodeSizeOf;
             UnsafeUtility.CopyPtrToStructure<Node>(cPtr, out var node);
@@ -157,24 +222,37 @@ namespace ActionFlow
         }
 
 
-        public int GetAllActiveOrSleepingIndex(ref NativeArray<int> nativeArray)
+        public (int,int) GetAllActiveOrWakingIndex(
+            ref NativeArray<int> activeArray, 
+            ref NativeArray<int> wakingArray)
         {
-            var count = 0;
+            var count_a = 0;
+            var count_b = 0;
             for (int i = 0; i < Length; i++)
             {
-                if (GetNodeCycle(i) == NodeCycle.Active)
+                var val = GetNodeCycle(i);
+                if (val.Has(Cycle.Active) )
                 {
-                    nativeArray[count] = i;
-                    count++;
+                    activeArray[count_a] = i;
+                    count_a++;
+                }
+                if (val.Has(Cycle.Waking))
+                {
+                    wakingArray[count_b] = i;
+                    count_b++;
                 }
             }
-            return count;
+            return (count_a, count_b);
         }
 
 
-        public bool AllSleeping { get => Sleeping > 0 && Active == 0; }
+        public bool AnySleeping { get => Sleeping > 0; }
 
-        public bool AllInactive { get => Sleeping == 0 && Active == 0; }
+        public bool AnyActive { get => Active > 0; }
+
+        public bool AnyWaking { get => Waking > 0; }
+
+
 
 
     }

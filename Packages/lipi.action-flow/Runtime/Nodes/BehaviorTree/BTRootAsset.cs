@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ActionFlow
 {
     [Serializable]
-    public class BTRoot : StatusNodeBase<NullStatus>, IBehaviorNode, INodeInput
+    public class BTRoot : StatusNodeBase<NullStatus>, IBehaviorCompositeNode, INodeInput
     {
 
         public void OnInput(ref Context context)
@@ -25,11 +25,11 @@ namespace ActionFlow
         {
             if (result == BehaviorStatus.Running)
             {
-                context.Inactive();
+                context.Inactive(this);
             }
             else
             {
-                context.Active();
+                context.Active(this);
             }
             return (false, BehaviorStatus.None);
         }
@@ -39,11 +39,11 @@ namespace ActionFlow
             var res = context.BTNodeOutput();
             if (res == BehaviorStatus.Running)
             {
-                context.Inactive();
+                context.Inactive(this);
             }
             else
             {
-                context.Active();
+                context.Active(this);
             }
         }
     }

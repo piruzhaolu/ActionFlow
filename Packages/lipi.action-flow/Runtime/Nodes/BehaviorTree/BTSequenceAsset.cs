@@ -13,7 +13,7 @@ namespace ActionFlow
     /// 顺序执行节点。 执行到返回Failure节点时结束
     /// </summary>
     [Serializable]
-    public class BTSequence : StatusNodeBase<BTSequenceData>, IBehaviorNode
+    public class BTSequence : StatusNodeBase<BTSequenceData>, IBehaviorCompositeNode
     {
         [NodeOutputBT(10)]
         public NullStatus[] Childs;
@@ -28,7 +28,7 @@ namespace ActionFlow
                     if (b == BehaviorStatus.Failure) return BehaviorStatus.Failure;
                     else if (b == BehaviorStatus.Running)
                     {
-                        SetValue(ref context, new BTSequenceData()
+                        context.SetValue(this, new BTSequenceData()
                         {
                             RunningIndex = i
                         });
@@ -46,7 +46,7 @@ namespace ActionFlow
         public (bool,BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus res)
         {
             if (res == BehaviorStatus.Failure) return (true, res);
-            var value = GetValue(ref context);
+            var value = context.GetValue(this);
 
             for (int i = value.RunningIndex+1; i < Childs.Length; i++)
             {
@@ -54,7 +54,7 @@ namespace ActionFlow
                 if (b == BehaviorStatus.Failure) return (true, b);
                 else if(b == BehaviorStatus.Running)
                 {
-                    SetValue(ref context, new BTSequenceData()
+                    context.SetValue(this, new BTSequenceData()
                     {
                         RunningIndex = i
                     });
