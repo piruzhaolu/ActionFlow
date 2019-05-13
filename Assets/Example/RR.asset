@@ -146,7 +146,7 @@ MonoBehaviour:
     Pos: {x: 593, y: 458}
   - Index: 6
     Pos: {x: 582, y: 327}
-  ViewPosition: {x: -80, y: -67.5}
+  ViewPosition: {x: -80, y: -67.333336}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &3331784061959709084
 MonoBehaviour:

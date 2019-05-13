@@ -2,8 +2,10 @@
 
 namespace ActionFlow
 {
-    public struct ActionRunState : IComponentData
+    public struct ActionRunState : ISystemStateComponentData
     {
-        public ActionStateData State;
+        public int InstanceID;
+        public int Index;
+        //public ActionStateData State;
     }
 }

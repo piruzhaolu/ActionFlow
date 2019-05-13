@@ -17,9 +17,9 @@ namespace ActionFlow
     /// <summary>
     /// ActionGraphAsset 已创建标记
     /// </summary>
-    public struct ActionGraphCreated : ISystemStateComponentData
-    {
-    }
+    //public struct ActionGraphCreated : ISystemStateComponentData
+    //{
+    //}
 
 
 

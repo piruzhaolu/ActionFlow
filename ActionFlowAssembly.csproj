@@ -74,6 +74,11 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\GraphAssetMonoComponent.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\NodeSleeping.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Components\NodeTimer.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateChunk.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateContainer.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateForEntity.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateMapToAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateNode.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionStateData.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\Context.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\GraphAsset.cs" />
@@ -99,6 +104,9 @@
     </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Collections.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.1.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

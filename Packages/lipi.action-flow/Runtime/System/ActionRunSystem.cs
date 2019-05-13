@@ -16,9 +16,14 @@ namespace ActionFlow
             NativeArray<int> actives = new NativeArray<int>(1000, Allocator.Temp);
             NativeArray<int> wakingArray = new NativeArray<int>(1000, Allocator.Temp);
 
+            
             Entities.ForEach((Entity e, ActionGraphAsset asset, ref ActionRunState state) =>
             {
-                var stateData = state.State;
+                var id = state.InstanceID;
+                var index = state.Index;
+                ref ActionStateContainer container = ref ActionStateMapToAsset.Instance.GetContainer(id);
+
+                var stateData = container.GetStateForEntity(index);// state.State;
                 if (stateData.AnyActive == false && stateData.AnyWaking == false) return;
 
                 var nodeList = asset.Asset.RuntimeNodes;
@@ -43,7 +48,7 @@ namespace ActionFlow
                 {
                     var wakingIndex = wakingArray[i]; 
                     context.Index = wakingIndex;
-                    stateData.RemoveNodeCycle(wakingIndex, ActionStateData.NodeCycle.Waking);
+                    stateData.RemoveNodeCycle(wakingIndex, NodeCycle.Waking);
 #if UNITY_EDITOR
                     if (nodeList[wakingIndex] is ISleepable == false)
                     {

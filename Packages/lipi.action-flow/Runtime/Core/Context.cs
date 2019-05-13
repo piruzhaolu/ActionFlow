@@ -20,7 +20,7 @@ namespace ActionFlow
         public Entity TargetEntity { set; get; }
 
 
-        public ActionStateData StateData { set; get; }
+        public ActionStateForEntity StateData { set; get; }
 
         public EntityManager EM { set; get; }
 
@@ -40,11 +40,11 @@ namespace ActionFlow
 
         public void Active(IStatusNode node)
         {
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Active);
+            StateData.SetNodeCycle(Index, NodeCycle.Active);
         }
         public void Inactive(IStatusNode node)
         {
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Inactive);
+            StateData.SetNodeCycle(Index, NodeCycle.Inactive);
         }
 
         public void NodeOutput(int outputID = 0)
@@ -199,7 +199,7 @@ namespace ActionFlow
                 ComponentType = ComponentType.ReadWrite<T>()
             });
             PostCommand.AddComponent(TargetEntity, component);
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+            StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
         }
 
 
@@ -219,7 +219,7 @@ namespace ActionFlow
                 Time = t,
                 NodeIndex = Index
             });
-            StateData.SetNodeCycle(Index, ActionStateData.NodeCycle.Sleeping);
+            StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
         }
         #endregion
 
