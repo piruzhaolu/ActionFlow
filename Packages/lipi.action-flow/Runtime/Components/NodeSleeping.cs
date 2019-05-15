@@ -10,8 +10,10 @@ namespace ActionFlow
         public Entity Entity;
         public ComponentType ComponentType;
         public int NodeIndex;
-        
+    }
 
+    public struct NodeSleepingTag : IComponentData
+    {
 
     }
 }

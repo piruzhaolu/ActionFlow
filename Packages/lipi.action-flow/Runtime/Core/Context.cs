@@ -20,14 +20,14 @@ namespace ActionFlow
         public Entity TargetEntity { set; get; }
 
 
-        public ActionStateForEntity StateData { set; get; }
+        public ActionStateContainer StateData { set; get; }
 
         public EntityManager EM { set; get; }
 
         public EntityCommandBuffer PostCommand;
 
 
-        public int Index { set; get; }
+        public ActionStateIndex Index { internal set; get; }
 
         /// <summary>
         /// 当前节点图
@@ -49,7 +49,7 @@ namespace ActionFlow
 
         public void NodeOutput(int outputID = 0)
         {
-            var nodeInfo = Graph.NodeInfo[Index];
+            var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return;
             
             for (int i = 0; i < nodeInfo.Childs.Count; i++)
@@ -61,7 +61,7 @@ namespace ActionFlow
                     if (Graph.RuntimeNodes[tIndex] is INodeInput nodeInput)
                     {
                         var copyValue = this;
-                        copyValue.Index = tIndex;
+                        copyValue.Index = Index.NewStateIndex(tIndex);
                         nodeInput.OnInput(ref copyValue);
                     }
                 }
@@ -70,7 +70,7 @@ namespace ActionFlow
 
         public void NodeOutput<T>(T value, int outputID = 0) where T : struct
         {
-            var nodeInfo = Graph.NodeInfo[Index];
+            var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return;
 
             for (int i = 0; i < nodeInfo.Childs.Count; i++)
@@ -82,7 +82,7 @@ namespace ActionFlow
                     if (Graph.RuntimeNodes[tIndex] is INodeInput<T> nodeInput)
                     {
                         var copyValue = this;
-                        copyValue.Index = tIndex;
+                        copyValue.Index = Index.NewStateIndex(tIndex);
                         nodeInput.OnInput(ref copyValue, value);
                     }
                 }
@@ -93,7 +93,7 @@ namespace ActionFlow
 
         public BehaviorStatus BTNodeOutput(int arrayIndex = 0, int outputID = 0)
         {
-            var nodeInfo = Graph.NodeInfo[Index];
+            var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return BehaviorStatus.None;
 
             var id = NodeLink.BTIDPre + outputID + arrayIndex * 100;
@@ -106,7 +106,7 @@ namespace ActionFlow
                     if (Graph.RuntimeNodes[tIndex] is IBehaviorNode node)
                     {
                         var copyValue = this;
-                        copyValue.Index = tIndex;
+                        copyValue.Index = Index.NewStateIndex(tIndex);
                         return node.BehaviorInput(ref copyValue);
                     }
                 }
@@ -149,7 +149,7 @@ namespace ActionFlow
 
         public T GetParameter<T>(T defaultValue)
         {
-            return GetParameter(defaultValue, Index, 0, 0);
+            return GetParameter(defaultValue, Index.NodeIndex, 0, 0);
         }
 
 
@@ -179,48 +179,21 @@ namespace ActionFlow
         /// 将node的运行转移到system,并让node进入睡眠状态. 
         /// component 是 System与ActionFlow的关联, 当被添加到entity system系统执行, system将它删除时node会被唤醒
         /// </summary>
+        /// <typeparam name="ISleepable">node参数不使用,用于调用节点的类型限制 </typeparam>
         /// <typeparam name="T"></typeparam>
         /// <param name="component"></param>
         public void TransferToSystemAndSleep<T>(ISleepable node, T component) where T : struct, IComponentData
         {
-            DynamicBuffer<NodeSleeping> buffers;
-            if (EM.HasComponent<NodeSleeping>(TargetEntity))
+            ActionWakeSystem.AddSleepingNode(TargetEntity, ComponentType.ReadWrite<T>(), Index.NodeIndex);
+
+            if (EM.HasComponent<NodeSleepingTag>(TargetEntity) == false)
             {
-                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
+                PostCommand.AddComponent(TargetEntity, new NodeSleepingTag());
             }
-            else
-            {
-                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
-            }
-            buffers.Add(new NodeSleeping()
-            {
-                Entity = CurrentEntity,
-                NodeIndex = Index,
-                ComponentType = ComponentType.ReadWrite<T>()
-            });
             PostCommand.AddComponent(TargetEntity, component);
             StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
         }
 
-
-        public void SetWakeTimerAndSleep(ISleepable node, float t)
-        {
-            DynamicBuffer<NodeTimer> buffers;
-            if (EM.HasComponent<NodeTimer>(CurrentEntity))
-            {
-                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
-            }
-            else
-            {
-                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
-            }
-            buffers.Add(new NodeTimer()
-            {
-                Time = t,
-                NodeIndex = Index
-            });
-            StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
-        }
         #endregion
 
 
@@ -231,7 +204,7 @@ namespace ActionFlow
         /// <returns></returns>
         public IBehaviorNode GetParentBehaviorNode()
         {
-            var pIndex = Graph.NodeInfo[Index].ParentIndex;
+            var pIndex = Graph.NodeInfo[Index.NodeIndex].ParentIndex;
             if (pIndex < Graph.RuntimeNodes.Length)
             {
                 if (Graph.RuntimeNodes[pIndex] is IBehaviorNode node)
@@ -245,15 +218,15 @@ namespace ActionFlow
 
         private void _BehaviorRunningCompleted(ref Context context, BehaviorStatus result)
         {
-            var pIndex = Graph.NodeInfo[context.Index].ParentIndex;
+            var pIndex = Graph.NodeInfo[context.Index.NodeIndex].ParentIndex;
             if (pIndex < 0) return;
             if (pIndex < Graph.RuntimeNodes.Length)
             {
                 if (Graph.RuntimeNodes[pIndex] is IBehaviorCompositeNode node)
                 {
                     var childIndex = context.Index;
-                    context.Index = pIndex;
-                    var (b, res) = node.Completed(ref context, childIndex, result);
+                    context.Index = context.Index.NewStateIndex( pIndex);
+                    var (b, res) = node.Completed(ref context, childIndex.NodeIndex, result);
                     if (b)
                     { //向 parent node 递归
                         _BehaviorRunningCompleted(ref context, res);

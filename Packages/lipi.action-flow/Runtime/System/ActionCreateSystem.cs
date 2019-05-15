@@ -31,11 +31,12 @@ namespace ActionFlow
                 //var stateData = ActionStateData.Create(asset.Asset);
                 //stateData.SetNodeCycle(asset.Asset.Entry, NodeCycle.Active);
                 //TODO: 把入口入在启动逻辑中，而不是通过设置为active来处理
-                container.GetStateForEntity(index).SetNodeCycle(asset.Asset.Entry, NodeCycle.Active);
+                var stateIndex = new ActionStateIndex(index, asset.Asset.Entry);
+                container.SetNodeCycle(stateIndex, NodeCycle.Active);
                 PostUpdateCommands.AddComponent(e, new ActionRunState()
                 {
                     InstanceID = asset.Asset.GetInstanceID(),
-                    Index = index
+                    ChunkIndex = index
                 });
                 //PostUpdateCommands.AddComponent(e, new ActionGraphCreated() { });
             });

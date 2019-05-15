@@ -21,7 +21,6 @@ namespace ActionFlow
         private int chunkCapacity;
 
 
-
         public static ActionStateContainer Create(GraphAsset graph, int chunkCapacity = 5)
         {
             var container = new ActionStateContainer();
@@ -117,18 +116,159 @@ namespace ActionFlow
             chunkCount--;
         }
 
-        public ActionStateForEntity GetStateForEntity(int index)
+        //public ActionStateForEntity GetStateForEntity(int index)
+        //{
+        //    return new ActionStateForEntity()
+        //    {
+        //        Nodes = new NativeSlice<ActionStateNode>(Nodes, Chunks[index].Position * nodeCount, nodeCount),
+        //        Chunk = Chunks,
+        //        States = States + Chunks[index].Position * statesSize,
+        //        CurrChunkIndex = index
+        //    };
+        //}
+
+        #region Node数据操作
+
+        public T GetValue<T>(ActionStateIndex index) where T : struct
         {
-            return new ActionStateForEntity()
+            var node = Nodes[ToNodeIndex(index)];
+            var valueOffset = Chunks[index.ChunkIndex].Position * statesSize + node.offset;
+            UnsafeUtility.CopyPtrToStructure<T>(States + valueOffset, out var value);
+            return value;
+        }
+        public void SetValue<T>(ActionStateIndex index, T value) where T : struct
+        {
+            var node = Nodes[ToNodeIndex(index)];
+            var valueOffset = Chunks[index.ChunkIndex].Position * statesSize + node.offset;
+            UnsafeUtility.CopyStructureToPtr(ref value, States + valueOffset);
+        }
+
+        public void SetNodeCycle(ActionStateIndex stateIndex, NodeCycle cycle)
+        {
+            var index = ToNodeIndex(stateIndex);
+            var node = Nodes[index];
+            var Chunk = Chunks[stateIndex.ChunkIndex];
+            var currCycle = node.Cycle;
+
+            switch (cycle)
             {
-                Nodes = new NativeSlice<ActionStateNode>(Nodes, Chunks[index].Position * nodeCount, nodeCount),
-                Chunk = Chunks,
-                States = States + Chunks[index].Position * statesSize,
-                CurrChunkIndex = index
-            };
+                case NodeCycle.Active:
+                    if (!currCycle.Has(NodeCycle.Active))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Chunk.Active += 1;
+                    }
+                    break;
+                case NodeCycle.Sleeping:
+                    if (!currCycle.Has(NodeCycle.Sleeping))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Chunk.Sleeping += 1;
+                        if (currCycle.Has(NodeCycle.Waking))
+                        {
+                            currCycle = currCycle.Remove(NodeCycle.Waking);
+                            Chunk.Waking -= 1;
+                        }
+                    }
+                    break;
+                case NodeCycle.Waking:
+                    if (!currCycle.Has(NodeCycle.Waking))
+                    {
+                        currCycle = currCycle.Add(cycle);
+                        Chunk.Waking += 1;
+                        if (currCycle.Has(NodeCycle.Sleeping))
+                        {
+                            currCycle = currCycle.Remove(NodeCycle.Sleeping);
+                            Chunk.Sleeping -= 1;
+                        }
+                    }
+                    break;
+                case NodeCycle.Inactive:
+                    if (currCycle.Has(NodeCycle.Active)) Chunk.Active -= 1;
+                    if (currCycle.Has(NodeCycle.Waking)) Chunk.Waking -= 1;
+                    if (currCycle.Has(NodeCycle.Sleeping)) Chunk.Sleeping -= 1;
+                    currCycle = cycle;
+                    break;
+            }
+            node.Cycle = currCycle;
+            Nodes[index] = node;
+            Chunks[stateIndex.ChunkIndex] = Chunk;
+        }
+
+        public void RemoveNodeCycle(ActionStateIndex stateIndex, NodeCycle cycle)
+        {
+            var index = ToNodeIndex(stateIndex);
+            var node = Nodes[index];
+            var Chunk = Chunks[stateIndex.ChunkIndex];
+            var currCycle = node.Cycle;
+            if (currCycle.Has(cycle))
+            {
+                currCycle = currCycle.Remove(cycle);
+                switch (cycle)
+                {
+                    case NodeCycle.Active: Chunk.Active -= 1; break;
+                    case NodeCycle.Sleeping: Chunk.Sleeping -= 1; break;
+                    case NodeCycle.Waking: Chunk.Waking -= 1; break;
+                }
+            }
+
+            node.Cycle = currCycle;
+            Nodes[index] = node;
+            Chunks[stateIndex.ChunkIndex] = Chunk;
+        }
+
+        public NodeCycle GetNodeCycle(ActionStateIndex stateIndex)
+        {
+            return Nodes[ToNodeIndex(stateIndex)].Cycle;
+        }
+
+        public (int, int) GetAllActiveOrWakingIndex(
+            int chunkIndex,
+            ref NativeArray<int> activeArray,
+            ref NativeArray<int> wakingArray)
+        {
+            var count_a = 0;
+            var count_b = 0;
+            var s = Chunks[chunkIndex].Position * nodeCount;
+            var e = s + nodeCount;
+            for (int i = s; i < e; i++)
+            {
+                var val = Nodes[i].Cycle;
+                if (val.Has(NodeCycle.Active))
+                {
+                    activeArray[count_a] = i-s;
+                    count_a++;
+                }
+                if (val.Has(NodeCycle.Waking))
+                {
+                    wakingArray[count_b] = i-s;
+                    count_b++;
+                }
+            }
+            return (count_a, count_b);
         }
 
 
+        public bool AnySleeping(int chunkIndex)
+        {
+            return Chunks[chunkIndex].Sleeping > 0;
+        }
+
+        public bool AnyActive(int chunkIndex)
+        {
+            return  Chunks[chunkIndex].Active > 0;
+
+        }
+
+        public bool AnyWaking(int chunkIndex)
+        { return Chunks[chunkIndex].Waking > 0; }
+
+
+        private int ToNodeIndex(ActionStateIndex actionStateIndex)
+        {
+            return Chunks[actionStateIndex.ChunkIndex].Position * nodeCount + actionStateIndex.NodeIndex;
+        }
+        #endregion
 
         public void Dispose()
         {
