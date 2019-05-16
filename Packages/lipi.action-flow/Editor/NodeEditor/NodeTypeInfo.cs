@@ -75,7 +75,7 @@ namespace ActionFlow
             {
                 case IOMode.BTInput:
                 case IOMode.BTOutput:
-                    return new Color(0.3f, 0.6f, 0.3f);
+                    return new Color(0.46f, 0.72f, 0.85f);
                 case IOMode.InputParm:
                 case IOMode.OutputParm:
                     return new Color(0.7f, 0.85f, 0.7f);

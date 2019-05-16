@@ -8,7 +8,7 @@ namespace ActionFlow
 {
 
     [Serializable]
-    public class DelayNode : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>
+    public class BTWait : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>
     {
         public float Time;
 
@@ -28,8 +28,8 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("Delay")]
-    public class DelayNodeAsset:NodeAsset<DelayNode>
+    [NodeInfo("BT/Wait")]
+    public class BTWaitAsset :NodeAsset<BTWait>
     {
 
     }

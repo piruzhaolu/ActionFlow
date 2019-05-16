@@ -42,7 +42,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    Value: 0.4
+    Value: 0.2
 --- !u!114 &-3969532750795772896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,12 +263,12 @@ MonoBehaviour:
   - Index: 12
     Pos: {x: 591, y: 549}
   - Index: 13
-    Pos: {x: 319, y: 588}
+    Pos: {x: 357, y: 595}
   - Index: 14
     Pos: {x: 598, y: 347}
   - Index: 15
     Pos: {x: 610, y: 732}
-  ViewPosition: {x: -35.333332, y: -3.3333333}
+  ViewPosition: {x: -35.5, y: -3.5}
   ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
 --- !u!114 &2796210345852103544
 MonoBehaviour:
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Value:
     RotateValue: 0.1
-    TimeLength: 3
+    TimeLength: 10
 --- !u!114 &8903697292685017399
 MonoBehaviour:
   m_ObjectHideFlags: 0

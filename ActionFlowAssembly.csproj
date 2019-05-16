@@ -88,8 +88,9 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\StatusNodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTRootAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSelectorAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSequenceAsset.cs" />
-    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\DelayNodeAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTWaitNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\EntryNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Parm\ParmFloatNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionCreateSystem.cs" />

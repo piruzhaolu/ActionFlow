@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Example\Scripts\BTAttackAsset.cs" />
     <Compile Include="Assets\Example\Scripts\BTNodeAsset.cs" />
     <Compile Include="Assets\Example\Scripts\InputNodeAsset.cs" />
     <Compile Include="Assets\Example\Scripts\RotateNodeAsset.cs" />
