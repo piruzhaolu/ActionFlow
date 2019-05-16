@@ -182,17 +182,60 @@ namespace ActionFlow
         /// <typeparam name="ISleepable">node参数不使用,用于调用节点的类型限制 </typeparam>
         /// <typeparam name="T"></typeparam>
         /// <param name="component"></param>
+        //public void TransferToSystemAndSleep<T>(ISleepable node, T component) where T : struct, IComponentData
+        //{
+        //    ActionWakeSystemV2.AddSleepingNode(TargetEntity, ComponentType.ReadWrite<T>(), CurrentEntity, Index.NodeIndex);
+
+        //    if (EM.HasComponent<NodeSleepingTag>(TargetEntity) == false)
+        //    {
+        //        PostCommand.AddComponent(TargetEntity, new NodeSleepingTag());
+        //    }
+        //    PostCommand.AddComponent(TargetEntity, component);
+        //    StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
+        //}
+
         public void TransferToSystemAndSleep<T>(ISleepable node, T component) where T : struct, IComponentData
         {
-            ActionWakeSystem.AddSleepingNode(TargetEntity, ComponentType.ReadWrite<T>(), Index.NodeIndex);
-
-            if (EM.HasComponent<NodeSleepingTag>(TargetEntity) == false)
+            DynamicBuffer<NodeSleeping> buffers;
+            if (EM.HasComponent<NodeSleeping>(TargetEntity))
             {
-                PostCommand.AddComponent(TargetEntity, new NodeSleepingTag());
+                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
             }
+            else
+            {
+                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
+            }
+            buffers.Add(new NodeSleeping()
+            {
+                Entity = CurrentEntity,
+                NodeIndex = Index.NodeIndex,
+                ComponentType = ComponentType.ReadWrite<T>()
+            });
             PostCommand.AddComponent(TargetEntity, component);
             StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
         }
+
+
+        public void SetWakeTimerAndSleep(ISleepable node, float t)
+        {
+            DynamicBuffer<NodeTimer> buffers;
+            if (EM.HasComponent<NodeTimer>(CurrentEntity))
+            {
+                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
+            }
+            else
+            {
+                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
+            }
+            buffers.Add(new NodeTimer()
+            {
+                Time = t,
+                NodeIndex = Index.NodeIndex
+            });
+            StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
+        }
+
+
 
         #endregion
 

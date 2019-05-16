@@ -6,30 +6,51 @@ using System;
 
 namespace ActionFlow
 {
+    //public unsafe struct ActionStateContainerPtr
+    //{
+    //    public void* Nodes;
+    //    public byte* States;
+    //    public void* Chunks;
+    //    public void* ContainerInfo;
+
+
+    //}
+
 
     public unsafe struct ActionStateContainer:IDisposable
     {
+        public struct Info
+        {
+            public int statesSize;//每块状态大小
+            public int nodeCount;//每块节点数量
+            public int chunkCount;
+            public int chunkCapacity;
+        }
 
         private NativeArray<ActionStateNode> Nodes;
         private byte* States;
         private NativeList<ActionStateChunk> Chunks;
+        private NativeArray<Info> ContainerInfo;
 
-        private int statesSize;//每块状态大小
-        private int nodeCount;//每块节点数量
+        //private int statesSize;//每块状态大小
+        //private int nodeCount;//每块节点数量
 
-        private int chunkCount;
-        private int chunkCapacity;
+        //private int chunkCount;
+        //private int chunkCapacity;
 
 
         public static ActionStateContainer Create(GraphAsset graph, int chunkCapacity = 5)
         {
             var container = new ActionStateContainer();
             var count = graph.RuntimeNodes.Length;
-            container.nodeCount = count;
+            container.ContainerInfo = new NativeArray<Info>(1, Allocator.Persistent);
+            var _info = new Info();
+            _info.nodeCount = count;
+            //container.nodeCount = count;
             container.Chunks = new NativeList<ActionStateChunk>(Allocator.Persistent);
            // container.Chunks.Add(new ActionStateChunk());
             container.Nodes = new NativeArray<ActionStateNode>(count* chunkCapacity, Allocator.Persistent);
-            container.chunkCount = 0;
+            _info.chunkCount = 0;
 
             var capacity = 1000;
             var statePtr = (byte*)UnsafeUtility.Malloc(capacity, 4, Allocator.Temp);
@@ -61,42 +82,45 @@ namespace ActionFlow
             UnsafeUtility.MemCpy(container.States, statePtr, offset);
             UnsafeUtility.Free(statePtr, Allocator.Temp);
 
-            container.statesSize = offset;
-            container.nodeCount = count;
-            container.chunkCapacity = chunkCapacity;
-
+            _info.statesSize = offset;
+            _info.nodeCount = count;
+            _info.chunkCapacity = chunkCapacity;
+            container.ContainerInfo[0] = _info;
             return container;
         }
 
+
+
         public int AddChunk()
         {
-            if (chunkCapacity <= chunkCount)
+            var _info = ContainerInfo[0];
+            if (ContainerInfo[0].chunkCapacity <= ContainerInfo[0].chunkCount)
             {
-                var newChunkCapacity = chunkCapacity * 2;
-                var newNodes = new NativeArray<ActionStateNode>(newChunkCapacity * nodeCount, Allocator.Persistent);
-                NativeArray<ActionStateNode>.Copy(Nodes, 0, newNodes, 0, chunkCapacity* nodeCount);
+                var newChunkCapacity = ContainerInfo[0].chunkCapacity * 2;
+                var newNodes = new NativeArray<ActionStateNode>(newChunkCapacity * ContainerInfo[0].nodeCount, Allocator.Persistent);
+                NativeArray<ActionStateNode>.Copy(Nodes, 0, newNodes, 0, _info.chunkCapacity * _info.nodeCount);
                 Nodes.Dispose();
                 Nodes = newNodes;
 
 
-                var newStates = UnsafeUtility.Malloc(newChunkCapacity * statesSize, 4, Allocator.Persistent);
-                UnsafeUtility.MemCpy(newStates, States, chunkCapacity * statesSize);
+                var newStates = UnsafeUtility.Malloc(newChunkCapacity * _info.statesSize, 4, Allocator.Persistent);
+                UnsafeUtility.MemCpy(newStates, States, _info.chunkCapacity * _info.statesSize);
                 UnsafeUtility.Free(States, Allocator.Persistent);
                 States = (byte*)newStates;
-                
-                chunkCapacity = newChunkCapacity;
+
+                _info.chunkCapacity = newChunkCapacity;
             }
 
             Chunks.Add(new ActionStateChunk()
             {
-                Position = chunkCount
+                Position = _info.chunkCount
             });
             //var v = Nodes[chunkCount * nodeCount];
             //v.Cycle = NodeCycle.Active;
             //Nodes[chunkCount * nodeCount] = v;
-            chunkCount++;
-
-            return chunkCount-1;
+            _info.chunkCount++;
+            ContainerInfo[0] = _info;
+            return _info.chunkCount - 1;
         }
 
 
@@ -108,12 +132,24 @@ namespace ActionFlow
                 throw new ArgumentOutOfRangeException(nameof(index), "index 溢出");
             }
 #endif
+            var _info = ContainerInfo[0];
+
             var remove_chunk = Chunks[index];
-            var last_chunk = Chunks[chunkCount - 1];
-            NativeArray<ActionStateNode>.Copy(Nodes, last_chunk.Position * nodeCount, Nodes, remove_chunk.Position * nodeCount, nodeCount);
-            UnsafeUtility.MemCpy(States + last_chunk.Position * statesSize, States + remove_chunk.Position * statesSize, statesSize);
+            var last_chunk = Chunks[_info.chunkCount - 1];
+            NativeArray<ActionStateNode>.Copy(
+                Nodes, 
+                last_chunk.Position * _info.nodeCount, 
+                Nodes, 
+                remove_chunk.Position * _info.nodeCount,
+                _info.nodeCount);
+
+            UnsafeUtility.MemCpy(
+                States + last_chunk.Position * _info.statesSize, 
+                States + remove_chunk.Position * _info.statesSize,
+                _info.statesSize);
             Chunks[index] = last_chunk;
-            chunkCount--;
+            _info.chunkCount--;
+            ContainerInfo[0] = _info;
         }
 
         //public ActionStateForEntity GetStateForEntity(int index)
@@ -132,14 +168,14 @@ namespace ActionFlow
         public T GetValue<T>(ActionStateIndex index) where T : struct
         {
             var node = Nodes[ToNodeIndex(index)];
-            var valueOffset = Chunks[index.ChunkIndex].Position * statesSize + node.offset;
+            var valueOffset = Chunks[index.ChunkIndex].Position * ContainerInfo[0].statesSize + node.offset;
             UnsafeUtility.CopyPtrToStructure<T>(States + valueOffset, out var value);
             return value;
         }
         public void SetValue<T>(ActionStateIndex index, T value) where T : struct
         {
             var node = Nodes[ToNodeIndex(index)];
-            var valueOffset = Chunks[index.ChunkIndex].Position * statesSize + node.offset;
+            var valueOffset = Chunks[index.ChunkIndex].Position * ContainerInfo[0].statesSize + node.offset;
             UnsafeUtility.CopyStructureToPtr(ref value, States + valueOffset);
         }
 
@@ -229,11 +265,12 @@ namespace ActionFlow
         {
             var count_a = 0;
             var count_b = 0;
-            var s = Chunks[chunkIndex].Position * nodeCount;
-            var e = s + nodeCount;
+            var s = Chunks[chunkIndex].Position * ContainerInfo[0].nodeCount;
+            var e = s + ContainerInfo[0].nodeCount;
             for (int i = s; i < e; i++)
             {
                 var val = Nodes[i].Cycle;
+                if (val == NodeCycle.Inactive) continue;
                 if (val.Has(NodeCycle.Active))
                 {
                     activeArray[count_a] = i-s;
@@ -266,7 +303,7 @@ namespace ActionFlow
 
         private int ToNodeIndex(ActionStateIndex actionStateIndex)
         {
-            return Chunks[actionStateIndex.ChunkIndex].Position * nodeCount + actionStateIndex.NodeIndex;
+            return Chunks[actionStateIndex.ChunkIndex].Position * ContainerInfo[0].nodeCount + actionStateIndex.NodeIndex;
         }
         #endregion
 
@@ -274,7 +311,8 @@ namespace ActionFlow
         {
             Nodes.Dispose();
             UnsafeUtility.Free(States, Allocator.Persistent);
-            Chunks.Dispose() ;
+            Chunks.Dispose();
+            ContainerInfo.Dispose();
         }
 
 

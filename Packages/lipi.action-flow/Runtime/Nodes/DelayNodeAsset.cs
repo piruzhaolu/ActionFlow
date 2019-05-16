@@ -14,7 +14,7 @@ namespace ActionFlow
 
         public BehaviorStatus BehaviorInput(ref Context context)
         {
-           // context.SetWakeTimerAndSleep(this, Time);
+            context.SetWakeTimerAndSleep(this, Time);
             return BehaviorStatus.Running;
         }
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Unity.Collections;
 
 namespace ActionFlow
 {
@@ -8,7 +9,7 @@ namespace ActionFlow
 
     public class ActionStateMapToAsset:IDisposable
     {
-        private Dictionary<int, ActionStateContainer[]> _map;
+        private Dictionary<int, ActionStateContainer[]> _map;// ActionStateContainer是数组只是为会能传引用
 
         private static ActionStateMapToAsset _inst;
 
@@ -64,6 +65,19 @@ namespace ActionFlow
                 throw new System.Exception("对应的GraphAsset没有被创建");
             }
         }
+
+        //public NativeHashMap<int,ActionStateContainer> GetAllContainer(Allocator allocator)
+        //{
+        //    var count = _map.Count;
+        //    var nhMap = new NativeHashMap<int, ActionStateContainer>(count, allocator);
+        //    foreach (var kv in _map)
+        //    {
+        //        nhMap.TryAdd(kv.Key, kv.Value[0]);
+        //    }
+        //    return nhMap;
+
+        //}
+
 
         public void Dispose()
         {

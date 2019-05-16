@@ -157,6 +157,7 @@ MonoBehaviour:
   - {fileID: 7787122702536894241}
   - {fileID: -6789423762661177033}
   - {fileID: 6894374720361153463}
+  - {fileID: 5337449773808506445}
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -194,6 +195,9 @@ MonoBehaviour:
     - FromID: 100100
       Index: 14
       ToID: 100000
+    - FromID: 100400
+      Index: 15
+      ToID: 100000
     ParentIndex: 3
   - CurrentIndex: 5
     Childs: []
@@ -228,6 +232,9 @@ MonoBehaviour:
   - CurrentIndex: 14
     Childs: []
     ParentIndex: 4
+  - CurrentIndex: 15
+    Childs: []
+    ParentIndex: 4
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 94, y: 224}
@@ -240,7 +247,7 @@ MonoBehaviour:
   - Index: 4
     Pos: {x: 390, y: 243}
   - Index: 5
-    Pos: {x: 593, y: 458}
+    Pos: {x: 595, y: 413}
   - Index: 6
     Pos: {x: 851, y: 594}
   - Index: 7
@@ -254,11 +261,13 @@ MonoBehaviour:
   - Index: 11
     Pos: {x: 801, y: 443}
   - Index: 12
-    Pos: {x: 602, y: 574}
+    Pos: {x: 591, y: 549}
   - Index: 13
     Pos: {x: 319, y: 588}
   - Index: 14
     Pos: {x: 598, y: 347}
+  - Index: 15
+    Pos: {x: 610, y: 732}
   ViewPosition: {x: -35.333332, y: -3.3333333}
   ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
 --- !u!114 &2796210345852103544
@@ -291,6 +300,20 @@ MonoBehaviour:
   Value:
     RotateValue: -0.1
     TimeLength: 3
+--- !u!114 &5337449773808506445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff1a2309e372d54a84274224ebaa638, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Value:
+    Time: 3
 --- !u!114 &6894374720361153463
 MonoBehaviour:
   m_ObjectHideFlags: 0
