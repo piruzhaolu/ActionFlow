@@ -98,7 +98,7 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRunSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionWakeSystem.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionWakeSystemV2.cs" />
-    <None Include="Packages\lipi.action-flow\Runtime\ActionFlowAssembly.asmdef" />
+    <None Include="Packages\lipi.action-flow\Runtime\ActionFlow.asmdef" />
     <Reference Include="Unity.Entities">
       <HintPath>C:/Users/lipi/Desktop/lipi/github/ActionFlow/Library/ScriptAssemblies/Unity.Entities.dll</HintPath>
     </Reference>

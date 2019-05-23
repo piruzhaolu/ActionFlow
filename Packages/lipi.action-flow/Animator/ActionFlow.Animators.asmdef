@@ -1,0 +1,20 @@
+{
+    "name": "ActionFlow.Animators",
+    "references": [
+        "GUID:11e06bc6d7d45d44ea13a5939c54a6a8",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:a5baed0c9693541a5bd947d336ec7659",
+        "GUID:8819f35a0fc84499b990e90a4ca1911f",
+        "GUID:44dcb2bf5b9be4b5aa76674c8edcd1d5"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
