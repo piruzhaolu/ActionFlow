@@ -9,10 +9,10 @@ namespace ActionFlow
     {
         protected override void OnUpdate()
         {
-            //Entities.ForEach((AnimationPlayer player, ref Translation t) =>
-            //{
-            //    t.Value = t.Value + new Unity.Mathematics.float3(0, 0, 0.05f);
-            //});
+            Entities.ForEach((AnimationPlayer player) =>
+            {
+                player.Tick(Time.deltaTime);
+            });
         }
     }
 }
