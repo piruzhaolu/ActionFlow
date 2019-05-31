@@ -6,6 +6,28 @@ namespace ActionFlow
     [Serializable]
     public struct NullStatus { }
 
+
+    [Serializable]
+    public struct ParallelStatus
+    {
+        public ulong Value;
+
+        public BehaviorStatus this[int i]
+        {
+            set
+            {
+                ulong v = (ulong)value & 0b1111;
+                v <<= (i * 4);
+                Value |= v;
+            }
+            get
+            {
+                ulong v = Value >> (i * 4);
+                return (BehaviorStatus)(v & 0b1111);
+            }
+        }
+    }
+
     /// <summary>
     /// 带状态node的抽象类
     /// </summary>

@@ -90,6 +90,8 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysFailureAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysSuccessAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTLogAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTParallelAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTParallelSelectorAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTRootAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSelectorAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSequenceAsset.cs" />

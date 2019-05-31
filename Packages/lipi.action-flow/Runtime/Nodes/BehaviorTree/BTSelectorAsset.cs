@@ -22,7 +22,7 @@ namespace ActionFlow
         {
             if (Childs != null)
             {
-                context.SetValue(this, default);
+               // context.SetValue(this, default); 可以不重置，因为不会读出旧数据
                 int index = 0;
                 return ExecuteItem(ref context, ref index);
                 //for (int i = 0; i < Childs.Length; i++)
