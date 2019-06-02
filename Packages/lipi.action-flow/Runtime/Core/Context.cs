@@ -62,6 +62,9 @@ namespace ActionFlow
                     {
                         var copyValue = this;
                         copyValue.Index = Index.NewStateIndex(tIndex);
+#if UNITY_EDITOR
+                        RunningGraphAsset.Instance.SetInputTime(Graph, copyValue.Index);
+#endif
                         nodeInput.OnInput(ref copyValue);
                     }
                 }
@@ -83,6 +86,9 @@ namespace ActionFlow
                     {
                         var copyValue = this;
                         copyValue.Index = Index.NewStateIndex(tIndex);
+#if UNITY_EDITOR
+                        RunningGraphAsset.Instance.SetInputTime(Graph, copyValue.Index);
+#endif
                         nodeInput.OnInput(ref copyValue, value);
                     }
                 }
@@ -107,6 +113,9 @@ namespace ActionFlow
                     {
                         var copyValue = this;
                         copyValue.Index = Index.NewStateIndex(tIndex);
+#if UNITY_EDITOR
+                        RunningGraphAsset.Instance.SetInputTime(Graph, copyValue.Index);
+#endif
                         return node.BehaviorInput(ref copyValue);
                     }
                 }

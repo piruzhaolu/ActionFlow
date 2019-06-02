@@ -37,6 +37,10 @@ namespace ActionFlow
                         if (Nodes[i] != null) _RuntimeNodes[i] = (Nodes[i] as INodeAsset)?.GetValue();
                     }
                 }
+                if (_RuntimeNodes.Length == 0)
+                {
+                    throw new System.Exception("node length error");
+                }
                 return _RuntimeNodes;
             }
         }

@@ -16,6 +16,8 @@ MonoBehaviour:
   - {fileID: 3341663855041099913}
   - {fileID: 2359785143171938760}
   - {fileID: 3734439077079205860}
+  - {fileID: 0}
+  - {fileID: 0}
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -33,14 +35,24 @@ MonoBehaviour:
   - CurrentIndex: 2
     Childs: []
     ParentIndex: 1
+  - CurrentIndex: 3
+    Childs: []
+    ParentIndex: -1
+  - CurrentIndex: 4
+    Childs: []
+    ParentIndex: -1
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 254, y: 217}
   - Index: 1
     Pos: {x: 405, y: 200}
   - Index: 2
-    Pos: {x: 638, y: 211}
-  ViewPosition: {x: 0, y: 0}
+    Pos: {x: 660, y: 81}
+  - Index: 3
+    Pos: {x: 801.6667, y: 406.99997}
+  - Index: 4
+    Pos: {x: 621.6667, y: 359}
+  ViewPosition: {x: -172.66667, y: 74}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &2359785143171938760
 MonoBehaviour:
@@ -58,7 +70,7 @@ MonoBehaviour:
     AnimationClip: {fileID: 7400000, guid: 7443db6b711128c4ead48604e1a5892d, type: 3}
     ToLayer: 0
     Transition: {x: 0, y: 0.1}
-    Duration: 3
+    Duration: 10
 --- !u!114 &3341663855041099913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,4 +99,4 @@ MonoBehaviour:
     AnimationClip: {fileID: 7400000, guid: c922c2ce41673614e98c355866b54055, type: 3}
     ToLayer: 0
     Transition: {x: 0.1, y: 0}
-    Duration: 1
+    Duration: 10

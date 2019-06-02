@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace ActionFlow
 {
@@ -13,6 +14,14 @@ namespace ActionFlow
 
         public ActionGraphView(GraphEditor window)
         {
+            toolbar = new Toolbar();
+            runningEntityMenu = new ToolbarMenu();
+            runningEntityMenu.text = "None";
+            //menu.menu.AppendAction("abc1", action, DropdownMenuAction.Status.Checked );
+            //menu.menu.AppendAction("abc2", action, DropdownMenuAction.Status.Normal);
+
+            toolbar.Add(runningEntityMenu);
+            Add(toolbar);
             this.AddManipulator(new ContentZoomer()
             {
                 minScale = 0.5f,
@@ -33,12 +42,37 @@ namespace ActionFlow
             viewTransformChanged += viewTransformChangedHandler;
         }
 
-        
+        private void runningEntityMenuAction(DropdownMenuAction obj)
+        {
+            var v = obj.name;
+            var arr = v.Split('-');
+            var intV = Convert.ToInt32(arr[arr.Length - 1]);
+            runningEntityMenu.text = obj.name;
+            SelectedIndex = intV;
+        }
+        private DropdownMenuAction.Status runningEntityMenuStatusAction(DropdownMenuAction arg)
+        {
+            var v = arg.name;
+            var arr = v.Split('-');
+            var intV = Convert.ToInt32(arr[arr.Length - 1]);
+            if (intV == SelectedIndex)
+            {
+                return DropdownMenuAction.Status.Checked;
+            }else
+            {
+                return DropdownMenuAction.Status.Normal;
+            }
+        }
+
+
+
 
         private GraphEditor CurrentWindow;
+        private Toolbar toolbar;
+        private ToolbarMenu runningEntityMenu;//运行中的Entity
+        private int SelectedIndex = 0;//当前选中的Entity索引
 
         public GraphAsset GraphAsset { private set; get; }
-       
 
         public void Show(GraphAsset graphAsset)
         {
@@ -58,8 +92,92 @@ namespace ActionFlow
                 this.UpdateViewTransform(graphAsset.ViewPosition, graphAsset.ViewScale);
             }
         }
+        private int _version = -1;
+        public void SetRunningEntity(List<RunningGraphAsset.Info> infos, int version)
+        {
+            if (_version == version) return;
+            _version = version;
+            var sIndex = -1 ;
+            var count = (infos.Count >= 10) ? 10 : infos.Count;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                //DropdownMenuAction.Status status = DropdownMenuAction.Status.Normal;
+                if (SelectedIndex == infos[i].Index)
+                {
+                    //status = DropdownMenuAction.Status.Checked;
+                    sIndex = SelectedIndex;
+                }
+                if (i == 0 && sIndex == -1)
+                {
+                    //status = DropdownMenuAction.Status.Checked;
+                    sIndex = 0;
+                    SelectedIndex = 0;
+                }
+                runningEntityMenu.menu.AppendAction($"{infos[i].Name}-{infos[i].Index}", runningEntityMenuAction, runningEntityMenuStatusAction);
+            }
+        }
 
-       
+
+        public List<(EditorActionNode, float)> ps = new List<(EditorActionNode, float)>();
+
+
+        //在编辑器Playing中每帧调用，显示节点状态
+        public void PlayingUpdata()
+        {
+            var list = this.Query<EditorActionNode>().ToList();
+            var info = RunningGraphAsset.Instance.GetInfo(GraphAsset, SelectedIndex);
+            if (info == null) return;
+            var t = Time.realtimeSinceStartup;
+
+            ps.Clear();
+            foreach (var item in list)
+            {
+                var v = info.GetNodeCycle(item.Index);
+                var inputTime = RunningGraphAsset.Instance.GetInputTime(GraphAsset,
+                    new ActionStateIndex() { ChunkIndex = SelectedIndex, NodeIndex = item.Index });
+                if (t - inputTime < 3f)
+                {
+                    ps.Add((item, inputTime));
+                    //item.InputTween((t - inputTime));
+                }
+
+                if (v != NodeCycle.Inactive)
+                {
+                    item.Running = true;
+                } else
+                {
+                    item.Running = false;
+                }
+            }
+            ps.Sort(psSortFn);
+            for (int i = 0; i < ps.Count; i++)
+            {
+                var tValue = t - (ps[i].Item2 + i * 0.1f);
+                if (tValue >= 0)
+                {
+                    ps[i].Item1.InputTween(tValue);
+                }
+            }
+
+        }
+
+        private int psSortFn((EditorActionNode, float) x, (EditorActionNode, float) y)
+        {
+            if (x.Item2 < y.Item2) return -1;
+            else return 1;
+        }
+
+        public void PlayingExit()
+        {
+            var list = this.Query<EditorActionNode>().ToList();
+            foreach (var item in list)
+            {
+                item.Running = false;
+                item.InputTween(1f);
+            }
+        }
+
+
 
         public EditorActionNode GetNode(int index)
         {

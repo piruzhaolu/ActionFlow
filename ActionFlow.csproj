@@ -87,6 +87,7 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\NodeBase.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\StatusNodeBase.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\Visual\RunningGraphAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysFailureAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysSuccessAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTLogAsset.cs" />

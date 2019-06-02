@@ -28,6 +28,10 @@ namespace ActionFlow
             {
                 ref ActionStateContainer container = ref ActionStateMapToAsset.Instance.GetContainer(asset.Asset);
                 var index = container.AddChunk();
+#if UNITY_EDITOR
+                var eName = EntityManager.GetName(e);
+                RunningGraphAsset.Instance.Add(asset.Asset, eName, container, index);
+#endif
                 //var stateData = ActionStateData.Create(asset.Asset);
                 //stateData.SetNodeCycle(asset.Asset.Entry, NodeCycle.Active);
                 //TODO: 把入口入在启动逻辑中，而不是通过设置为active来处理

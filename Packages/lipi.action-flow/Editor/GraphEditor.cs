@@ -56,7 +56,29 @@ namespace ActionFlow
 
         }
 
+        private bool playing = false;
+        void Update()
+        {
+            if (EditorApplication.isPlaying && !EditorApplication.isPaused)
+            {
+                playing = true;
+                if (_graphView != null)
+                {
+                    _graphView.PlayingUpdata();
+                    var infoList = RunningGraphAsset.Instance.GetInfoList(GraphAsset);
+                    if (infoList == null) return;
+                    _graphView.SetRunningEntity(infoList.Infos, infoList.Version);
 
+                }
+            }else if(EditorApplication.isPlaying == false)
+            {
+                if (playing)
+                {
+                    _graphView.PlayingExit();
+                    playing = false;
+                }
+            }
+        }
 
 
         [OnOpenAsset()]

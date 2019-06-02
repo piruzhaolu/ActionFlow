@@ -9,7 +9,7 @@ namespace ActionFlow
 
     public class ActionStateMapToAsset:IDisposable
     {
-        private Dictionary<int, ActionStateContainer[]> _map;// ActionStateContainer是数组只是为会能传引用
+        private Dictionary<int, ActionStateContainer[]> _map;// ActionStateContainer是数组只是为了能传引用
 
         private static ActionStateMapToAsset _inst;
 
