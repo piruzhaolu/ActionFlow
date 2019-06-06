@@ -72,6 +72,7 @@ namespace ActionFlow
         public AnimationClipPlayable Play(AnimationClip clip, float transition = 0, int toLayer = 0)
         {
             var playable = AnimationClipPlayable.Create(_playableGraph, clip);
+
             int inputIndex;
             if (AnimationPlayLayers.Length > 1)
             {
@@ -81,6 +82,10 @@ namespace ActionFlow
             }
             else
             {
+                if (AnimationClipIsPlaying(mixerPlayable, clip, out var playingPlayable))
+                {
+                    return playingPlayable;
+                }
                 inputIndex = GetInputIndex(mixerPlayable);
                 var layer = AnimationPlayLayers[toLayer];
                 layer.Add(inputIndex, transition);
@@ -91,6 +96,25 @@ namespace ActionFlow
                 }
             }
             return playable;
+        }
+
+        private bool AnimationClipIsPlaying(AnimationMixerPlayable mixerPlayable, AnimationClip clip, out AnimationClipPlayable playable )
+        {
+            var count = mixerPlayable.GetInputCount();
+            for (int i = 0; i < count; i++)
+            {
+                var p = mixerPlayable.GetInput(i);
+                if (p.IsNull() == false)
+                {
+                    if (p.IsPlayableOfType<AnimationClipPlayable>())
+                    {
+                        playable = (AnimationClipPlayable)p;
+                        if (((AnimationClipPlayable)p).GetAnimationClip() == clip) return true;
+                    }
+                }
+            }
+            playable = (AnimationClipPlayable) Playable.Null;
+            return false;
         }
 
 
@@ -112,10 +136,11 @@ namespace ActionFlow
         }
 
 
-        public void Destroy()
+        public void OnDestroy()
         {
             _playableGraph.Destroy();
         }
+        
 
     }
 

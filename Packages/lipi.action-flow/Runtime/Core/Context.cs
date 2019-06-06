@@ -5,7 +5,7 @@ using Unity.Entities;
 #pragma warning disable IDE0060 // 删除未使用的参数
 namespace ActionFlow
 {
-   
+
     public struct Context
     {
 
@@ -22,9 +22,9 @@ namespace ActionFlow
 
         public ActionStateContainer StateData { set; get; }
 
-        public EntityManager EM { set; get; }
+        public EntityManager EntityManager { set; get; }
 
-        public EntityCommandBuffer PostCommand;
+        public EntityCommandBuffer PostUpdateCommands;
 
 
         public ActionStateIndex Index { internal set; get; }
@@ -51,7 +51,7 @@ namespace ActionFlow
         {
             var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return;
-            
+
             for (int i = 0; i < nodeInfo.Childs.Count; i++)
             {
                 var child = nodeInfo.Childs[i];
@@ -162,7 +162,7 @@ namespace ActionFlow
         }
 
 
-        public T GetValue<T>(IStatusNode<T> node)  where T: struct
+        public T GetValue<T>(IStatusNode<T> node) where T : struct
         {
             return StateData.GetValue<T>(Index);
         }
@@ -173,11 +173,50 @@ namespace ActionFlow
         /// <typeparam name="T"></typeparam>
         /// <param name="node"></param>
         /// <param name="value"></param>
-        public void SetValue<T>(IStatusNode<T> node, T value) where T: struct
+        public void SetValue<T>(IStatusNode<T> node, T value) where T : struct
 
         {
             StateData.SetValue(Index, value);
         }
+
+        /// <summary>
+        /// 设置节点共用数据(行为树中的黑板)。内部存储于Entity的组件上
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        public void SetDataToBlackboard<T>(T value) where T :struct, IComponentData
+        {
+            if (EntityManager.HasComponent<T>(CurrentEntity))
+            {
+                PostUpdateCommands.SetComponent(CurrentEntity, value);
+            }
+            else
+            {
+                PostUpdateCommands.AddComponent(CurrentEntity, value);
+            }
+        }
+
+        /// <summary>
+        /// 读取节点共用数据(行为树中的黑板)。内部存储于Entity的组件上
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool GetDataFromBlackboard<T>(out T value) where T : struct, IComponentData
+        {
+            if (EntityManager.HasComponent<T>(CurrentEntity))
+            {
+                value = EntityManager.GetComponentData<T>(CurrentEntity);
+                return true;
+            } else
+            {
+                value = default;
+                return false;
+            }
+        }
+
+
+
 
         #endregion
 
@@ -206,13 +245,13 @@ namespace ActionFlow
         public void TransferToSystemAndSleep<T>(ISleepable node, T component) where T : struct, IComponentData
         {
             DynamicBuffer<NodeSleeping> buffers;
-            if (EM.HasComponent<NodeSleeping>(TargetEntity))
+            if (EntityManager.HasComponent<NodeSleeping>(TargetEntity))
             {
-                buffers = EM.GetBuffer<NodeSleeping>(TargetEntity);
+                buffers = EntityManager.GetBuffer<NodeSleeping>(TargetEntity);
             }
             else
             {
-                buffers = PostCommand.AddBuffer<NodeSleeping>(TargetEntity);
+                buffers = PostUpdateCommands.AddBuffer<NodeSleeping>(TargetEntity);
             }
             buffers.Add(new NodeSleeping()
             {
@@ -220,7 +259,7 @@ namespace ActionFlow
                 NodeIndex = Index.NodeIndex,
                 ComponentType = ComponentType.ReadWrite<T>()
             });
-            PostCommand.AddComponent(TargetEntity, component);
+            PostUpdateCommands.AddComponent(TargetEntity, component);
             StateData.SetNodeCycle(Index, NodeCycle.Sleeping);
         }
 
@@ -228,13 +267,13 @@ namespace ActionFlow
         public void SetWakeTimerAndSleep(ISleepable node, float t)
         {
             DynamicBuffer<NodeTimer> buffers;
-            if (EM.HasComponent<NodeTimer>(CurrentEntity))
+            if (EntityManager.HasComponent<NodeTimer>(CurrentEntity))
             {
-                buffers = EM.GetBuffer<NodeTimer>(CurrentEntity);
+                buffers = EntityManager.GetBuffer<NodeTimer>(CurrentEntity);
             }
             else
             {
-                buffers = PostCommand.AddBuffer<NodeTimer>(CurrentEntity);
+                buffers = PostUpdateCommands.AddBuffer<NodeTimer>(CurrentEntity);
             }
             buffers.Add(new NodeTimer()
             {

@@ -7,7 +7,6 @@ using UnityEngine.Profiling;
 
 namespace ActionFlow
 {
-
     [UpdateAfter(typeof(ActionCreateSystem))]
     public class ActionRunSystem : ComponentSystem
     {
@@ -50,8 +49,8 @@ namespace ActionFlow
                 var nodeList = asset.Asset.RuntimeNodes;
 
                 context.Graph = asset.Asset;
-                context.EM = EntityManager;
-                context.PostCommand = PostUpdateCommands;
+                context.EntityManager = EntityManager;
+                context.PostUpdateCommands = PostUpdateCommands;
                 context.StateData = container;
                 for (int j = 0; j < runStateArray.Length; j++)
                 {
