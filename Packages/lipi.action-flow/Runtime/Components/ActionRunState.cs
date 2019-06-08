@@ -6,6 +6,7 @@ namespace ActionFlow
     {
         public int InstanceID;
         public int ChunkIndex;
+        //public Entity Blackboard;
         //public ActionStateData State;
     }
 }

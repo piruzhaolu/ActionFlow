@@ -66,9 +66,11 @@ namespace ActionFlow
             {
                 var outputInfo = nodeTypeInfo.Outputs[i];
 
-                var port = node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, null);
+                Port.Capacity capacity = (outputInfo.Mode == NodeTypeInfo.IOMode.BTOutput) ? Port.Capacity.Single : Port.Capacity.Multi;
+                var port = node.InstantiatePort(Orientation.Horizontal, Direction.Output, capacity, null);
                 port.portName = outputInfo.GetName();
                 port.source = outputInfo;
+                port.portColor = NodeTypeInfo.IOModeColor(outputInfo.Mode);
                 node.outputContainer.Add(port);
             }
             

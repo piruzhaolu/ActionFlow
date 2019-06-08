@@ -65,8 +65,16 @@ namespace ActionFlow
                             outPort = port;
 
                         }
-
+                    } else if(item.BT_IOInfo != null)
+                    {
+                        var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
+                        port.source = item.BT_IOInfo;
+                        port.portName = "";// item.IOInfo.Name;
+                        port.portColor = NodeTypeInfo.IOModeColor(NodeTypeInfo.IOMode.BTOutput);
+                        port.AddToClassList("outputparm-field");
+                        outPort = port;
                     }
+
                     if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
                     {
                         var labelField = new Label(item.Name);
@@ -119,6 +127,7 @@ namespace ActionFlow
             if (type == typeof(float)) return new FloatField();
             else if (type == typeof(int)) return new IntegerField();
             else if (type == typeof(Vector2)) return new Vector2Field();
+            else if (type == typeof(Vector3)) return new Vector3Field();
             else if (type == typeof(string)) return new TextField();
             else
             {

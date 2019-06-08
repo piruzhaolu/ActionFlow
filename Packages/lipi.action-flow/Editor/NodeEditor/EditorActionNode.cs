@@ -64,7 +64,7 @@ namespace ActionFlow
         public void InputTween(float t)
         {
             var colorIn = new Color(0.669f, 0.4f, 0.164f, 0.803f); //
-            var colorOut = new Color(0.247f, 0.247f, 0.247f, 0.803f);
+            var colorOut = new Color(0.247f, 0.247f, 0.247f, 0.803f); //默认色
             var v = Color.Lerp(colorIn, colorOut,t);
             titleContainer.style.backgroundColor = new StyleColor(v);
         }

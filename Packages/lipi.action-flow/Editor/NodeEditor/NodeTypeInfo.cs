@@ -63,8 +63,8 @@ namespace ActionFlow
             {
                 case IOMode.Output: return "output" + typeName;
                 case IOMode.Input: return "input" + typeName;
-                case IOMode.BTInput:return "BT input";
-                case IOMode.BTOutput:return "BT output";
+                case IOMode.BTInput:return "BTin";
+                case IOMode.BTOutput:return "BTout";
             }
             return string.Empty;
         }
@@ -224,6 +224,18 @@ namespace ActionFlow
                         Mode = IOMode.Output
                     });
                 }
+                var btArris = methods[i].GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                for (int j = 0; j < btArris.Length; j++)
+                {
+                    if (j > 0) continue;
+                   // var outputAttri = (NodeOutputBTAttribute)btArris[j];
+                    Outputs.Add(new IOInfo()
+                    {
+                        Name = "BTout",
+                        ID = NodeLink.BTIDPre,// TypeInfoHash(outputAttri.Type, IOMode.Output, outputAttri.ID),// outputAttri.ID,
+                        Mode = IOMode.BTOutput
+                    });
+                }
             }
 
         }
@@ -303,21 +315,21 @@ namespace ActionFlow
             //var methods = _valueType.GetMethods();
             //foreach (var method in methods)
             //{
-            //    var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute),false);
+            //    var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
             //    if (attri == null) continue;
             //    foreach (var item in attri)
             //    {
             //        if (item is NodeOutputBTAttribute btAttri)
             //        {
-            //            BTOutputs.Add(new BTOutputInfo()
+            //            BTOutput = new BTOutputInfo()
             //            {
-            //                MaxLink = btAttri.MaxLink,
+            //                MaxLink = 1,
             //                IOInfo = new IOInfo()
             //                {
             //                    Mode = IOMode.BTOutput,
             //                    ID = NodeLink.BTIDPre
             //                }
-            //            });
+            //            };
             //        }
             //    }
             //}

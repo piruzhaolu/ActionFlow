@@ -47,6 +47,9 @@ namespace ActionFlow
             StateData.SetNodeCycle(Index, NodeCycle.Inactive);
         }
 
+
+
+        #region output
         public void NodeOutput(int outputID = 0)
         {
             var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
@@ -122,7 +125,7 @@ namespace ActionFlow
             }
             return BehaviorStatus.None;
         }
-
+        #endregion
 
         #region get set Value
         /// <summary>
@@ -179,21 +182,31 @@ namespace ActionFlow
             StateData.SetValue(Index, value);
         }
 
+        public struct TempBlackboard:IComponentData
+        {
+            public Entity Entity;
+        }
+
+        //=======================================================
+        //TODO:临时处理方案。之后改成把数据放入专门的数据节点中
         /// <summary>
         /// 设置节点共用数据(行为树中的黑板)。内部存储于Entity的组件上
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
-        public void SetDataToBlackboard<T>(T value) where T :struct, IComponentData
+        public void SetDataToBlackboard<T>(ISetBlackboard<T> node, T value) where T :struct, IComponentData
         {
-            if (EntityManager.HasComponent<T>(CurrentEntity))
-            {
-                PostUpdateCommands.SetComponent(CurrentEntity, value);
-            }
-            else
-            {
-                PostUpdateCommands.AddComponent(CurrentEntity, value);
-            }
+            StateData.GetBlackboard<T>(Index) = value;
+            //Entity e = EntityManager.GetComponentData<ActionRunState>(CurrentEntity).Blackboard;
+
+            //if (EntityManager.HasComponent<T>(e))
+            //{
+            //    EntityManager.SetComponentData(e, value);
+            //}
+            //else
+            //{
+            //    EntityManager.AddComponentData(e, value);
+            //}
         }
 
         /// <summary>
@@ -202,17 +215,21 @@ namespace ActionFlow
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool GetDataFromBlackboard<T>(out T value) where T : struct, IComponentData
+        public T GetDataFromBlackboard<T>() where T : struct, IComponentData
         {
-            if (EntityManager.HasComponent<T>(CurrentEntity))
-            {
-                value = EntityManager.GetComponentData<T>(CurrentEntity);
-                return true;
-            } else
-            {
-                value = default;
-                return false;
-            }
+            return StateData.GetBlackboard<T>(Index);
+
+            //Entity e = EntityManager.GetComponentData<ActionRunState>(CurrentEntity).Blackboard;
+            //if (EntityManager.HasComponent<T>(e))
+            //{
+            //    value = EntityManager.GetComponentData<T>(e);
+            //    return true;
+            //}
+
+            //value = default;
+            //return false;
+
+
         }
 
 

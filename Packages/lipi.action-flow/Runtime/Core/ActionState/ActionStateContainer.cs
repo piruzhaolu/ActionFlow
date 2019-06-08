@@ -31,6 +31,7 @@ namespace ActionFlow
         private byte* States;
         private NativeList<ActionStateChunk> Chunks;
         private NativeArray<Info> ContainerInfo;
+        private NativeStructMap.Array BlackboardArray;
 
         //private int statesSize;//每块状态大小
         //private int nodeCount;//每块节点数量
@@ -42,6 +43,7 @@ namespace ActionFlow
         public static ActionStateContainer Create(GraphAsset graph, int chunkCapacity = 5)
         {
             var container = new ActionStateContainer();
+            var builder = NativeStructMap.CreateBuilder();
             var count = graph.RuntimeNodes.Length;
             container.ContainerInfo = new NativeArray<Info>(1, Allocator.Persistent);
             var _info = new Info();
@@ -77,15 +79,26 @@ namespace ActionFlow
                     nodeObject.CreateNodeDataTo(statePtr + offset);
                     offset += size;
                 }
+                if (asset?.GetValue() is IAccessBlackboard accessBlackboard)
+                {
+                    accessBlackboard.ToBuilder(builder);
+                }
+
             }
             container.States = (byte*) UnsafeUtility.Malloc(offset* chunkCapacity, 4, Allocator.Persistent);
             UnsafeUtility.MemCpy(container.States, statePtr, offset);
             UnsafeUtility.Free(statePtr, Allocator.Temp);
 
+            var array = builder.ToNativeStructMapArray(chunkCapacity, Allocator.Persistent);
+            container.BlackboardArray = array;
+
+
             _info.statesSize = offset;
             _info.nodeCount = count;
             _info.chunkCapacity = chunkCapacity;
             container.ContainerInfo[0] = _info;
+
+
             return container;
         }
 
@@ -119,6 +132,7 @@ namespace ActionFlow
             //v.Cycle = NodeCycle.Active;
             //Nodes[chunkCount * nodeCount] = v;
             _info.chunkCount++;
+            BlackboardArray.Add();
             ContainerInfo[0] = _info;
             return _info.chunkCount - 1;
         }
@@ -307,12 +321,19 @@ namespace ActionFlow
         }
         #endregion
 
+
+        public ref T GetBlackboard<T>(ActionStateIndex stateIndex) where T:struct
+        {
+            return ref BlackboardArray[stateIndex.ChunkIndex].GetValue<T>();
+        }
+
         public void Dispose()
         {
             Nodes.Dispose();
             UnsafeUtility.Free(States, Allocator.Persistent);
             Chunks.Dispose();
             ContainerInfo.Dispose();
+            BlackboardArray.Dispose();
         }
 
 

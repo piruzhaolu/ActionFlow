@@ -39,7 +39,24 @@ namespace ActionFlow {
         void Wake(ref Context context);
     }
 
+    /// <summary>
+    /// 黑板数据的注入接口。实际请使用IAccessBlackboard子接口 TODO:换C#8.0时可提供默认实现
+    /// 实现代码:builder.Add<T>();
+    /// </summary>
+    public interface IAccessBlackboard
+    {
+        void ToBuilder(NativeStructMap.Builder builder);
+    }
 
+    public interface IGetBlackboard<T> : IAccessBlackboard where T:struct
+    {
+    }
+    public interface ISetBlackboard<T> : IAccessBlackboard where T : struct
+    {
+    }
+    public interface IGetSetBlackboard<T> : IGetBlackboard<T>, ISetBlackboard<T> where T:struct
+    {
+    }
 
 
 
