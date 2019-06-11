@@ -4,7 +4,7 @@ using Unity.Collections.LowLevel.Unsafe;
 namespace ActionFlow
 {
     [Serializable]
-    public struct NullStatus { }
+    public struct NullStatus { public byte b; } // b数据无意义，增加是因为无法序列化0 size的struct
 
 
     [Serializable]

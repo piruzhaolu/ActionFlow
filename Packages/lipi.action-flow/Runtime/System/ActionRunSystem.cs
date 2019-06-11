@@ -34,6 +34,7 @@ namespace ActionFlow
             var sComponentType = GetArchetypeChunkSharedComponentType<ActionGraphAsset>();
             var stateComponentType = GetArchetypeChunkComponentType<ActionRunState>(true);
             var entityType = GetArchetypeChunkEntityType();
+            
 
             NativeArray<int> actives = new NativeArray<int>(1000, Allocator.Temp);
             NativeArray<int> wakingArray = new NativeArray<int>(1000, Allocator.Temp);

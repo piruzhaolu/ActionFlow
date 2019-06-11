@@ -27,7 +27,6 @@ namespace ActionFlow
                 context.Active(this);
                 return BehaviorStatus.Running;
             }
-
         }
 
         public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
