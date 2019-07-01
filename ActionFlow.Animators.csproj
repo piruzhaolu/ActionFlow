@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\lipi.action-flow\Animator\AnimationClipNode.cs" />
+    <Compile Include="Packages\lipi.action-flow\Animator\AnimationClipNodeAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Animator\AnimationConvertToEntity.cs" />
     <Compile Include="Packages\lipi.action-flow\Animator\AnimationPlayer.cs" />
     <Compile Include="Packages\lipi.action-flow\Animator\AnimationPlayLayer.cs" />

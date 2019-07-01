@@ -177,7 +177,6 @@ namespace ActionFlow
         /// <param name="node"></param>
         /// <param name="value"></param>
         public void SetValue<T>(IStatusNode<T> node, T value) where T : struct
-
         {
             StateData.SetValue(Index, value);
         }

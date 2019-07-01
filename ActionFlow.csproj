@@ -81,6 +81,7 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateMapToAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionState\ActionStateNode.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\ActionStateData.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Core\Container\NativeStructMap.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\Context.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\GraphAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Core\INode.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysFailureAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTAlwaysSuccessAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTLogAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTLoopUntilFailureAsset.cs" />
+    <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTLoopUntilSuccessAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTParallelAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTParallelSelectorAsset.cs" />
     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTRootAsset.cs" />
