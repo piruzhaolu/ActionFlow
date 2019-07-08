@@ -1,21 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Unity.Entities;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using System;
+using Unity.Collections;
+using Unity.Entities;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace ActionFlow
 {
-
-    /// <summary>
-    /// 静态的不同类型的Struct组成的数组
-    /// </summary>
-    public struct NativeStaticArrayHead:IDisposable
+    public struct NativeStaticMapHead:IDisposable
     {
         public struct TypePosition
         {
-            //public int TypeIndex;
+            public int TypeIndex;
             public int Offset;
             public int Size;
         }
@@ -24,23 +20,34 @@ namespace ActionFlow
 
         internal int Size; //总的内存大小
 
-
-        public TypePosition this[int i]
+        public bool GetPosition<T>(out TypePosition pos) where T : struct
         {
-            get
-            {
-                return TypePositions[i];
-            }
+            var index = TypeManager.GetTypeIndex<T>();
+            return GetPosition(index, out pos);
         }
 
+        public bool GetPosition(Type type, out TypePosition pos)
+        {
+            var index = TypeManager.GetTypeIndex(type);
+            return GetPosition(index, out pos);
+        }
 
-        
-
+        public bool GetPosition(int typeIndex, out TypePosition pos)
+        {
+            for (int i = 0; i < TypePositions.Length; i++)
+            {
+                pos = TypePositions[i];
+                if (TypePositions[i].TypeIndex == typeIndex) return true;
+            }
+            pos = default;
+            return false;
+        }
 
         public void Dispose()
         {
             TypePositions.Dispose();
         }
+
 
         ///==========  Builder
         ///==========  Builder
@@ -51,8 +58,6 @@ namespace ActionFlow
             var b = new Builder();
             return b;
         }
-
-        
 
         public class Builder
         {
@@ -67,9 +72,17 @@ namespace ActionFlow
 
             public Builder Add<T>() where T : struct
             {
+                var index = TypeManager.GetTypeIndex<T>();
+
+                for (int i = 0; i < NativeLists.Length; i++)
+                {
+                    if (NativeLists[i].TypeIndex == index) return this;
+                }
+
                 var size = UnsafeUtility.SizeOf<T>();
                 NativeLists.Add(new TypePosition()
                 {
+                    TypeIndex = index,
                     Offset = offset,
                     Size = size
                 });
@@ -77,11 +90,10 @@ namespace ActionFlow
                 return this;
             }
 
-            
 
-            public NativeStaticArrayHead ToHead()
+            public NativeStaticMapHead ToHead()
             {
-                var head = new NativeStaticArrayHead()
+                var head = new NativeStaticMapHead()
                 {
                     TypePositions = NativeLists.ToArray(Allocator.Persistent),
                     Size = offset
@@ -90,12 +102,7 @@ namespace ActionFlow
                 return head;
             }
 
-
         }
-
     }
-
-
-    
 
 }
