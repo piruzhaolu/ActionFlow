@@ -15,6 +15,8 @@ namespace ActionFlow
         #region 运行时数据
         public List<ScriptableObject> Nodes = new List<ScriptableObject>();
 
+        //public List<INode> Nodes = new List<INode>(); //2019.3
+
         public int Entry;
 
         public List<GraphNodeInfo> NodeInfo = new List<GraphNodeInfo>();
