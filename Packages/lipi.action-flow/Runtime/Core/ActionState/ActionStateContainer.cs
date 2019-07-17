@@ -6,17 +6,6 @@ using System;
 
 namespace ActionFlow
 {
-    //public unsafe struct ActionStateContainerPtr
-    //{
-    //    public void* Nodes;
-    //    public byte* States;
-    //    public void* Chunks;
-    //    public void* ContainerInfo;
-
-
-    //}
-
-
     public unsafe struct ActionStateContainer:IDisposable
     {
         public struct Info
@@ -31,27 +20,24 @@ namespace ActionFlow
         private byte* States;
         private NativeList<ActionStateChunk> Chunks;
         private NativeArray<Info> ContainerInfo;
-        private NativeStructMap.Array BlackboardArray;
+       // private NativeStructMap.Array BlackboardArray;
+        private NativeStaticMap Blackboard;
 
-        //private int statesSize;//每块状态大小
-        //private int nodeCount;//每块节点数量
-
-        //private int chunkCount;
-        //private int chunkCapacity;
 
 
         public static ActionStateContainer Create(GraphAsset graph, int chunkCapacity = 5)
         {
             var container = new ActionStateContainer();
-            var builder = NativeStructMap.CreateBuilder();
+           // var builder = NativeStructMap.CreateBuilder();
+            var builder = NativeStaticMapHead.CreateBuilder();
             var count = graph.RuntimeNodes.Length;
             container.ContainerInfo = new NativeArray<Info>(1, Allocator.Persistent);
             var _info = new Info();
             _info.nodeCount = count;
             //container.nodeCount = count;
             container.Chunks = new NativeList<ActionStateChunk>(Allocator.Persistent);
-           // container.Chunks.Add(new ActionStateChunk());
-            container.Nodes = new NativeArray<ActionStateNode>(count* chunkCapacity, Allocator.Persistent);
+            // container.Chunks.Add(new ActionStateChunk());
+            container.Nodes = new NativeArray<ActionStateNode>(count * chunkCapacity, Allocator.Persistent);
             _info.chunkCount = 0;
 
             var capacity = 1000;
@@ -85,12 +71,15 @@ namespace ActionFlow
                 }
 
             }
-            container.States = (byte*) UnsafeUtility.Malloc(offset* chunkCapacity, 4, Allocator.Persistent);
+            container.States = (byte*)UnsafeUtility.Malloc(offset * chunkCapacity, 4, Allocator.Persistent);
             UnsafeUtility.MemCpy(container.States, statePtr, offset);
             UnsafeUtility.Free(statePtr, Allocator.Temp);
 
-            var array = builder.ToNativeStructMapArray(chunkCapacity, Allocator.Persistent);
-            container.BlackboardArray = array;
+            //var array = builder.ToNativeStructMapArray(chunkCapacity, Allocator.Persistent);
+            var head = builder.ToHead();
+            var blackboard = NativeStaticMap.Create(ref head, chunkCapacity);
+            //container.BlackboardArray = array;
+            container.Blackboard = blackboard;
 
 
             _info.statesSize = offset;
@@ -132,7 +121,8 @@ namespace ActionFlow
             //v.Cycle = NodeCycle.Active;
             //Nodes[chunkCount * nodeCount] = v;
             _info.chunkCount++;
-            BlackboardArray.Add();
+            //BlackboardArray.Add();
+            Blackboard.NewItem();
             ContainerInfo[0] = _info;
             return _info.chunkCount - 1;
         }
@@ -324,7 +314,8 @@ namespace ActionFlow
 
         public ref T GetBlackboard<T>(ActionStateIndex stateIndex) where T:struct
         {
-            return ref BlackboardArray[stateIndex.ChunkIndex].GetValue<T>();
+            return ref Blackboard[stateIndex.ChunkIndex].RefGet<T>();
+           //return ref BlackboardArray[stateIndex.ChunkIndex].GetValue<T>();
         }
 
         public void Dispose()
@@ -333,7 +324,8 @@ namespace ActionFlow
             UnsafeUtility.Free(States, Allocator.Persistent);
             Chunks.Dispose();
             ContainerInfo.Dispose();
-            BlackboardArray.Dispose();
+            Blackboard.Dispose();
+            //BlackboardArray.Dispose();
         }
 
 

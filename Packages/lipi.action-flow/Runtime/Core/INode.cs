@@ -45,7 +45,7 @@ namespace ActionFlow {
     /// </summary>
     public interface IAccessBlackboard
     {
-        void ToBuilder(NativeStructMap.Builder builder);
+        void ToBuilder(NativeStaticMapHead.Builder builder);
     }
 
     public interface IGetBlackboard<T> : IAccessBlackboard where T:struct

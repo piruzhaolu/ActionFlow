@@ -93,6 +93,16 @@ namespace ActionFlow
             throw new Exception("T does not exist");
         }
 
+        public ref T RefGet<T>() where T : struct
+        {
+            if (head.GetPosition<T>(out var pos))
+            {
+                return ref UnsafeUtilityEx.AsRef<T>(data + pos.Offset);
+            }
+            throw new Exception("T does not exist");
+        }
+
+
         public void Set<T>(T value) where T : struct
         {
             if (head.GetPosition<T>(out var pos))
