@@ -166,9 +166,9 @@ namespace ActionFlow
             }
             else
             {
-                var label = new Label(_fieldInfo.Name);
-                label.AddToClassList("node-field-label");
-                arrItem.Add(label);
+                //var label = new Label(_fieldInfo.Name);
+                //label.AddToClassList("node-field-label");
+                //arrItem.Add(label);
             }
 
             var arrayItem = _sp.GetArrayElementAtIndex(i);
@@ -176,7 +176,7 @@ namespace ActionFlow
             if (be != null) arrItem.Add(be);
 
 
-            var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
+            var port = _node.InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, null);
             port.source = Clone(_fieldInfo.BT_IOInfo, i);
             port.portColor = NodeTypeInfo.IOModeColor(_fieldInfo.BT_IOInfo.Mode);
             port.portName = "";// item.IOInfo.Name;

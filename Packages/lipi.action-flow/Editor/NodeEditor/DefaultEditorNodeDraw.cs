@@ -49,12 +49,27 @@ namespace ActionFlow
 
             foreach (var inputInfo in list)
             {
-                Port.Capacity capacity = (inputInfo.Mode == NodeTypeInfo.IOMode.BTInput) ? Port.Capacity.Single : Port.Capacity.Multi;
-                var portIn = node.InstantiatePort(Orientation.Horizontal, Direction.Input, capacity, null);
-                portIn.portColor = NodeTypeInfo.IOModeColor(inputInfo.Mode);
-                portIn.portName = inputInfo.GetName();
-                portIn.source = inputInfo;
-                node.inputContainer.Add(portIn);
+                if(inputInfo.Mode == NodeTypeInfo.IOMode.BTInput)
+                {
+                    Port.Capacity capacity = Port.Capacity.Single;
+                    var portIn = node.InstantiatePort(Orientation.Vertical, Direction.Input, capacity, null);
+                    portIn.portColor = NodeTypeInfo.IOModeColor(inputInfo.Mode);
+                    portIn.portName = string.Empty;
+                    portIn.source = inputInfo;
+                    portIn.style.paddingTop = 2;
+                    node.titleContainer.Add(portIn);
+                    node.titleContainer.style.justifyContent = Justify.FlexStart;
+                    node.titleButtonContainer.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    Port.Capacity capacity = Port.Capacity.Multi;
+                    var portIn = node.InstantiatePort(Orientation.Horizontal, Direction.Input, capacity, null);
+                    portIn.portColor = NodeTypeInfo.IOModeColor(inputInfo.Mode);
+                    portIn.portName = inputInfo.GetName();
+                    portIn.source = inputInfo;
+                    node.inputContainer.Add(portIn);
+                }
             }
 
         }

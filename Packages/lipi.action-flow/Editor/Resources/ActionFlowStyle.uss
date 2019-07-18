@@ -72,9 +72,14 @@ EditorActionNode EditorNodeElement .outputparm-method #type {
 /* -------------*/
 
 
+NodeArrayField{
+    flex-grow: 1;
+}
+
 .node-array-label {
     flex-direction:row;
     justify-content:space-between;
+    
 }
 
 .node-array-label Button{
@@ -82,4 +87,9 @@ EditorActionNode EditorNodeElement .outputparm-method #type {
 }
 .node-array-content{
     /*padding-left:10;*/
+    flex-direction:row;
+    justify-content: center;
+    top:4;
+    padding-left: 5;
+    padding-right: 5;
 }
