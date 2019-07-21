@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.Experimental.GraphView;
 
 namespace ActionFlow
 {
@@ -28,18 +29,26 @@ namespace ActionFlow
             {
                 Debug.Log(a);
             }
+            Instance = window;
 
             //Debug.Log(t?.Length);
-           
+
 
         }
 
-        public GraphAsset GraphAsset;
+        public static GraphEditor Instance { get; private set; }
+
+
+
+        public GraphAsset GraphAsset { private set; get; }
+
+
         private ActionGraphView _graphView;
 
         void OnEnable()
         {
-           RefreshView();
+            Instance = this;
+            RefreshView();
         }
 
         void RefreshView()
@@ -53,7 +62,17 @@ namespace ActionFlow
             {
                 _graphView.Show(GraphAsset);
             }
+        }
 
+
+        public EditorActionNode selection {
+            get
+            {
+                var s = _graphView?.selection;
+                if (s == null || s.Count == 0) return null;
+                if (s[0] is EditorActionNode node) return node;
+                return null;
+            }
         }
 
         private bool playing = false;

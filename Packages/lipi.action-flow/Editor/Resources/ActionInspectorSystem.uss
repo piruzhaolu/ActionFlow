@@ -1,0 +1,6 @@
+﻿.ActionInspector #title
+{
+    font-size: 18px;
+    padding-left: 5px;
+    padding-top: 5px;
+}
