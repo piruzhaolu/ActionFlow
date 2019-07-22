@@ -16,6 +16,7 @@ namespace ActionFlow
     {
 
         [NodeOutputBT(10)]
+        [HideInActionInspector]
         public NullStatus[] Childs;
 
         public BehaviorStatus BehaviorInput(ref Context context)

@@ -1,6 +1,20 @@
-﻿.ActionInspector #title
+﻿.ActionInspector .title
 {
     font-size: 18px;
     padding-left: 5px;
     padding-top: 5px;
+}
+
+.ActionInspector .title2
+{
+    font-size: 14px;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.ActionInspector .nodeContainer
+{
+    padding-left: 10px;
+    margin-top: 2px;
+    margin-bottom: 5px;
 }

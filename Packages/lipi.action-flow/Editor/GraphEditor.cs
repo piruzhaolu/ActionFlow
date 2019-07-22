@@ -64,14 +64,12 @@ namespace ActionFlow
             }
         }
 
-
-        public EditorActionNode selection {
+        public List<ISelectable> selection {
             get
             {
                 var s = _graphView?.selection;
                 if (s == null || s.Count == 0) return null;
-                if (s[0] is EditorActionNode node) return node;
-                return null;
+                return s;
             }
         }
 
