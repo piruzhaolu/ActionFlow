@@ -77,7 +77,7 @@ namespace ActionFlow
 
 
 
-
+        
         void DrawUI()
         {
             rootVisualElement.Clear();
@@ -107,7 +107,6 @@ namespace ActionFlow
             }
         }
 
-
         void DrawUI_Node(SerializedObject nodeSO, string name)
         {
             var title = new Label();
@@ -126,32 +125,24 @@ namespace ActionFlow
                 {
                     if (sp.propertyPath != "m_Script" && sp.propertyPath != "Value")
                     {
-                        var be = new PropertyField(sp);
-                        be.Bind(nodeSO);
-                        var objs = GetAttribute(nodeSO, sp.propertyPath);
-                        foreach (var item in objs)
-                        {
-                            Debug.Log(item);
-                        }
+                        var list = InspectorAttributeUtils.GetAttribute(nodeSO, sp);
 
-                        nodeVE.Add(be);
+                        VisualElement be = new PropertyField(sp);
+                        be.Bind(nodeSO);
+
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            var ui = list[i].CreateUI(nodeSO, sp, be);
+                            be = ui.Item2;
+                            if (!ui.Item1) break;
+                        }
+                        if (be != null) nodeVE.Add(be);
                     }
                 } while (sp.NextVisible(sp.propertyPath == "Value"));
             }
         }
 
-        private object[] GetAttribute(SerializedObject so, string propertyPath)
-        {
-            var type = so.targetObject.GetType();
-            var paths = propertyPath.Split('.');
-            FieldInfo fieldInfo = null;
-            for (int i = 0; i < paths.Length; i++)
-            {
-                fieldInfo = type.GetField(paths[i]);
-                type = fieldInfo.FieldType;
-            }
-            return fieldInfo.GetCustomAttributes(false);
-        }
+        
 
 
         void RefreshView()
