@@ -90,7 +90,7 @@ namespace ActionFlow
 
         public NodeTypeInfo(Type type)
         {
-            _valueType = type.GetField("Value").FieldType;
+            _valueType = type.GetField("Value").FieldType; //TODO：Del SO
             if (_valueType.IsSerializable == false)
             {
                 throw new Exception($"{_valueType.Name} no add Serializable Attribute");
@@ -142,6 +142,11 @@ namespace ActionFlow
             var fields = _valueType.GetFields();
             foreach (var item in fields)
             {
+                if (item.IsDefined(typeof(HideInGraphViewAttribute), true))
+                {
+                    continue;
+                }
+
                 var attr = Get(item);
                 IOInfo ioInfo = null;
                 if (attr is NodeInputParmAttribute a)
@@ -177,15 +182,18 @@ namespace ActionFlow
                     };
                 }
 
-                FieldInfos.Add(new FieldInfo()
+                var fileInfo = new FieldInfo()
                 {
-                    Path = $"Value.{item.Name}",
+                    Path = $"Value.{item.Name}", //TODO:Del SO
                     FieldType = item.FieldType,
                     Name = item.Name,
                     MaxLink = maxLink,
                     IOInfo = ioInfo,
                     BT_IOInfo = btIOInfo
-                });
+                };
+                if (item.IsDefined(typeof(HideLabelInGraphViewAttribute), true)) fileInfo.Name = string.Empty;
+
+                FieldInfos.Add(fileInfo);
             }
 
             object Get(System.Reflection.FieldInfo item)
@@ -224,18 +232,17 @@ namespace ActionFlow
                         Mode = IOMode.Output
                     });
                 }
-                var btArris = methods[i].GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-                for (int j = 0; j < btArris.Length; j++)
-                {
-                    if (j > 0) continue;
-                   // var outputAttri = (NodeOutputBTAttribute)btArris[j];
-                    Outputs.Add(new IOInfo()
-                    {
-                        Name = "BTout",
-                        ID = NodeLink.BTIDPre,// TypeInfoHash(outputAttri.Type, IOMode.Output, outputAttri.ID),// outputAttri.ID,
-                        Mode = IOMode.BTOutput
-                    });
-                }
+                //var btArris = methods[i].GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                //for (int j = 0; j < btArris.Length; j++)
+                //{
+                //    if (j > 0) continue;
+                //    Outputs.Add(new IOInfo()
+                //    {
+                //        Name = "",
+                //        ID = NodeLink.BTIDPre,// TypeInfoHash(outputAttri.Type, IOMode.Output, outputAttri.ID),// outputAttri.ID,
+                //        Mode = IOMode.BTOutput
+                //    });
+                //}
             }
 
         }
@@ -292,47 +299,48 @@ namespace ActionFlow
         {
             BTOutput = null;
 
-            var fields = _valueType.GetFields();
-            foreach (var field in fields)
-            {
-                var attri = field.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-                if (attri == null || attri.Length == 0) continue;
-                if (attri[0] is NodeOutputBTAttribute outputBT)
-                {
-                    var isArray = field.FieldType.IsArray ? 100 : 0;
-                    BTOutput = new BTOutputInfo()
-                    {
-                        MaxLink = outputBT.MaxLink,
-                        IOInfo = new IOInfo()
-                        {
-                            Mode = IOMode.BTOutput,
-                            ID = NodeLink.BTIDPre + isArray
-                        }
-                    };
-                }
-            }
-
-            //var methods = _valueType.GetMethods();
-            //foreach (var method in methods)
+            //--------------Field在buildFieldInfo里处理
+            //var fields = _valueType.GetFields();
+            //foreach (var field in fields)
             //{
-            //    var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-            //    if (attri == null) continue;
-            //    foreach (var item in attri)
+            //    var attri = field.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+            //    if (attri == null || attri.Length == 0) continue;
+            //    if (attri[0] is NodeOutputBTAttribute outputBT)
             //    {
-            //        if (item is NodeOutputBTAttribute btAttri)
+            //        var isArray = field.FieldType.IsArray ? 100 : 0;
+            //        BTOutput = new BTOutputInfo()
             //        {
-            //            BTOutput = new BTOutputInfo()
+            //            MaxLink = outputBT.MaxLink,
+            //            IOInfo = new IOInfo()
             //            {
-            //                MaxLink = 1,
-            //                IOInfo = new IOInfo()
-            //                {
-            //                    Mode = IOMode.BTOutput,
-            //                    ID = NodeLink.BTIDPre
-            //                }
-            //            };
-            //        }
+            //                Mode = IOMode.BTOutput,
+            //                ID = NodeLink.BTIDPre + isArray
+            //            }
+            //        };
             //    }
             //}
+
+            var methods = _valueType.GetMethods();
+            foreach (var method in methods)
+            {
+                var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                if (attri == null) continue;
+                foreach (var item in attri)
+                {
+                    if (item is NodeOutputBTAttribute btAttri)
+                    {
+                        BTOutput = new BTOutputInfo()
+                        {
+                            MaxLink = 1,
+                            IOInfo = new IOInfo()
+                            {
+                                Mode = IOMode.BTOutput,
+                                ID = NodeLink.BTIDPre
+                            }
+                        };
+                    }
+                }
+            }
         }
 
 

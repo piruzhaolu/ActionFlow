@@ -33,10 +33,11 @@ namespace ActionFlow
             var fieldInfos = _typeInfo.FieldInfos;
             foreach (var item in fieldInfos)
             {
+               
                 var ve = new VisualElement();
                 ve.AddToClassList("node-field");
 
-                if (item.FieldType.IsArray && (item.MaxLink != -1 )) //|| item.IOInfo != null
+                if (item.FieldType.IsArray && (item.MaxLink != -1)) //|| item.IOInfo != null
                 {
                     var arrayField = new NodeArrayField(mSO, item.Path, item, _node);
                     ve.Add(arrayField);
@@ -65,7 +66,7 @@ namespace ActionFlow
                             outPort = port;
 
                         }
-                    } else if(item.BT_IOInfo != null)
+                    } else if (item.BT_IOInfo != null)
                     {
                         var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, null);
                         port.source = item.BT_IOInfo;
@@ -81,7 +82,7 @@ namespace ActionFlow
                         labelField.AddToClassList("node-field-label");
                         ve.Add(labelField);
                     }
-
+                    
                     AddField(ve, item.FieldType, mSO, item.Path);
                     if (outPort != null)
                     {
@@ -106,6 +107,26 @@ namespace ActionFlow
                 ve.Add(port);
                 Add(ve);
             }
+
+            if (_typeInfo.BTOutput != null)
+            {
+                var ve = new VisualElement();
+                ve.AddToClassList("node-field");
+                ve.AddToClassList("outputparm-method");
+
+                var port = _node.InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, null);
+                port.portName = string.Empty;
+                port.source = _typeInfo.BTOutput.IOInfo;
+                port.portColor = NodeTypeInfo.IOModeColor(_typeInfo.BTOutput.IOInfo.Mode);
+
+                ve.Add(port);
+                var _content = new VisualElement();
+                _content.AddToClassList("node-array-content");
+                _content.Add(ve);
+                Add(_content);
+            }
+
+
         }
 
 

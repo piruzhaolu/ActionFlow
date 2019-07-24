@@ -10,6 +10,7 @@ namespace ActionFlow
     [Serializable]
     public class BTWait : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>
     {
+        [HideLabelInGraphView]
         public float Time;
 
         public BehaviorStatus BehaviorInput(ref Context context)
