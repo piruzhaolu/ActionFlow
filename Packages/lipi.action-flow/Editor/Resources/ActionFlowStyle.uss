@@ -11,10 +11,12 @@
     flex-grow: 0;
 }
 
+
 .node-field-input {
     flex-grow: 1;
-    width: 100;
+   /* width: 100;*/
 }
+
 
 
 /* -------------*/
@@ -92,4 +94,27 @@ NodeArrayField{
     top:4;
     padding-left: 5;
     padding-right: 5;
+}
+
+.btInputPort{
+    position: absolute;
+    align-self: center;
+    top: -12;
+}
+.btInputPort>Label#type{
+    width: 0;
+    padding: 0;
+    margin: 0;
+}
+EditorActionNode #title-button-container{
+    display: none;
+}
+
+EditorActionNode #title{
+    justify-content: flex-start;
+}
+
+EditorActionNode #title-label{
+    margin-left: 4;
+    margin-right: 4;
 }

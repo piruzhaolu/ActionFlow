@@ -57,9 +57,11 @@ namespace ActionFlow
                     portIn.portName = string.Empty;
                     portIn.source = inputInfo;
                     portIn.style.paddingTop = 2;
-                    node.titleContainer.Add(portIn);
-                    node.titleContainer.style.justifyContent = Justify.FlexStart;
-                    node.titleButtonContainer.style.display = DisplayStyle.None;
+                    //node.titleContainer.Add(portIn);
+                    //node.titleContainer.style.justifyContent = Justify.FlexStart;
+                    //node.titleButtonContainer.style.display = DisplayStyle.None;
+                    portIn.AddToClassList("btInputPort");
+                    node.hierarchy.Insert(0,portIn);
                 }
                 else
                 {
