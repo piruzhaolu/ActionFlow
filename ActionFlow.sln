@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 16
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionFlow.Animators", "ActionFlow.Animators.csproj", "{64A77B02-C13D-AB15-9627-E2A1E3F4B867}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionFlow", "ActionFlow.csproj", "{6DA25F4B-7941-69F2-32A2-A8B84FDD73CE}"

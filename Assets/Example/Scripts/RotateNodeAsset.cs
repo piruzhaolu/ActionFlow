@@ -42,10 +42,10 @@ public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorN
     {
         var rv = context.GetParameter(RotateValue);
         var data = context.GetValue(this);
-        var r = context.EM.GetComponentData<Rotation>(context.CurrentEntity);
+        var r = context.EntityManager.GetComponentData<Rotation>(context.CurrentEntity);
        
         r.Value = math.mul(r.Value, quaternion.RotateY(rv + data.Value));
-        context.EM.SetComponentData(context.CurrentEntity, r);
+        context.EntityManager.SetComponentData(context.CurrentEntity, r);
         if (Time.time - data.StartTime > TimeLength)
         {
             context.BehaviorRunningCompleted(BehaviorStatus.Success);

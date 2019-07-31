@@ -9,6 +9,7 @@ using ActionFlow;
 [System.Serializable]
 public class BTLog : INode, IBehaviorNode
 {
+    [HideLabelInGraphView]
     public string LogText = string.Empty;
 
     public BehaviorStatus BehaviorInput(ref Context context)
