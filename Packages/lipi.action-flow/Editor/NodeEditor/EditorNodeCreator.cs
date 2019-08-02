@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEditor.Experimental.GraphView;
-using System.Collections.Generic;
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace ActionFlow
 {
@@ -32,7 +31,6 @@ namespace ActionFlow
             {
                 _searchTree = new List<SearchTreeEntry>();
                 _searchTree.Add(new SearchTreeGroupEntry(new GUIContent("Create Node"), 0));
-
                 GetAllNode(_searchTree);
             }
             return _searchTree;
@@ -85,31 +83,20 @@ namespace ActionFlow
         private void GetAllNode(List<SearchTreeEntry> treeEntries)
         {
             List<EntryItem> entryItems = new List<EntryItem>() ;
-            var allAssembly = AppDomain.CurrentDomain.GetAssemblies();
-            for (int i = 0; i < allAssembly.Length; i++)
+            var attrs = UnityEditor.TypeCache.GetTypesWithAttribute<NodeInfoAttribute>();
+            for (int i = 0; i < attrs.Count; i++)
             {
-                Assembly assembly = allAssembly[i];
-                if (assembly != null)
+                var aType = attrs[i];
+                var nodeInfo = (NodeInfoAttribute) Attribute.GetCustomAttribute(aType, typeof(NodeInfoAttribute));
+                var menuName = nodeInfo.MenuName.Split('/');
+                entryItems.Add(new EntryItem()
                 {
-                    Type[] types = assembly.GetTypes();
-                    for (int j = 0; j < types.Length; j++)
-                    {
-                        if (!types[j].IsClass) continue;
-                        NodeInfoAttribute nodeAttribute = (NodeInfoAttribute)Attribute.GetCustomAttribute(types[j], typeof(NodeInfoAttribute));
-                        if (nodeAttribute != null)
-                        {
-                            var menuName = nodeAttribute.MenuName.Split('/');
-                            entryItems.Add(new EntryItem()
-                            {
-                                Menu = menuName,
-                                Type = types[j]
-                            });
-                        }
+                    Menu = menuName,
+                    Type = aType
+                });
 
-                    }
-
-                }
             }
+
             entryItems.Sort((EntryItem x, EntryItem y) =>
             {
                 var len = Math.Max(x.Menu.Length, y.Menu.Length);
@@ -181,3 +168,29 @@ namespace ActionFlow
     }
 
 }
+
+//var allAssembly = AppDomain.CurrentDomain.GetAssemblies();
+//for (int i = 0; i < allAssembly.Length; i++)
+//{
+//    Assembly assembly = allAssembly[i];
+//    if (assembly != null)
+//    {
+//        Type[] types = assembly.GetTypes();
+//        for (int j = 0; j < types.Length; j++)
+//        {
+//            if (!types[j].IsClass) continue;
+//            NodeInfoAttribute nodeAttribute = (NodeInfoAttribute)Attribute.GetCustomAttribute(types[j], typeof(NodeInfoAttribute));
+//            if (nodeAttribute != null)
+//            {
+//                var menuName = nodeAttribute.MenuName.Split('/');
+//                entryItems.Add(new EntryItem()
+//                {
+//                    Menu = menuName,
+//                    Type = types[j]
+//                });
+//            }
+
+//        }
+
+//    }
+//}

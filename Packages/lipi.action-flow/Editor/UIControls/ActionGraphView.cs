@@ -238,6 +238,8 @@ namespace ActionFlow
         {
             var nodePos = pos - CurrentWindow.position.min - contentViewContainer.worldBound.position;
             var scaleNodePos = new Vector2(nodePos.x / viewTransform.scale.x, nodePos.y / viewTransform.scale.y);
+
+
             var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
 
             DrawNode(index);
