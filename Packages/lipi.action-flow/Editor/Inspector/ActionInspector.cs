@@ -98,19 +98,21 @@ namespace ActionFlow
                 for (int i = 0; i < _CurrentNodes.Count; i++)
                 {
                     var node = _CurrentNodes[i] as EditorActionNode;
-                    if (node != null && node.NodeAsset != null)
+                    if (node != null && node.SProperty != null)
                     {
-                        var mSO = new SerializedObject(node.NodeAsset);
-                        DrawUI_Node(mSO, node.title);
+                        //var mSO = new SerializedObject(node.NodeAsset);
+                        DrawUI_Node(node.SProperty, node.title);
                     }
                 }
             }
         }
 
-        void DrawUI_Node(SerializedObject nodeSO, string name)
+        void DrawUI_Node(SerializedProperty nodeSO, string name)
         {
-            var title = new Label();
-            title.text = name;
+            var title = new Label
+            {
+                text = name
+            };
             title.AddToClassList("title2");
             rootVisualElement.Add(title);
 
@@ -118,28 +120,36 @@ namespace ActionFlow
             nodeVE.AddToClassList("nodeContainer");
             rootVisualElement.Add(nodeVE);
 
-            var sp = nodeSO.GetIterator();
-            if (sp.NextVisible(true))
+            var toType = nodeSO.GetValueType();
+            var fields = toType.GetFields();
+            for (int i = 0; i < fields.Length; i++)
             {
-                do
-                {
-                    if (sp.propertyPath != "m_Script" && sp.propertyPath != "Value")
-                    {
-                        var list = InspectorAttributeUtils.GetAttribute(nodeSO, sp);
-
-                        VisualElement be = new PropertyField(sp);
-                        be.Bind(nodeSO);
-
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var ui = list[i].CreateUI(nodeSO, sp, be);
-                            be = ui.Item2;
-                            if (!ui.Item1) break;
-                        }
-                        if (be != null) nodeVE.Add(be);
-                    }
-                } while (sp.NextVisible(sp.propertyPath == "Value"));
+                Debug.Log(fields[i].Name);
             }
+
+
+          //  var sp = nodeSO;//.GetIterator();
+           // if (sp.NextVisible(true))
+            //{
+                //do
+                //{
+                //    if (sp.propertyPath != "m_Script" && sp.propertyPath != "Value")
+                //    {
+                //        var list = InspectorAttributeUtils.GetAttribute(nodeSO, sp);
+
+                //        VisualElement be = new PropertyField(sp);
+                //        be.Bind(nodeSO);
+
+                //        for (int i = 0; i < list.Count; i++)
+                //        {
+                //            var ui = list[i].CreateUI(nodeSO, sp, be);
+                //            be = ui.Item2;
+                //            if (!ui.Item1) break;
+                //        }
+                //        if (be != null) nodeVE.Add(be);
+                //    }
+                //} while (sp.NextVisible(sp.propertyPath == "Value"));
+            //}
         }
 
         

@@ -44,41 +44,13 @@ namespace ActionFlow
             return true;
         }
 
-        //private class TreeNode
-        //{
-        //    public TreeNode(string name)
-        //    {
-        //        Name = name;
-        //        Childs = new List<TreeNode>();
-        //    }
-        //    public string Name;
-        //    public List<TreeNode> Childs;
-        //    public Type Type;
-
-        //    public void Add(string[] path, Type type)
-        //    {
-        //        for (int i = 0; i < path.Length; i++)
-        //        {
-        //            var mName = path[i];
-        //            for (int j = 0; j < Childs.Count; j++)
-        //            {
-        //                if (Childs[j].Name == mName)
-        //                {
-        //                    var newPath = new string[path.Length - 1];
-        //                    Array.Copy(path, 1, newPath, 0, path.Length - 1);
-        //                    Add(path, type);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
         
         private class EntryItem
         {
             public string[] Menu;
             public Type Type;
         }
+
 
         private void GetAllNode(List<SearchTreeEntry> treeEntries)
         {
@@ -97,26 +69,7 @@ namespace ActionFlow
 
             }
 
-            entryItems.Sort((EntryItem x, EntryItem y) =>
-            {
-                var len = Math.Max(x.Menu.Length, y.Menu.Length);
-
-                for (int i = 0; i < len; i++)
-                {
-                    if (i == x.Menu.Length - 1 && i < y.Menu.Length - 1) return 1;
-                    if (i < x.Menu.Length - 1 && i == y.Menu.Length - 1) return -1;
-                    if (x.Menu.Length <= i) return 1;
-                    if (y.Menu.Length <= i) return -1;
-                    var xName = x.Menu[i];
-                    var yName = y.Menu[i];
-                    if (xName != yName)
-                    {
-                        return xName.CompareTo(yName);
-                    }
-
-                }
-                return 0;
-            });
+            entryItems.Sort(SortFn);
 
             List<string> currentPath = new List<string>();
             for (int i = 0; i < entryItems.Count; i++)
@@ -126,18 +79,8 @@ namespace ActionFlow
                 {
                     if (currentPath.Count <= j)
                     {
-                        if (j == item.Menu.Length - 1)
-                        {
-                            _searchTree.Add(new SearchTreeEntry(new GUIContent(item.Menu[j], Texture2D.blackTexture)) {
-                                level = j+1,
-                                userData = item.Type
+                        _addTreeEntry(j, item);
 
-                            });
-                        } else
-                        {
-                            _searchTree.Add(new SearchTreeGroupEntry(new GUIContent(item.Menu[j]), j+1));
-                            currentPath.Add(item.Menu[j]);
-                        }
                     }
                     else
                     {
@@ -145,29 +88,117 @@ namespace ActionFlow
                         else
                         {
                             currentPath.RemoveRange(j, currentPath.Count - j);
-                            if (j == item.Menu.Length - 1)
-                            {
-                                _searchTree.Add(new SearchTreeEntry(new GUIContent(item.Menu[j], Texture2D.blackTexture)) {
-                                    level = j + 1,
-                                    userData = item.Type
-                                });
-                            }
-                            else
-                            {
-                                _searchTree.Add(new SearchTreeGroupEntry(new GUIContent(item.Menu[j]), j + 1));
-                                currentPath.Add(item.Menu[j]);
-                            }
+                            _addTreeEntry(j, item);
                         }
                     }
                 }
-                
             }
 
+            //local function 
+            void _addTreeEntry(int j, EntryItem item){
+                if (j == item.Menu.Length - 1)
+                {
+                    _searchTree.Add(new SearchTreeEntry(new GUIContent(item.Menu[j], Texture2D.blackTexture))
+                    {
+                        level = j + 1,
+                        userData = item.Type
+
+                    });
+                }
+                else
+                {
+                    _searchTree.Add(new SearchTreeGroupEntry(new GUIContent(item.Menu[j]), j + 1));
+                    currentPath.Add(item.Menu[j]);
+                }
+            }
 
         }
-    }
 
+
+
+        private int SortFn(EntryItem x, EntryItem y)
+        {
+            var len = Math.Max(x.Menu.Length, y.Menu.Length);
+
+            for (int i = 0; i < len; i++)
+            {
+                if (i == x.Menu.Length - 1 && i < y.Menu.Length - 1) return 1;
+                if (i < x.Menu.Length - 1 && i == y.Menu.Length - 1) return -1;
+                if (x.Menu.Length <= i) return 1;
+                if (y.Menu.Length <= i) return -1;
+                var xName = x.Menu[i];
+                var yName = y.Menu[i];
+                if (xName != yName)
+                {
+                    return xName.CompareTo(yName);
+                }
+
+            }
+            return 0;
+        }
+
+    }
 }
+
+
+
+//if (j == item.Menu.Length - 1)
+//{
+//    _searchTree.Add(new SearchTreeEntry(new GUIContent(item.Menu[j], Texture2D.blackTexture)) {
+//        level = j + 1,
+//        userData = item.Type
+//    });
+//}
+//else
+//{
+//    _searchTree.Add(new SearchTreeGroupEntry(new GUIContent(item.Menu[j]), j + 1));
+//    currentPath.Add(item.Menu[j]);
+//}
+
+//if (j == item.Menu.Length - 1)
+//{
+//    _searchTree.Add(new SearchTreeEntry(new GUIContent(item.Menu[j], Texture2D.blackTexture)) {
+//        level = j+1,
+//        userData = item.Type
+
+//    });
+//} else
+//{
+//    _searchTree.Add(new SearchTreeGroupEntry(new GUIContent(item.Menu[j]), j+1));
+//    currentPath.Add(item.Menu[j]);
+//}
+
+
+//private class TreeNode
+//{
+//    public TreeNode(string name)
+//    {
+//        Name = name;
+//        Childs = new List<TreeNode>();
+//    }
+//    public string Name;
+//    public List<TreeNode> Childs;
+//    public Type Type;
+
+//    public void Add(string[] path, Type type)
+//    {
+//        for (int i = 0; i < path.Length; i++)
+//        {
+//            var mName = path[i];
+//            for (int j = 0; j < Childs.Count; j++)
+//            {
+//                if (Childs[j].Name == mName)
+//                {
+//                    var newPath = new string[path.Length - 1];
+//                    Array.Copy(path, 1, newPath, 0, path.Length - 1);
+//                    Add(path, type);
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//}
+
 
 //var allAssembly = AppDomain.CurrentDomain.GetAssemblies();
 //for (int i = 0; i < allAssembly.Length; i++)

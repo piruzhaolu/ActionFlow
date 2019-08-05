@@ -14,22 +14,22 @@ namespace ActionFlow
     {
 
         
-        public EditorNodeElement(ScriptableObject so, EditorActionNode node)
+        public EditorNodeElement(SerializedProperty so, EditorActionNode node)
         {
             _so = so;
             _node = node;
-            _typeInfo = NodeTypeInfo.GetNodeTypeInfo(so.GetType());
+            _typeInfo = NodeTypeInfo.GetNodeTypeInfo(so.GetValueType());
             CreateFieldElement();
         }
 
-        private ScriptableObject _so;
+        private SerializedProperty _so;
         private EditorActionNode _node;
         private NodeTypeInfo _typeInfo;
 
 
         private void CreateFieldElement()
         {
-            var mSO = new SerializedObject(_so);
+            var mSO = _so;
             var fieldInfos = _typeInfo.FieldInfos;
             foreach (var item in fieldInfos)
             {
@@ -132,11 +132,13 @@ namespace ActionFlow
 
 
 
-        private void AddField(VisualElement parent, Type fieldType, SerializedObject so, string path)
+        private void AddField(VisualElement parent, Type fieldType, SerializedProperty so, string path)
         {
             var be = DrawField(fieldType);
-            be.bindingPath = path;// $"Value.{fields[i].Name}";
-            be.Bind(so);
+            // be.bindingPath = path;// $"Value.{fields[i].Name}";
+            //Debug.Log($"{so.propertyPath} -- {path}");
+            var prop = so.FindPropertyRelative(path);
+            be.BindProperty(prop);
             be.AddToClassList("node-field-input");
             parent.Add(be);
         }

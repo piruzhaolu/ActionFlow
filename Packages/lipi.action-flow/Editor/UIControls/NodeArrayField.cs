@@ -6,19 +6,21 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
+using Unity.Burst;
 
 namespace ActionFlow
 {
 
     public class NodeArrayField : BindableElement
     {
-        public NodeArrayField(SerializedObject so, string bindingPath, NodeTypeInfo.FieldInfo fieldInfo, EditorActionNode node)
+        public NodeArrayField(SerializedProperty so, string bindingPath, NodeTypeInfo.FieldInfo fieldInfo, EditorActionNode node)
         {
             var elementType = fieldInfo.FieldType.GetElementType();
 
             _so = so;
             this.bindingPath = bindingPath;
-            _sp = _so.FindProperty(bindingPath);
+            _sp = _so.FindPropertyRelative(bindingPath);
             _elementType = elementType;
             _fieldInfo = fieldInfo;
             _node = node;
@@ -37,7 +39,7 @@ namespace ActionFlow
             Refresh();
         }
 
-        private SerializedObject _so;
+        private SerializedProperty _so;
         private SerializedProperty _sp;
         private Type _elementType;
         private VisualElement _content;
@@ -62,7 +64,7 @@ namespace ActionFlow
                 {
                     if (_fieldInfo.MaxLink != -1 && visualElements.Count >= _fieldInfo.MaxLink) break;
                     _sp.InsertArrayElementAtIndex(visualElements.Count);
-                    _so.ApplyModifiedProperties();
+                    _so.serializedObject.ApplyModifiedProperties();
                     var ve = AddElement(visualElements.Count);
                     visualElements.Add(ve);
                     _content.Add(ve);
@@ -135,7 +137,7 @@ namespace ActionFlow
                     _sp.InsertArrayElementAtIndex(arrayLength);
                     arrayLength += 1;
                 }
-                _so.ApplyModifiedProperties();
+                _so.serializedObject.ApplyModifiedProperties();
             } else
             {
                 maxIndex = arrayLength;
@@ -171,8 +173,9 @@ namespace ActionFlow
                 //arrItem.Add(label);
             }
 
-            var arrayItem = _sp.GetArrayElementAtIndex(i);
-            var be = ElementGenerate.Generate(_elementType, _so, arrayItem.propertyPath);// $"{_fieldInfo.Path}.Array.Data[{i}]");
+            //var arrayItem = _sp.GetArrayElementAtIndex(i);
+            //var be = ElementGenerate.Generate(_elementType, _sp, arrayItem.propertyPath);// $"{_fieldInfo.Path}.Array.Data[{i}]");
+            var be = ElementGenerate.Generate(_elementType, _sp);
             if (be != null) arrItem.Add(be);
 
 

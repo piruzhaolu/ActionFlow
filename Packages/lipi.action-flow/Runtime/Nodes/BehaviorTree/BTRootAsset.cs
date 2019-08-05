@@ -4,6 +4,7 @@ using UnityEngine;
 namespace ActionFlow
 {
     [Serializable]
+    [NodeInfo("BT/Root")]
     public class BTRoot : StatusNodeBase<NullStatus>, IBehaviorCompositeNode, INodeInput
     {
 
@@ -49,7 +50,7 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/Root")]
+    
     public class BTRootAsset : NodeAsset<BTRoot>
     {
 

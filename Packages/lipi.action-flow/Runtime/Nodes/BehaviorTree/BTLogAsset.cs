@@ -7,6 +7,7 @@ using ActionFlow;
 /// 调试用打印一个文本
 /// </summary>
 [System.Serializable]
+[NodeInfo("BT/Log")]
 public class BTLog : INode, IBehaviorNode
 {
     [HideLabelInGraphView]
@@ -21,8 +22,9 @@ public class BTLog : INode, IBehaviorNode
 }
 
 
-[NodeInfo("BT/Log")]
+
 public class BTLogAsset : NodeAsset<BTLog>
 {
 
 }
+

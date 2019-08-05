@@ -48,12 +48,12 @@ namespace ActionFlow
 
 
 
-        public static BindableElement Generate(Type type, SerializedObject so, string bindingPath)
+        public static BindableElement Generate(Type type, SerializedProperty so)//, string bindingPath
         {
             if (type == typeof(NullStatus)) return null;
             var be = GetField(type);
-            be.bindingPath = bindingPath;
-            be.Bind(so);
+            //be.bindingPath = bindingPath;
+            be.BindProperty(so);
             be.AddToClassList("node-field-input");
             return be;
         }

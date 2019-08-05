@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.Graphs;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,9 +15,11 @@ namespace ActionFlow
     {
 
         #region 运行时数据
+        [Obsolete]
         public List<ScriptableObject> Nodes = new List<ScriptableObject>();
 
-        //public List<INode> Nodes = new List<INode>(); //2019.3
+        [SerializeReference]
+        public List<INode> m_Nodes = new List<INode>();
 
         public int Entry;
 
@@ -61,7 +65,29 @@ namespace ActionFlow
         #endregion
 
 
+        public int Add(INode node, Vector2 pos)
+        {
+            m_Nodes.Add(node);
+            var index = m_Nodes.Count - 1;
+            NodeInfo.Add(new GraphNodeInfo()
+            {
+                CurrentIndex = index
+            });
+            NodeEditorInfo.Add(new GraphNodeEditorInfo()
+            {
+                Index = index,
+                Pos = pos
+            });
+            return index;
+        }
 
+        public void Remove(INode node)
+        {
+            var index = m_Nodes.IndexOf(node);
+            if (index != -1) m_Nodes[index] = null;
+        }
+
+        [Obsolete]
         public int Add(ScriptableObject so, Vector2 pos)
         {
             Nodes.Add(so);
@@ -83,6 +109,7 @@ namespace ActionFlow
             return index;
         }
 
+        [Obsolete]
         public void Remove(ScriptableObject so)
         {
 #if UNITY_EDITOR

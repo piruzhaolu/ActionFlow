@@ -6,6 +6,7 @@ namespace ActionFlow
 {
 
     [Serializable]
+    [NodeInfo("Entry")]
     public class EntryNode : StatusNodeBase<NullStatus>
     {
         [NodeOutput]
@@ -18,7 +19,7 @@ namespace ActionFlow
 
 
 
-    [NodeInfo("Entry")]
+    
     public class EntryNodeAsset : NodeAsset<EntryNode>
     {
 

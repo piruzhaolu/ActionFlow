@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
+using UnityEditor;
 
 namespace ActionFlow
 {
@@ -11,10 +12,10 @@ namespace ActionFlow
     {
         public delegate void EdgeChange();
 
-        public EditorActionNode(ScriptableObject nodeAsset, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
+        public EditorActionNode(SerializedProperty sProperty, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
         {
 
-            NodeAsset = nodeAsset;
+            SProperty = sProperty;
             NodeInfo = nodeInfo;
             NodeEditorInfo = nodeEditorInfo;
             Index = index;
@@ -23,7 +24,7 @@ namespace ActionFlow
             RunningMarker.style.width = 4f;
             titleContainer.hierarchy.Insert(0, RunningMarker);
 
-            var infos = nodeAsset.GetType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
+            var infos = sProperty.GetValueType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
             NodeInfoAttribute info;
 
             if (infos != null && infos.Length > 0)
@@ -33,11 +34,11 @@ namespace ActionFlow
             }
             else
             {
-                title = nodeAsset.name;
+                title = sProperty.ToString();
             }
 
-            var drawer = DefaultEditorNodeDraw.GetEditor(nodeAsset.GetType());
-            drawer.Create(this, nodeAsset);
+            var drawer = DefaultEditorNodeDraw.GetEditor(sProperty.GetValueType());
+            drawer.Create(this, sProperty);
         }
 
         private VisualElement RunningMarker;
@@ -71,8 +72,8 @@ namespace ActionFlow
 
 
 
-
-        public ScriptableObject NodeAsset { private set; get; }
+        public SerializedProperty SProperty { private set; get; }
+        //public ScriptableObject NodeAsset { private set; get; }
         public GraphNodeInfo NodeInfo { private set; get; }
         public GraphNodeEditorInfo NodeEditorInfo { private set; get; }
         public int Index { private set; get; }

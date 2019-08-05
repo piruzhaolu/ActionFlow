@@ -40,7 +40,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    Childs: []
+    Childs:
+    - b: 0
 --- !u!114 &-130401141536587255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,7 +55,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value:
-    Childs: []
+    Childs:
+    - b: 0
+    - b: 0
+    - b: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,11 +112,11 @@ MonoBehaviour:
   - Index: 1
     Pos: {x: 264, y: 195}
   - Index: 2
-    Pos: {x: 612, y: 181}
+    Pos: {x: 127, y: 432}
   - Index: 3
-    Pos: {x: 616, y: 308}
+    Pos: {x: 334, y: 433}
   - Index: 4
-    Pos: {x: 450, y: 145}
+    Pos: {x: 262, y: 331}
   ViewPosition: {x: 0, y: 0}
   ViewScale: {x: 1, y: 1, z: 1}
 --- !u!114 &3778491335810933876

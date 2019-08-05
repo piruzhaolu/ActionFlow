@@ -5,6 +5,7 @@ using System;
 
 namespace ActionFlow
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple =false)]
     public class NodeInfoAttribute : Attribute
     {
         public string Name;

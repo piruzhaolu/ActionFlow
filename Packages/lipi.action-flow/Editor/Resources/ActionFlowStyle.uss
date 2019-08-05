@@ -7,44 +7,44 @@
 }
 
 .node-field-label {
-    width: 70;
+    width: 70px;
     flex-grow: 0;
 }
 
 
 .node-field-input {
-    flex-grow: 1;
+    flex-grow: 1px;
    /* width: 100;*/
-   min-width: 60;
+   min-width: 60px;
 }
 
 
 
 /* -------------*/
 EditorNodeElement {
-    padding: 2;
+    padding: 2px;
 }
 EditorActionNode #title {
-    height: 22;
+    height: 22px;
 }
 
 EditorActionNode #contents > #top > #input {
-    padding-top: 2;
-    padding-bottom: 2;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 EditorActionNode #contents > #top > #output {
-    padding-top: 2;
-    padding-bottom: 2;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 
 EditorActionNode .port {
-    height: 20;
+    height: 20px;
 }
 
 EditorActionNode EditorNodeElement .outputparm-field{
-    width:16;
+    width:16px;
     padding-left:0;
     padding-right:0;
 
@@ -56,7 +56,7 @@ EditorActionNode EditorNodeElement .outputparm-field #type {
 }
 
 EditorActionNode EditorNodeElement .inputparm-field{
-    padding-left:2;
+    padding-left:2px;
 }
 
 EditorActionNode EditorNodeElement .outputparm-method {
@@ -92,15 +92,15 @@ NodeArrayField{
     /*padding-left:10;*/
     flex-direction:row;
     justify-content: center;
-    top:4;
-    padding-left: 5;
-    padding-right: 5;
+    top:4px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .btInputPort{
     position: absolute;
     align-self: center;
-    top: -12;
+    top: -12px;
 }
 .btInputPort>Label#type{
     width: 0;
@@ -116,6 +116,6 @@ EditorActionNode #title{
 }
 
 EditorActionNode #title-label{
-    margin-left: 4;
-    margin-right: 4;
+    margin-left: 4px;
+    margin-right: 4px;
 }

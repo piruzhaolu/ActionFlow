@@ -72,7 +72,15 @@ namespace ActionFlow
         private ToolbarMenu runningEntityMenu;//运行中的Entity
         private int SelectedIndex = 0;//当前选中的Entity索引
 
-        public GraphAsset GraphAsset { private set; get; }
+        public SerializedObject SerializedGraphAsset { private set; get; }
+        private GraphAsset _GraphAsset;
+        public GraphAsset GraphAsset { private set
+            {
+                SerializedGraphAsset = (value == null)?null:new SerializedObject(value);
+                _GraphAsset = value;
+            }
+            get { return _GraphAsset; }
+        }
 
         public void Show(GraphAsset graphAsset)
         {
@@ -81,11 +89,11 @@ namespace ActionFlow
                 GraphAsset = graphAsset;
                 graphElements.ForEach((element) => RemoveElement(element));
 
-                for (int i = 0; i < GraphAsset.Nodes.Count; i++)
+                for (int i = 0; i < GraphAsset.m_Nodes.Count; i++)// GraphAsset.Nodes.Count
                 {
                     DrawNode(i);
                 }
-                for (int i = 0; i < GraphAsset.Nodes.Count; i++)
+                for (int i = 0; i < GraphAsset.m_Nodes.Count; i++)
                 {
                     DrawEdge(i);
                 }
@@ -193,10 +201,11 @@ namespace ActionFlow
 
         private EditorActionNode DrawNode(int index)
         {
-            var asset = GraphAsset.Nodes[index];
+            var asset = GraphAsset.m_Nodes[index];// GraphAsset.Nodes[index];
             if (asset == null) return null;
+            var property = SerializedGraphAsset.FindProperty("m_Nodes").GetArrayElementAtIndex(index);
             var editorInfo = GraphAsset.NodeEditorInfo[index];
-            var node = new EditorActionNode(asset, GraphAsset.NodeInfo[index], editorInfo,index);
+            var node = new EditorActionNode(property, GraphAsset.NodeInfo[index], editorInfo,index);
             node.SetPosition(new Rect(editorInfo.Pos, editorInfo.Pos));
             AddElement(node);
             return node;
@@ -240,9 +249,19 @@ namespace ActionFlow
             var scaleNodePos = new Vector2(nodePos.x / viewTransform.scale.x, nodePos.y / viewTransform.scale.y);
 
 
-            var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
-
-            DrawNode(index);
+            if (type.IsSubclassOf(typeof(ScriptableObject)))
+            { // TODO:旧功能
+                var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
+                DrawNode(index);
+            }
+            else
+            {
+                var node = (INode) Activator.CreateInstance(type);
+                Debug.Assert(node != null, "NodeInfo Attribute Can only be added to INode !");
+                var index = GraphAsset.Add(node, scaleNodePos);
+                SerializedGraphAsset.Update();
+                DrawNode(index);
+            }
         }
 
 

@@ -24,10 +24,10 @@ namespace ActionFlow
 
         public static NodeTypeInfo GetNodeTypeInfo(Type type)
         {
-            if(typeof(NodeAsset<>) != type.BaseType.GetGenericTypeDefinition())
-            {
-                throw new Exception("type需要是NodeAsset<>的子类");
-            }
+            //if(typeof(NodeAsset<>) != type.BaseType.GetGenericTypeDefinition())
+            //{
+            //    throw new Exception("type需要是NodeAsset<>的子类");
+            //}
             if (_typeInfos == null) _typeInfos = new Dictionary<Type, NodeTypeInfo>();
             if (_typeInfos.TryGetValue(type, out var info))
             {
@@ -90,7 +90,7 @@ namespace ActionFlow
 
         public NodeTypeInfo(Type type)
         {
-            _valueType = type.GetField("Value").FieldType; //TODO：Del SO
+            _valueType = type;// type.GetField("Value").FieldType; //TODO：Del SO
             if (_valueType.IsSerializable == false)
             {
                 throw new Exception($"{_valueType.Name} no add Serializable Attribute");
@@ -184,7 +184,7 @@ namespace ActionFlow
 
                 var fileInfo = new FieldInfo()
                 {
-                    Path = $"Value.{item.Name}", //TODO:Del SO
+                    Path = $"{item.Name}",
                     FieldType = item.FieldType,
                     Name = item.Name,
                     MaxLink = maxLink,
