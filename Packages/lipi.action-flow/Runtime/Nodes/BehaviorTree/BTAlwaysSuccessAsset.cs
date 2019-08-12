@@ -9,6 +9,7 @@ namespace ActionFlow
     /// 始终返回Success的节点
     /// </summary>
     [System.Serializable]
+    [NodeInfo("BT/AlwaysSuccess")]
     public class BTAlwaysSuccess : INode, IBehaviorCompositeNode
     {
         [NodeOutputBT]
@@ -38,9 +39,5 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/AlwaysSuccess")]
-    public class BTAlwaysSuccessAsset : NodeAsset<BTAlwaysSuccess>
-    {
-
-    }
+    
 }

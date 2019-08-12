@@ -15,8 +15,9 @@ MonoBehaviour:
   Nodes: []
   m_Nodes:
   - id: 0
-  - id: 1
-  - id: 2
+  - id: 0
+  - id: 0
+  - id: 0
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -34,25 +35,21 @@ MonoBehaviour:
   - CurrentIndex: 2
     Childs: []
     ParentIndex: 1
+  - CurrentIndex: 3
+    Childs: []
+    ParentIndex: -1
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 226, y: 200}
+    Pos: {x: 331, y: 220}
   - Index: 1
-    Pos: {x: 470, y: 217}
+    Pos: {x: 541, y: 238}
   - Index: 2
-    Pos: {x: 488, y: 371}
+    Pos: {x: 508, y: 367}
+  - Index: 3
+    Pos: {x: 404, y: 468}
   ViewPosition: {x: 0, y: 0}
   ViewScale: {x: 1, y: 1, z: 1}
   references:
     version: 1
     00000000:
-      type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
-    00000001:
-      type: {class: BTRoot, ns: ActionFlow, asm: ActionFlow}
-      data:
-        Childs:
-        - b: 0
-    00000002:
-      type: {class: BTLog, ns: , asm: ActionFlow}
-      data:
-        LogText: 333
+      type: {class: , ns: , asm: }

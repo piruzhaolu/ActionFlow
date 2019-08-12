@@ -14,6 +14,7 @@ namespace ActionFlow
         }
 
         [NodeOutputBT(1)]
+        [HideInActionInspector]
         public NullStatus[] Childs;
 
         public BehaviorStatus BehaviorInput(ref Context context)
@@ -51,8 +52,8 @@ namespace ActionFlow
 
 
     
-    public class BTRootAsset : NodeAsset<BTRoot>
-    {
+    //public class BTRootAsset : NodeAsset<BTRoot>
+    //{
 
-    }
+    //}
 }

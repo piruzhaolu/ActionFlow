@@ -15,6 +15,7 @@ namespace ActionFlow
     /// TODO: 返回failure只是忽略running并不会中断running中的节点
     /// </summary>
     [System.Serializable]
+    [NodeInfo("BT/Parallel")]
     public class BTParallel : StatusNodeBase<BTParallelData>, IBehaviorCompositeNode
     {
         [NodeOutputBT(10)]
@@ -87,9 +88,9 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/Parallel")]
-    public class BTParallelAsset : NodeAsset<BTParallel>
-    {
+    //[NodeInfo("BT/Parallel")]
+    //public class BTParallelAsset : NodeAsset<BTParallel>
+    //{
 
-    }
+    //}
 }

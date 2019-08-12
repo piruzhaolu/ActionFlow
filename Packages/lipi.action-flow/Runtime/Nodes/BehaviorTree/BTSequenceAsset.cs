@@ -13,6 +13,7 @@ namespace ActionFlow
     /// 顺序执行节点。 执行到返回Failure节点时结束
     /// </summary>
     [Serializable]
+    [NodeInfo("BT/Sequence")]
     public class BTSequence : StatusNodeBase<BTSequenceData>, IBehaviorCompositeNode
     {
         [NodeOutputBT(10)]
@@ -106,9 +107,9 @@ namespace ActionFlow
         }
     }
 
-    [NodeInfo("BT/Sequence")]
-    public class BTSequenceAsset:NodeAsset<BTSequence>
-    {
+    //[NodeInfo("BT/Sequence")]
+    //public class BTSequenceAsset:NodeAsset<BTSequence>
+    //{
 
-    }
+    //}
 }

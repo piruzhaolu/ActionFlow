@@ -375,9 +375,10 @@ namespace ActionFlow
         private void nodeRemove(EditorActionNode node)
         {
             var index = node.Index;
-            var so = GraphAsset.Nodes[index];
-            GraphAsset.Remove(so);
-            GraphAsset.Nodes[index] = null;
+            GraphAsset.m_Nodes[index] = null;
+            //var so = GraphAsset.Nodes[index];
+            //GraphAsset.Remove(so);
+            //GraphAsset.Nodes[index] = null;
 
         }
 

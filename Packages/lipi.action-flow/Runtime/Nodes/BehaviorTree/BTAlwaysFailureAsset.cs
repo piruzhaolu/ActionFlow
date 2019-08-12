@@ -8,6 +8,7 @@ namespace ActionFlow
     /// 始终返回Failure的节点
     /// </summary>
     [System.Serializable]
+    [NodeInfo("BT/AlwaysFailure")]
     public class BTAlwaysFailure : INode,  IBehaviorCompositeNode
     {
         [NodeOutputBT]
@@ -36,10 +37,4 @@ namespace ActionFlow
         }
     }
 
-
-    [NodeInfo("BT/AlwaysFailure")]
-    public class BTAlwaysFailureAsset : NodeAsset<BTAlwaysFailure>
-    {
-
-    }
 }

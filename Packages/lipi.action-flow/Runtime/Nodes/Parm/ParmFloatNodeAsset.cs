@@ -4,6 +4,7 @@ using System.Collections;
 namespace ActionFlow
 {
     [System.Serializable]
+    [NodeInfo("Parm/float")]
     public class ParmFloatNode : INode, IParameterType<float>
     {
         [NodeOutputParm]
@@ -17,10 +18,10 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("Parm/float")]
-    public class ParmFloatNodeAsset : NodeAsset<ParmFloatNode>
-    {
+    //[NodeInfo("Parm/float")]
+    //public class ParmFloatNodeAsset : NodeAsset<ParmFloatNode>
+    //{
 
-    }
+    //}
 }
 

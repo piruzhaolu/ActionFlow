@@ -14,6 +14,7 @@ namespace ActionFlow
     /// 并行控制节点。所有子节点返回failure则返回failure，有一节点返回success则直接返回success
     /// </summary>
     [System.Serializable]
+    [NodeInfo("BT/ParallelSel")]
     public class BTParallelSelector : StatusNodeBase<BTParallelSelectorData>, IBehaviorCompositeNode
     {
         [NodeOutputBT(10)]
@@ -86,9 +87,9 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/ParallelSel")]
-    public class BBTParallelSelectorAsset : NodeAsset<BTParallelSelector>
-    {
+    //[NodeInfo("BT/ParallelSel")]
+    //public class BBTParallelSelectorAsset : NodeAsset<BTParallelSelector>
+    //{
 
-    }
+    //}
 }

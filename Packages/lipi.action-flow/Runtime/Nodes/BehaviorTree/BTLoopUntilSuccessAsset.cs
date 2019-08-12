@@ -7,6 +7,7 @@ namespace ActionFlow
     ///  子节点执行成功则返回成功，否则一直处理Running状态
     /// </summary>
     [System.Serializable]
+    [NodeInfo("BT/LoopUntilSuccess")]
     public class BTLoopUntilSuccess : StatusNodeBase<NullStatus>, IBehaviorCompositeNode
     {
         [NodeOutputBT]
@@ -68,10 +69,10 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/LoopUntilSuccess")]
-    public class BTLoopUntilSuccessAsset : NodeAsset<BTLoopUntilSuccess>
-    {
+    //[NodeInfo("BT/LoopUntilSuccess")]
+    //public class BTLoopUntilSuccessAsset : NodeAsset<BTLoopUntilSuccess>
+    //{
 
 
-    }
+    //}
 }

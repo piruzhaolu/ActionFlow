@@ -12,6 +12,7 @@ namespace ActionFlow
     /// 选择节点。 执行到返回Success节点时结束并返回Success
     /// </summary>
     [Serializable]
+    [NodeInfo("BT/Selector")]
     public class BTSelector : StatusNodeBase<BTSelectorData>, IBehaviorCompositeNode
     {
 
@@ -112,12 +113,12 @@ namespace ActionFlow
         }
     }
 
-    [NodeInfo("BT/Selector")]
+    
 
-    public class BTSelectorAsset : NodeAsset<BTSelector>
-    {
+    //public class BTSelectorAsset : NodeAsset<BTSelector>
+    //{
 
-    }
+    //}
 
 }
 

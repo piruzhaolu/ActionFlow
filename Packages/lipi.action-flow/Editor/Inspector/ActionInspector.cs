@@ -124,9 +124,14 @@ namespace ActionFlow
             var fields = toType.GetFields();
             for (int i = 0; i < fields.Length; i++)
             {
-                Debug.Log(fields[i].Name);
+                var hideAttr = fields[i].GetCustomAttribute<HideInActionInspectorAttribute>();
+                if (hideAttr != null) continue;
+                var childProp = nodeSO.FindPropertyRelative(fields[i].Name);
+                VisualElement be = new PropertyField(childProp);
+                be.Bind(nodeSO.serializedObject);
+                nodeVE.Add(be);
             }
-
+            
 
           //  var sp = nodeSO;//.GetIterator();
            // if (sp.NextVisible(true))

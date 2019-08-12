@@ -8,6 +8,7 @@ namespace ActionFlow
 {
 
     [Serializable]
+    [NodeInfo("BT/Wait")]
     public class BTWait : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>
     {
         [HideLabelInGraphView]
@@ -29,9 +30,9 @@ namespace ActionFlow
     }
 
 
-    [NodeInfo("BT/Wait")]
-    public class BTWaitAsset :NodeAsset<BTWait>
-    {
+    //[NodeInfo("BT/Wait")]
+    //public class BTWaitAsset :NodeAsset<BTWait>
+    //{
 
-    }
+    //}
 }
