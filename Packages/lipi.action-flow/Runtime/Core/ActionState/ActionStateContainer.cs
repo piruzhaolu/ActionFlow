@@ -46,11 +46,11 @@ namespace ActionFlow
             int offset = 0;
             for (int i = 0; i < count; i++)
             {
-                var asset = graph.Nodes[i] as INodeAsset;
+                var inode = graph.m_Nodes[i];// as INodeAsset;
                 var node = new ActionStateNode() { Cycle = NodeCycle.Inactive, offset = offset };
                 container.Nodes[i] = node;
 
-                if (asset?.GetValue() is IStatusNode nodeObject)
+                if (inode is IStatusNode nodeObject)
                 {
                     var t = nodeObject.NodeDataType();
                     var size = UnsafeUtility.SizeOf(t);
@@ -65,7 +65,7 @@ namespace ActionFlow
                     nodeObject.CreateNodeDataTo(statePtr + offset);
                     offset += size;
                 }
-                if (asset?.GetValue() is IAccessBlackboard accessBlackboard)
+                if (inode is IAccessBlackboard accessBlackboard)
                 {
                     accessBlackboard.ToBuilder(builder);
                 }

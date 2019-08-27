@@ -10,15 +10,19 @@ namespace ActionFlow
 
     }
 
+    [NodeInfo("Animation/Clip")]
     [Serializable]
     public class AnimationClipNode:StatusNodeBase<AnimationClipNodeData>, INodeInput, ISleepable
     {
         public AnimationClip AnimationClip;
 
+        [HideInGraphView]
         public int ToLayer = 0;
 
+        [HideInGraphView]
         public Vector2 Transition = new Vector2(0,0);
 
+        [HideInGraphView]
         public float Duration = 1f;
 
         public void OnInput(ref Context context)
@@ -43,9 +47,4 @@ namespace ActionFlow
 
 
 
-    [NodeInfo("Animation/Clip")]
-    public class AnimationClipNodeAsset : NodeAsset<AnimationClipNode>
-    {
-
-    }
 }

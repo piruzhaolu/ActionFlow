@@ -8,7 +8,7 @@ public struct SleepComponent:IComponentData
     public float t;
 }
 
-
+[NodeInfo("Example/SleepingNode")]
 [System.Serializable]
 public class SleepingNode : INode, IBehaviorNode, ISleepable
 {
@@ -29,9 +29,4 @@ public class SleepingNode : INode, IBehaviorNode, ISleepable
 }
 
 
-[NodeInfo("Example/SleepingNode")]
-public class SleepingNodeAsset : NodeAsset<SleepingNode>
-{
 
-    
-}

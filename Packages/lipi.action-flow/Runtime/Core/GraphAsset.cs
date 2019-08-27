@@ -37,10 +37,10 @@ namespace ActionFlow
             {
                 if (_RuntimeNodes == null)
                 {
-                    _RuntimeNodes = new INode[Nodes.Count];
-                    for (int i = 0; i < Nodes.Count; i++)
+                    _RuntimeNodes = new INode[m_Nodes.Count];
+                    for (int i = 0; i < m_Nodes.Count; i++)
                     {
-                        if (Nodes[i] != null) _RuntimeNodes[i] = (Nodes[i] as INodeAsset)?.GetValue();
+                        if (m_Nodes[i] != null) _RuntimeNodes[i] = m_Nodes[i];// (m_Nodes[i] as INodeAsset)?.GetValue();
                     }
                 }
                 if (_RuntimeNodes.Length == 0)

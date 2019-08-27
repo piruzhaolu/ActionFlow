@@ -56,10 +56,3 @@ public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorN
 
     
 }
-
-
-[NodeInfo("Example/Rotate")]
-public class RotateNodeAsset : NodeAsset<RotateNode>
-{
-
-}
