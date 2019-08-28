@@ -6,6 +6,7 @@
     flex-direction:row
 }
 
+/*
 .node-field-label {
     width: 70px;
     flex-grow: 0;
@@ -14,10 +15,23 @@
 
 .node-field-input {
     flex-grow: 1px;
-   /* width: 100;*/
-   min-width: 60px;
+}
+.node-field-input Label{
+    width: 40px;
+    min-width: 40px;
+    flex-shrink:1;
+    flex-grow: 1;
+
+}
+*/
+
+.node-field-input .unity-property-field__label{
+    min-width: 60px;
 }
 
+.node-field-input .unity-property-field__input{
+    min-width: 50px;
+}
 
 
 /* -------------*/

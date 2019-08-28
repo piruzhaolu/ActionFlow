@@ -16,12 +16,14 @@ MonoBehaviour:
   m_Nodes:
   - id: 0
   - id: 1
-  - id: 2
+  - id: 0
+  - id: 0
   - id: 2
   - id: 3
   - id: 4
+  - id: 0
   - id: 5
-  Entry: 0
+  Entry: 7
   NodeInfo:
   - CurrentIndex: 0
     Childs:
@@ -34,7 +36,7 @@ MonoBehaviour:
     - FromID: 0
       Index: 4
       ToID: 0
-    ParentIndex: 0
+    ParentIndex: 7
   - CurrentIndex: 2
     Childs: []
     ParentIndex: 0
@@ -56,27 +58,40 @@ MonoBehaviour:
   - CurrentIndex: 6
     Childs: []
     ParentIndex: 5
+  - CurrentIndex: 7
+    Childs:
+    - FromID: 0
+      Index: 1
+      ToID: 0
+    ParentIndex: -1
+  - CurrentIndex: 8
+    Childs: []
+    ParentIndex: -1
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 193, y: 197}
   - Index: 1
-    Pos: {x: 358, y: 263}
+    Pos: {x: 228, y: 210}
   - Index: 2
     Pos: {x: 435, y: 95}
   - Index: 3
     Pos: {x: 526, y: 185}
   - Index: 4
-    Pos: {x: 556, y: 266}
+    Pos: {x: 429, y: 213}
   - Index: 5
-    Pos: {x: 765, y: 267}
+    Pos: {x: 635, y: 134}
   - Index: 6
-    Pos: {x: 995, y: 266}
-  ViewPosition: {x: -90.666664, y: -95.333336}
-  ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
+    Pos: {x: 854, y: 219}
+  - Index: 7
+    Pos: {x: 95, y: 214}
+  - Index: 8
+    Pos: {x: 568, y: 338}
+  ViewPosition: {x: -12, y: -29.333334}
+  ViewScale: {x: 1, y: 1, z: 1}
   references:
     version: 1
     00000000:
-      type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
+      type: {class: , ns: , asm: }
     00000001:
       type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
       data:
@@ -85,25 +100,27 @@ MonoBehaviour:
         Transition: {x: 0, y: 0}
         Duration: 1
     00000002:
-      type: {class: , ns: , asm: }
-    00000003:
       type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
       data:
         AnimationClip: {fileID: 7400000, guid: c922c2ce41673614e98c355866b54055, type: 3}
         ToLayer: 0
         Transition: {x: 0, y: 0}
         Duration: 5
-    00000004:
+    00000003:
       type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
       data:
         AnimationClip: {fileID: 7400000, guid: 7443db6b711128c4ead48604e1a5892d, type: 3}
         ToLayer: 0
         Transition: {x: 0, y: 0}
         Duration: 1
-    00000005:
+    00000004:
       type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
       data:
         AnimationClip: {fileID: 7400000, guid: c6d21c3d97525044ba9028b80eb805f8, type: 3}
         ToLayer: 0
         Transition: {x: 0, y: 0}
         Duration: 1
+    00000005:
+      type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
+      data:
+        LogText: t

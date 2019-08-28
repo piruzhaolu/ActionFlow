@@ -64,7 +64,7 @@ namespace ActionFlow
         struct WakeJob : IJobChunk
         {
             public ArchetypeChunkBufferType<NodeSleeping> NodeSleepings;
-            public NativeQueue<RemoveItem>.Concurrent RemoveList;
+            public NativeQueue<RemoveItem>.ParallelWriter RemoveList;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
@@ -94,7 +94,7 @@ namespace ActionFlow
             public ArchetypeChunkBufferType<NodeTimer> NodeTimeBufferType;
             public ArchetypeChunkComponentType<ActionRunState> ActionRunStateType;
             public float dt;
-            public NativeQueue<WakeItem>.Concurrent RemoveList;
+            public NativeQueue<WakeItem>.ParallelWriter RemoveList;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
@@ -136,7 +136,7 @@ namespace ActionFlow
             var job = new WakeJob()
             {
                 NodeSleepings = GetArchetypeChunkBufferType<NodeSleeping>(),
-                RemoveList = removeList.ToConcurrent(),
+                RemoveList = removeList.AsParallelWriter(),
             };
 
             var jobTimer = new WakeWithTimerJob()
@@ -144,7 +144,7 @@ namespace ActionFlow
                 dt = Time.deltaTime,
                 NodeTimeBufferType = GetArchetypeChunkBufferType<NodeTimer>(),
                 ActionRunStateType = GetArchetypeChunkComponentType<ActionRunState>(),
-                RemoveList = timerRemoveList.ToConcurrent(),
+                RemoveList = timerRemoveList.AsParallelWriter(),
 
             };
 

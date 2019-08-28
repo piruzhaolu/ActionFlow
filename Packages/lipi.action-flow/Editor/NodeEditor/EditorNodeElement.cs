@@ -76,14 +76,15 @@ namespace ActionFlow
                         outPort = port;
                     }
 
-                    if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
-                    {
-                        var labelField = new Label(item.Name);
-                        labelField.AddToClassList("node-field-label");
-                        ve.Add(labelField);
-                    }
-                    
-                    AddField(ve, item.FieldType, mSO, item.Path);
+                    //if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
+                    //{
+                    //    var labelField = new Label(item.Name);
+                    //    labelField.AddToClassList("node-field-label");
+                    //    ve.Add(labelField);
+                    //}
+
+                    ve.Add(GetField(mSO, item.Path));
+                    //AddField(ve, item.FieldType, mSO, item.Path);
                     if (outPort != null)
                     {
                         ve.Add(outPort);
@@ -125,40 +126,47 @@ namespace ActionFlow
                 _content.Add(ve);
                 Add(_content);
             }
-
-
         }
 
-
-
-
-        private void AddField(VisualElement parent, Type fieldType, SerializedProperty so, string path)
+        private PropertyField GetField(SerializedProperty so, string path)
         {
-            var be = DrawField(fieldType);
-            // be.bindingPath = path;// $"Value.{fields[i].Name}";
-            //Debug.Log($"{so.propertyPath} -- {path}");
             var prop = so.FindPropertyRelative(path);
-            be.BindProperty(prop);
-            be.AddToClassList("node-field-input");
-            parent.Add(be);
+            var p = new PropertyField(prop);
+            p.Bind(so.serializedObject);
+            p.AddToClassList("node-field-input");
+            return p;
+
         }
 
 
 
-        private BindableElement DrawField(Type type)
-        {
-            if (type == typeof(float)) return new FloatField();
-            else if (type == typeof(int)) return new IntegerField();
-            else if (type == typeof(Vector2)) return new Vector2Field();
-            else if (type == typeof(Vector3)) return new Vector3Field();
-            else if (type == typeof(string)) return new TextField();
-            else
-            {
-                var of = new ObjectField();
-                of.objectType = type;
-                return of;
-            }
-        }
+        //private void AddField(VisualElement parent, Type fieldType, SerializedProperty so, string path)
+        //{
+        //    var be = DrawField(fieldType);
+        //    // be.bindingPath = path;// $"Value.{fields[i].Name}";
+        //    //Debug.Log($"{so.propertyPath} -- {path}");
+        //    var prop = so.FindPropertyRelative(path);
+        //    be.BindProperty(prop);
+        //    be.AddToClassList("node-field-input");
+        //    parent.Add(be);
+        //}
+
+
+
+        //private BindableElement DrawField(Type type)
+        //{
+        //    if (type == typeof(float)) return new FloatField();
+        //    else if (type == typeof(int)) return new IntegerField();
+        //    else if (type == typeof(Vector2)) return new Vector2Field();
+        //    else if (type == typeof(Vector3)) return new Vector3Field();
+        //    else if (type == typeof(string)) return new TextField();
+        //    else
+        //    {
+        //        var of = new ObjectField();
+        //        of.objectType = type;
+        //        return of;
+        //    }
+        //}
 
     }
 }

@@ -251,8 +251,9 @@ namespace ActionFlow
 
             if (type.IsSubclassOf(typeof(ScriptableObject)))
             { // TODO:旧功能
-                var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
-                DrawNode(index);
+                //var index = GraphAsset.Add(ScriptableObject.CreateInstance(type), scaleNodePos);
+                //DrawNode(index);
+                throw new Exception("已不能添加此类型");
             }
             else
             {

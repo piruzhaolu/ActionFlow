@@ -6,3 +6,4 @@ Temp
 obj
 Packages/com.unity.entities
 Unity.*
+*.csproj

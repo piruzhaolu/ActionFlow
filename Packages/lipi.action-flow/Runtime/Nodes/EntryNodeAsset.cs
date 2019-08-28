@@ -18,12 +18,4 @@ namespace ActionFlow
     }
 
 
-
-    
-    public class EntryNodeAsset : NodeAsset<EntryNode>
-    {
-
-    }
-
-
 }
