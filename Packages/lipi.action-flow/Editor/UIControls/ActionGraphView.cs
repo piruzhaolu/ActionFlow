@@ -74,12 +74,13 @@ namespace ActionFlow
 
         public SerializedObject SerializedGraphAsset { private set; get; }
         private GraphAsset _GraphAsset;
-        public GraphAsset GraphAsset { private set
+        public GraphAsset GraphAsset {
+            private set
             {
                 SerializedGraphAsset = (value == null)?null:new SerializedObject(value);
                 _GraphAsset = value;
             }
-            get { return _GraphAsset; }
+            get => _GraphAsset;
         }
 
         public void Show(GraphAsset graphAsset)

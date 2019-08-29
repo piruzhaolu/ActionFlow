@@ -97,8 +97,7 @@ namespace ActionFlow
             {
                 for (int i = 0; i < _CurrentNodes.Count; i++)
                 {
-                    var node = _CurrentNodes[i] as EditorActionNode;
-                    if (node != null && node.SProperty != null)
+                    if (_CurrentNodes[i] is EditorActionNode node && node.SProperty != null)
                     {
                         //var mSO = new SerializedObject(node.NodeAsset);
                         DrawUI_Node(node.SProperty, node.title);

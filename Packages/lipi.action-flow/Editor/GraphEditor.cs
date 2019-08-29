@@ -38,9 +38,9 @@ namespace ActionFlow
 
         public static GraphEditor Instance { get; private set; }
 
-
-
-        public GraphAsset GraphAsset { private set; get; }
+        [SerializeField]
+        private GraphAsset _GraphAsset;
+        public GraphAsset GraphAsset { private set=> _GraphAsset=value; get=> _GraphAsset; }
 
 
         private ActionGraphView _graphView;
@@ -94,6 +94,12 @@ namespace ActionFlow
                     _graphView.PlayingExit();
                     playing = false;
                 }
+                //if (_graphView!=null && _graphView.SerializedGraphAsset != null && _graphView.SerializedGraphAsset.hasModifiedProperties)
+                //{
+                //    _graphView.SerializedGraphAsset.ApplyModifiedProperties();
+                //    Debug.Log("dddd");
+
+                //}
             }
         }
 
