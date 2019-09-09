@@ -13,7 +13,7 @@ namespace ActionFlow
     public class EditorNodeElement : VisualElement
     {
 
-        
+
         public EditorNodeElement(SerializedProperty so, EditorActionNode node)
         {
             _so = so;
@@ -33,7 +33,7 @@ namespace ActionFlow
             var fieldInfos = _typeInfo.FieldInfos;
             foreach (var item in fieldInfos)
             {
-               
+
                 var ve = new VisualElement();
                 ve.AddToClassList("node-field");
 
@@ -76,21 +76,22 @@ namespace ActionFlow
                         outPort = port;
                     }
 
-                    //if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
-                    //{
-                    //    var labelField = new Label(item.Name);
-                    //    labelField.AddToClassList("node-field-label");
-                    //    ve.Add(labelField);
-                    //}
+                    if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
+                    {
+                        ve.Add(GetField(mSO, item.Path, item.Name));
+                    }
+                    else
+                    {
+                        ve.Add(GetField(mSO, item.Path));
+                    }
 
-                    ve.Add(GetField(mSO, item.Path));
                     //AddField(ve, item.FieldType, mSO, item.Path);
                     if (outPort != null)
                     {
                         ve.Add(outPort);
                     }
                 }
-               
+
                 Add(ve);
             }
 
@@ -104,7 +105,7 @@ namespace ActionFlow
                 var port = _node.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, null);
                 port.source = item;
                 port.portName = item.Name;
-                
+
                 ve.Add(port);
                 Add(ve);
             }
@@ -128,14 +129,57 @@ namespace ActionFlow
             }
         }
 
-        private PropertyField GetField(SerializedProperty so, string path)
+        private VisualElement GetField(SerializedProperty so, string path, string label = null)
         {
             var prop = so.FindPropertyRelative(path);
-            var p = new PropertyField(prop);
-            p.Bind(so.serializedObject);
-            p.AddToClassList("node-field-input");
-            return p;
+            var valueType = prop.propertyType;// prop.GetValueType();
+            if (valueType == SerializedPropertyType.ObjectReference) // valueType.IsSubclassOf(typeof(UnityEngine.Object))
+            {
+                var objectField = new ObjectField(label);
+                if (label == null)
+                {
+                    objectField.AddToClassList("hideLabel");
+                }
+                objectField.objectType = prop.GetValueType();
+                objectField.allowSceneObjects = false;
+                objectField.bindingPath = prop.propertyPath;
+                objectField.Bind(prop.serializedObject);
+                objectField.AddToClassList("node-field-input");
+                objectField.binding = new BBB();
+                return objectField;
 
+            } else
+            {
+                PropertyField p = new PropertyField(prop, label);
+                if (label == null)
+                {
+                    p.AddToClassList("hideLabel");
+                }
+                p.Bind(so.serializedObject);
+                p.AddToClassList("node-field-input");
+                return p;
+            }
+
+
+
+        }
+
+        private class BBB : IBinding
+        {
+            public void PreUpdate()
+            {
+                Debug.Log("pre");
+            }
+
+            public void Release()
+            {
+                Debug.Log("Release");
+            }
+
+            public void Update()
+            {
+                Debug.Log("Update");
+            }
         }
 
 

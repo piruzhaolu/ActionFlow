@@ -184,6 +184,7 @@ namespace ActionFlow
             port.portColor = NodeTypeInfo.IOModeColor(_fieldInfo.BT_IOInfo.Mode);
             port.portName = "";// item.IOInfo.Name;
             port.AddToClassList("outputparm-field");
+            //_node.Add(port);
             arrItem.Add(port);
             return arrItem;
         }

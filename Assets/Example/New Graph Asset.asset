@@ -13,11 +13,102 @@ MonoBehaviour:
   m_Name: New Graph Asset
   m_EditorClassIdentifier: 
   Nodes: []
-  m_Nodes: []
+  m_Nodes:
+  - id: 0
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 1
+  - id: 2
   Entry: 0
-  NodeInfo: []
-  NodeEditorInfo: []
-  ViewPosition: {x: 0, y: 0}
-  ViewScale: {x: 1, y: 1, z: 1}
+  NodeInfo:
+  - CurrentIndex: 0
+    Childs: []
+    ParentIndex: -1
+  - CurrentIndex: 1
+    Childs: []
+    ParentIndex: 0
+  - CurrentIndex: 2
+    Childs: []
+    ParentIndex: 0
+  - CurrentIndex: 3
+    Childs: []
+    ParentIndex: 5
+  - CurrentIndex: 4
+    Childs: []
+    ParentIndex: -1
+  - CurrentIndex: 5
+    Childs:
+    - FromID: 100100
+      Index: 3
+      ToID: 100000
+    - FromID: 100000
+      Index: 6
+      ToID: 100000
+    - FromID: 100000
+      Index: 7
+      ToID: 100000
+    ParentIndex: -1
+  - CurrentIndex: 6
+    Childs: []
+    ParentIndex: 5
+  - CurrentIndex: 7
+    Childs: []
+    ParentIndex: 8
+  - CurrentIndex: 8
+    Childs:
+    - FromID: 100000
+      Index: 7
+      ToID: 100000
+    ParentIndex: 9
+  - CurrentIndex: 9
+    Childs:
+    - FromID: 100000
+      Index: 10
+      ToID: 100000
+    ParentIndex: -1
+  - CurrentIndex: 10
+    Childs: []
+    ParentIndex: 9
+  NodeEditorInfo:
+  - Index: 0
+    Pos: {x: 229, y: 324}
+  - Index: 1
+    Pos: {x: 500, y: 233}
+  - Index: 2
+    Pos: {x: 531.00006, y: 200}
+  - Index: 3
+    Pos: {x: 570, y: 354}
+  - Index: 4
+    Pos: {x: 557.00006, y: 204}
+  - Index: 5
+    Pos: {x: 479, y: 214}
+  - Index: 6
+    Pos: {x: 625.00006, y: 250}
+  - Index: 7
+    Pos: {x: 474, y: 350}
+  - Index: 8
+    Pos: {x: 509, y: 334}
+  - Index: 9
+    Pos: {x: 564, y: 304}
+  - Index: 10
+    Pos: {x: 427, y: 502}
+  ViewPosition: {x: 80, y: -22}
+  ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 1
+    00000000:
+      type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000001:
+      type: {class: , ns: , asm: }
+    00000002:
+      type: {class: BTWait, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Time: 0

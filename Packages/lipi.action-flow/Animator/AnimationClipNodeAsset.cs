@@ -14,6 +14,7 @@ namespace ActionFlow
     [Serializable]
     public class AnimationClipNode:StatusNodeBase<AnimationClipNodeData>, INodeInput, ISleepable
     {
+        [HideLabelInGraphView]
         public AnimationClip AnimationClip;
 
         [HideInGraphView]

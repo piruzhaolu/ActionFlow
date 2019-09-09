@@ -5,7 +5,9 @@
 .node-field{
     flex-direction:row
 }
-
+.node-field-input {
+    flex-grow: 1px;
+}
 /*
 .node-field-label {
     width: 70px;
@@ -121,6 +123,12 @@ NodeArrayField{
     padding: 0;
     margin: 0;
 }
+
+.hideLabel .unity-property-field__label{
+    display: none
+}
+
+
 EditorActionNode #title-button-container{
     display: none;
 }

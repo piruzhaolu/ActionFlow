@@ -61,6 +61,8 @@ namespace ActionFlow
                     //node.titleContainer.style.justifyContent = Justify.FlexStart;
                     //node.titleButtonContainer.style.display = DisplayStyle.None;
                     portIn.AddToClassList("btInputPort");
+                    //node.inputContainer.Add(portIn);
+                    //node.hierarchy.mo
                     node.hierarchy.Insert(0,portIn);
                 }
                 else
