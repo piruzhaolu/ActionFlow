@@ -11,7 +11,7 @@ namespace ActionFlow
         {
             Entities.ForEach((AnimationPlayer player) =>
             {
-                player.Tick(Time.deltaTime);
+                player.Tick(Time.DeltaTime);
             });
         }
     }

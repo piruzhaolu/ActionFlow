@@ -141,7 +141,7 @@ namespace ActionFlow
 
             var jobTimer = new WakeWithTimerJob()
             {
-                dt = Time.deltaTime,
+                dt = Time.DeltaTime,
                 NodeTimeBufferType = GetArchetypeChunkBufferType<NodeTimer>(),
                 ActionRunStateType = GetArchetypeChunkComponentType<ActionRunState>(),
                 RemoveList = timerRemoveList.AsParallelWriter(),

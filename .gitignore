@@ -7,3 +7,4 @@ obj
 Packages/com.unity.entities
 Unity.*
 *.csproj
+.idea
