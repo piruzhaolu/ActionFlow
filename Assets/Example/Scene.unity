@@ -211,11 +211,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7888348124749312560, guid: 1e7872435e750e741a9b8c60593c562e,
-        type: 3}
-      propertyPath: m_Name
-      value: Gongji
-      objectReference: {fileID: 0}
     - target: {fileID: 7888348124749061024, guid: 1e7872435e750e741a9b8c60593c562e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -270,6 +265,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888348124749312560, guid: 1e7872435e750e741a9b8c60593c562e,
+        type: 3}
+      propertyPath: m_Name
+      value: Gongji
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7204689043668316909, guid: 1e7872435e750e741a9b8c60593c562e, type: 3}

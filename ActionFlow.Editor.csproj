@@ -59,7 +59,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\Drawer.cs" />
+     <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\DynamicObjectUtility.cs" />
      <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\MyWindows.cs" />
+     <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\PropertyDrawer.cs" />
+     <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\PropertyItem.cs" />
+     <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Drawer.cs\PropertyToggleMode.cs" />
      <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\GraphEditor.cs" />
      <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\Inspector\ActionInspector.cs" />
      <Compile Include="C:\Users\lipi\Desktop\lipi\github\ActionFlow\Packages\lipi.action-flow\Editor\NodeEditor\DefaultEditorNodeDraw.cs" />

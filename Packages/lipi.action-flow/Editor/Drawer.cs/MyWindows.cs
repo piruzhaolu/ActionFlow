@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using ActionFlow;
+using Object = UnityEngine.Object;
+using PropertyDrawer = ActionFlow.PropertyDrawer;
 
 
 public class MyWindows : EditorWindow
@@ -31,8 +33,10 @@ public class MyWindows : EditorWindow
     {
         public int Value;
         public int Value2;
+        public PlayMode Mode;
         public C CValue;
         public int[] Arr;
+        public Object Obj;
         public List<D> List;
     }
     [Serializable]
@@ -58,8 +62,7 @@ public class MyWindows : EditorWindow
     private B _bb = new B();
     void OnEnable()
     {
-        
-        var drawer = new Drawer(_bb);
+        var drawer = new PropertyDrawer(_bb);
         rootVisualElement.Add(drawer);
     }
 }

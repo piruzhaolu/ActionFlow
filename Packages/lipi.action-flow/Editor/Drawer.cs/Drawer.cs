@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace ActionFlow
 {
@@ -52,7 +53,23 @@ namespace ActionFlow
                     var field = new TextField(fieldInfo.Name);
                     RegisterChangeEvent(field);
                     element = field;
+                }else if(fieldInfo.FieldType.IsEnum)
+                {
+                    var field = new EnumField(fieldInfo.Name, (Enum) Activator.CreateInstance(fieldInfo.FieldType));
+                    RegisterChangeEvent(field);
+                    element = field;
+                }else if(fieldInfo.FieldType == typeof(Object) || fieldInfo.FieldType.IsSubclassOf(typeof(Object))) {
+                    var field = new ObjectField(fieldInfo.Name) {objectType = fieldInfo.FieldType};
+                    RegisterChangeEvent(field);
+                    element = field;
                 } else if (fieldInfo.FieldType.IsClass)
+                {
+                    var label = new Label(fieldInfo.Name);
+                    Add(label);
+                    var subFieldInfos = fieldInfo.FieldType.GetFields();
+                    var path = string.IsNullOrEmpty(parentPath)? fieldInfo.Name: $"{parentPath}/{fieldInfo.Name}" ;
+                    DrawFields(subFieldInfos,path);
+                } else if (fieldInfo.FieldType.IsValueType)
                 {
                     var label = new Label(fieldInfo.Name);
                     Add(label);
