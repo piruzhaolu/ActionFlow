@@ -1,0 +1,14 @@
+﻿.Inspector{
+    
+}
+
+.Inspector PropertyItem{
+    flex-direction:row;
+}
+.Inspector .unity-base-field{
+    flex-grow: 1;
+}
+
+.Inspector .title .unity-base-field{
+    flex-grow: 0;
+}

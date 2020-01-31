@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEngine;
 using ActionFlow;
 using Object = UnityEngine.Object;
-using PropertyDrawer = ActionFlow.PropertyDrawer;
 
 
 public class MyWindows : EditorWindow
@@ -62,7 +61,7 @@ public class MyWindows : EditorWindow
     private B _bb = new B();
     void OnEnable()
     {
-        var drawer = new PropertyDrawer(_bb);
+        var drawer = new InspectorElement(_bb);
         rootVisualElement.Add(drawer);
     }
 }
