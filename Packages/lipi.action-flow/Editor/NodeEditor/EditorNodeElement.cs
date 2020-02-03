@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using System;
 using UnityEditor.UIElements;
 using UnityEditor.Experimental.GraphView;
+using Object = System.Object;
 
 namespace ActionFlow
 {
@@ -14,22 +14,25 @@ namespace ActionFlow
     {
 
 
-        public EditorNodeElement(SerializedProperty so, EditorActionNode node)
+        public EditorNodeElement(INode so, EditorActionNode node)
         {
             _so = so;
             _node = node;
-            _typeInfo = NodeTypeInfo.GetNodeTypeInfo(so.GetValueType());
+            _typeInfo = NodeTypeInfo.GetNodeTypeInfo(so.GetType());
             CreateFieldElement();
         }
 
-        private SerializedProperty _so;
+        private readonly object _so;
         private EditorActionNode _node;
         private NodeTypeInfo _typeInfo;
 
 
         private void CreateFieldElement()
         {
-            var mSO = _so;
+            var element = new InspectorElement(_so);
+            Add(element);
+            return;
+            var mSo = _so;
             var fieldInfos = _typeInfo.FieldInfos;
             foreach (var item in fieldInfos)
             {
@@ -39,8 +42,8 @@ namespace ActionFlow
 
                 if (item.FieldType.IsArray && (item.MaxLink != -1)) //|| item.IOInfo != null
                 {
-                    var arrayField = new NodeArrayField(mSO, item.Path, item, _node);
-                    ve.Add(arrayField);
+//                    var arrayField = new NodeArrayField(mSO, item.Path, item, _node);//TODO:Re
+//                    ve.Add(arrayField);
                 }
                 else
                 {
@@ -78,14 +81,14 @@ namespace ActionFlow
 
                     if (item.Name != string.Empty && (item.IOInfo == null || outPort != null))
                     {
-                        ve.Add(GetField(mSO, item.Path, item.Name));
+                        //ve.Add(GetField(mSO, item.Path, item.Name)); TODO:Re
                     }
                     else
                     {
-                        ve.Add(GetField(mSO, item.Path));
+                        //ve.Add(GetField(mSO, item.Path)); TODO:Re
                     }
 
-                    //AddField(ve, item.FieldType, mSO, item.Path);
+                    //AddField(ve, item.FieldType, mSO, item.Path); 
                     if (outPort != null)
                     {
                         ve.Add(outPort);
@@ -129,95 +132,38 @@ namespace ActionFlow
             }
         }
 
-        private VisualElement GetField(SerializedProperty so, string path, string label = null)
-        {
-            var prop = so.FindPropertyRelative(path);
-            var valueType = prop.propertyType;// prop.GetValueType();
-            if (valueType == SerializedPropertyType.ObjectReference) // valueType.IsSubclassOf(typeof(UnityEngine.Object))
-            {
-                var objectField = new ObjectField(label);
-                if (label == null)
-                {
-                    objectField.AddToClassList("hideLabel");
-                }
-                objectField.objectType = prop.GetValueType();
-                objectField.allowSceneObjects = false;
-                objectField.bindingPath = prop.propertyPath;
-                objectField.Bind(prop.serializedObject);
-                objectField.AddToClassList("node-field-input");
-                objectField.binding = new BBB();
-                return objectField;
-
-            } else
-            {
-                PropertyField p = new PropertyField(prop, label);
-                if (label == null)
-                {
-                    p.AddToClassList("hideLabel");
-                }
-                p.Bind(so.serializedObject);
-                p.AddToClassList("node-field-input");
-                return p;
-            }
-
-
-
-        }
-
-        private class BBB : IBinding
-        {
-            public void PreUpdate()
-            {
-                Debug.Log("pre");
-            }
-
-            public void Release()
-            {
-                Debug.Log("Release");
-            }
-
-            public void Update()
-            {
-                Debug.Log("Update");
-            }
-        }
-
-
-
-        //private void AddField(VisualElement parent, Type fieldType, SerializedProperty so, string path)
-        //{
-        //    var be = DrawField(fieldType);
-        //    // be.bindingPath = path;// $"Value.{fields[i].Name}";
-        //    //Debug.Log($"{so.propertyPath} -- {path}");
-        //    var prop = so.FindPropertyRelative(path);
-        //    be.BindProperty(prop);
-        //    be.AddToClassList("node-field-input");
-        //    parent.Add(be);
-        //}
-
-
-
-        //private BindableElement DrawField(Type type)
-        //{
-        //    if (type == typeof(float)) return new FloatField();
-        //    else if (type == typeof(int)) return new IntegerField();
-        //    else if (type == typeof(Vector2)) return new Vector2Field();
-        //    else if (type == typeof(Vector3)) return new Vector3Field();
-        //    else if (type == typeof(string)) return new TextField();
-        //    else
-        //    {
-        //        var of = new ObjectField();
-        //        of.objectType = type;
-        //        return of;
-        //    }
-        //}
+//        private VisualElement GetField(SerializedProperty so, string path, string label = null)
+//        {
+//            var prop = so.FindPropertyRelative(path);
+//            var valueType = prop.propertyType;// prop.GetValueType();
+//            if (valueType == SerializedPropertyType.ObjectReference) // valueType.IsSubclassOf(typeof(UnityEngine.Object))
+//            {
+//                var objectField = new ObjectField(label);
+//                if (label == null)
+//                {
+//                    objectField.AddToClassList("hideLabel");
+//                }
+//                objectField.objectType = prop.GetValueType();
+//                objectField.allowSceneObjects = false;
+//                objectField.bindingPath = prop.propertyPath;
+//                objectField.Bind(prop.serializedObject);
+//                objectField.AddToClassList("node-field-input");
+//                objectField.binding = new BBB();
+//                return objectField;
+//
+//            } else
+//            {
+//                PropertyField p = new PropertyField(prop, label);
+//                if (label == null)
+//                {
+//                    p.AddToClassList("hideLabel");
+//                }
+//                p.Bind(so.serializedObject);
+//                p.AddToClassList("node-field-input");
+//                return p;
+//            }
+//        }
 
     }
 }
 
-
-//var be = DrawField(item.FieldType);
-//be.bindingPath = item.Path;// $"Value.{fields[i].Name}";
-//be.Bind(mSO);
-//be.AddToClassList("node-field-input");
-//ve.Add(be);

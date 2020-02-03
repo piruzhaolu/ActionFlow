@@ -9,7 +9,7 @@ namespace ActionFlow
 {
     public class DefaultEditorNodeDraw : IEditorNodeDraw
     {
-        private static DefaultEditorNodeDraw Defalt = new DefaultEditorNodeDraw();
+        private static readonly DefaultEditorNodeDraw Defalt = new DefaultEditorNodeDraw();
 
         public static IEditorNodeDraw GetEditor(Type type)
         {
@@ -18,7 +18,7 @@ namespace ActionFlow
 
 
 
-        public virtual void Create(EditorActionNode node, SerializedProperty asset)
+        public virtual void Create(EditorActionNode node, INode asset)
         {
           //  node.Q(name: "selection-border").Add(new Label("aaa"));
             InputDraw(node, asset);
@@ -27,22 +27,22 @@ namespace ActionFlow
             node.RefreshExpandedState();
         }
 
-        public virtual void DoubleClick(EditorActionNode node, SerializedProperty asset)
+        public virtual void DoubleClick(EditorActionNode node, INode asset)
         {
         }
 
 
 
-        public virtual void ExtensionDraw(EditorActionNode node, SerializedProperty asset)
+        public virtual void ExtensionDraw(EditorActionNode node, INode asset)
         {
             var elem = new EditorNodeElement(asset, node);
             node.mainContainer.Add(elem);
         }
 
 
-        public virtual void InputDraw(EditorActionNode node, SerializedProperty asset)
+        public virtual void InputDraw(EditorActionNode node, INode asset)
         {
-            var nodeTypeInfo = NodeTypeInfo.GetNodeTypeInfo(asset.GetValueType());
+            var nodeTypeInfo = NodeTypeInfo.GetNodeTypeInfo(asset.GetType());
             List<NodeTypeInfo.IOInfo> list = new List<NodeTypeInfo.IOInfo>();
             list.AddRange(nodeTypeInfo.Inputs);
             list.AddRange(nodeTypeInfo.BTInputs);
@@ -78,9 +78,9 @@ namespace ActionFlow
 
         }
 
-        public virtual void OutputDraw(EditorActionNode node, SerializedProperty asset)
+        public virtual void OutputDraw(EditorActionNode node, INode asset)
         {
-            var nodeTypeInfo = NodeTypeInfo.GetNodeTypeInfo(asset.GetValueType());
+            var nodeTypeInfo = NodeTypeInfo.GetNodeTypeInfo(asset.GetType());
             for (int i = 0; i < nodeTypeInfo.Outputs.Count; i++)
             {
                 var outputInfo = nodeTypeInfo.Outputs[i];

@@ -6,15 +6,15 @@ namespace ActionFlow
 {
     public interface IEditorNodeDraw 
     {
-        void Create(EditorActionNode node, SerializedProperty asset);
+        void Create(EditorActionNode node, INode asset);
 
-        void InputDraw(EditorActionNode node, SerializedProperty asset);
+        void InputDraw(EditorActionNode node, INode asset);
 
-        void OutputDraw(EditorActionNode node, SerializedProperty asset);
+        void OutputDraw(EditorActionNode node, INode asset);
 
-        void ExtensionDraw(EditorActionNode node, SerializedProperty asset);
+        void ExtensionDraw(EditorActionNode node, INode asset);
 
-        void DoubleClick(EditorActionNode node, SerializedProperty asset);
+        void DoubleClick(EditorActionNode node, INode asset);
 
     }
 

@@ -204,9 +204,9 @@ namespace ActionFlow
         {
             var asset = GraphAsset.m_Nodes[index];// GraphAsset.Nodes[index];
             if (asset == null) return null;
-            var property = SerializedGraphAsset.FindProperty("m_Nodes").GetArrayElementAtIndex(index);
+            //var property = SerializedGraphAsset.FindProperty("m_Nodes").GetArrayElementAtIndex(index);
             var editorInfo = GraphAsset.NodeEditorInfo[index];
-            var node = new EditorActionNode(property, GraphAsset.NodeInfo[index], editorInfo,index);
+            var node = new EditorActionNode(asset, GraphAsset.NodeInfo[index], editorInfo,index);
             node.SetPosition(new Rect(editorInfo.Pos, editorInfo.Pos));
             AddElement(node);
             return node;

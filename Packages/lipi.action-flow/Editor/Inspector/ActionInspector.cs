@@ -40,7 +40,7 @@ namespace ActionFlow
 
         private bool setSelectedNode()
         {
-            var nodes = GraphEditor.Instance?.selection;
+            var nodes = GraphEditor.Instance?.Selection;
             if (nodes == null && _CurrentNodes != null)
             {
                 _CurrentNodes = null;

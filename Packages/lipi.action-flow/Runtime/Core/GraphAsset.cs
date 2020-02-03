@@ -26,7 +26,7 @@ namespace ActionFlow
         public List<GraphNodeInfo> NodeInfo = new List<GraphNodeInfo>();
 
 
-        private INode[] _RuntimeNodes = null;
+        private INode[] _runtimeNodes ;
 
         /// <summary>
         /// 
@@ -35,19 +35,19 @@ namespace ActionFlow
         {
             get
             {
-                if (_RuntimeNodes == null)
+                if (_runtimeNodes == null)
                 {
-                    _RuntimeNodes = new INode[m_Nodes.Count];
+                    _runtimeNodes = new INode[m_Nodes.Count];
                     for (int i = 0; i < m_Nodes.Count; i++)
                     {
-                        if (m_Nodes[i] != null) _RuntimeNodes[i] = m_Nodes[i];// (m_Nodes[i] as INodeAsset)?.GetValue();
+                        if (m_Nodes[i] != null) _runtimeNodes[i] = m_Nodes[i];// (m_Nodes[i] as INodeAsset)?.GetValue();
                     }
                 }
-                if (_RuntimeNodes.Length == 0)
+                if (_runtimeNodes.Length == 0)
                 {
-                    throw new System.Exception("node length error");
+                    throw new Exception("node length error");
                 }
-                return _RuntimeNodes;
+                return _runtimeNodes;
             }
         }
 
@@ -55,8 +55,8 @@ namespace ActionFlow
 
 
         #region 编辑器数据
-        [System.NonSerialized]
-        public string guid;
+        [NonSerialized]
+        public string Guid;
 
         public List<GraphNodeEditorInfo> NodeEditorInfo = new List<GraphNodeEditorInfo>();
 
@@ -123,14 +123,14 @@ namespace ActionFlow
 
     //=================================
 
-    [System.Serializable]
+    [Serializable]
     public struct GraphNodeEditorInfo
     {
         public int Index;
         public Vector2 Pos;
     }
 
-    [System.Serializable]
+    [Serializable]
     public class GraphNodeInfo
     {
         public int CurrentIndex;
@@ -138,7 +138,7 @@ namespace ActionFlow
         public int ParentIndex = -1;
     }
 
-    [System.Serializable]
+    [Serializable]
     public struct NodeLink
     {
         public static readonly int ParmIDPre = 10000;

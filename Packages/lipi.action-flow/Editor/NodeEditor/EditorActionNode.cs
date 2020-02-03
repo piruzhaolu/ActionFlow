@@ -12,10 +12,38 @@ namespace ActionFlow
     {
         public delegate void EdgeChange();
 
-        public EditorActionNode(SerializedProperty sProperty, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
-        {
+//        public EditorActionNode(SerializedProperty sProperty, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
+//        {
+//
+//            SProperty = sProperty;
+//            NodeInfo = nodeInfo;
+//            NodeEditorInfo = nodeEditorInfo;
+//            Index = index;
+//
+//            RunningMarker = new VisualElement();
+//            RunningMarker.style.width = 4f;
+//            titleContainer.hierarchy.Insert(0, RunningMarker);
+//
+//            var infos = sProperty.GetValueType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
+//            NodeInfoAttribute info;
+//
+//            if (infos != null && infos.Length > 0)
+//            {
+//                info = (NodeInfoAttribute)infos[0];
+//                title = info.Name;
+//            }
+//            else
+//            {
+//                title = sProperty.ToString();
+//            }
+//
+//            var drawer = DefaultEditorNodeDraw.GetEditor(sProperty.GetValueType());
+//            drawer.Create(this, sProperty);
+//        }
 
-            SProperty = sProperty;
+        public EditorActionNode(INode node, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
+        {
+            NodeData = node;
             NodeInfo = nodeInfo;
             NodeEditorInfo = nodeEditorInfo;
             Index = index;
@@ -24,22 +52,24 @@ namespace ActionFlow
             RunningMarker.style.width = 4f;
             titleContainer.hierarchy.Insert(0, RunningMarker);
 
-            var infos = sProperty.GetValueType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
+            var infos = node.GetType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
             NodeInfoAttribute info;
 
-            if (infos != null && infos.Length > 0)
+            if (infos.Length > 0)
             {
                 info = (NodeInfoAttribute)infos[0];
                 title = info.Name;
             }
             else
             {
-                title = sProperty.ToString();
+                title = string.Empty;
             }
 
-            var drawer = DefaultEditorNodeDraw.GetEditor(sProperty.GetValueType());
-            drawer.Create(this, sProperty);
+            var drawer = DefaultEditorNodeDraw.GetEditor(node.GetType());
+            drawer.Create(this, node);
         }
+        
+        
 
         private VisualElement RunningMarker;
 
@@ -72,8 +102,8 @@ namespace ActionFlow
 
 
 
+        public INode NodeData;
         public SerializedProperty SProperty { private set; get; }
-        //public ScriptableObject NodeAsset { private set; get; }
         public GraphNodeInfo NodeInfo { private set; get; }
         public GraphNodeEditorInfo NodeEditorInfo { private set; get; }
         public int Index { private set; get; }

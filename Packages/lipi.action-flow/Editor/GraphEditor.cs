@@ -17,18 +17,10 @@ namespace ActionFlow
             window.Show();
 
             window.GraphAsset = asset;
-            if (window._graphView != null)
-            {
-                window._graphView.Show(asset);
-            }
+            window._graphView?.Show(asset);
 
             window.Repaint();
             // window.RefreshView();
-            object t = null;
-            if (t is int a)
-            {
-                Debug.Log(a);
-            }
             Instance = window;
 
             //Debug.Log(t?.Length);
@@ -64,7 +56,7 @@ namespace ActionFlow
             }
         }
 
-        public List<ISelectable> selection {
+        public List<ISelectable> Selection {
             get
             {
                 var s = _graphView?.selection;
@@ -73,12 +65,12 @@ namespace ActionFlow
             }
         }
 
-        private bool playing = false;
+        private bool _playing = false;
         void Update()
         {
             if (EditorApplication.isPlaying && !EditorApplication.isPaused)
             {
-                playing = true;
+                _playing = true;
                 if (_graphView != null)
                 {
                     _graphView.PlayingUpdata();
@@ -89,10 +81,10 @@ namespace ActionFlow
                 }
             }else if(EditorApplication.isPlaying == false)
             {
-                if (playing)
+                if (_playing)
                 {
                     _graphView.PlayingExit();
-                    playing = false;
+                    _playing = false;
                 }
                 //if (_graphView!=null && _graphView.SerializedGraphAsset != null && _graphView.SerializedGraphAsset.hasModifiedProperties)
                 //{
@@ -105,9 +97,9 @@ namespace ActionFlow
 
 
         [OnOpenAsset()]
-        public static bool OpenWindow(int insID, int line)
+        public static bool OpenWindow(int insId, int line)
         {
-            var obj = EditorUtility.InstanceIDToObject(insID);
+            var obj = EditorUtility.InstanceIDToObject(insId);
             System.Type type = obj.GetType();
             if (type == typeof(GraphAsset))
             {
