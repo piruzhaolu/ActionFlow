@@ -6,12 +6,26 @@ namespace ActionFlow
 {
     public static class DynamicObjectUtility
     {
-
-
         public static object GetObjectValue(object target, string path)
         {
-            
-            return null;
+            var pathArr = path.Split('/');
+            var mTarget = target;
+            for (var i = 0; i < pathArr.Length; i++)
+            {
+                var name = pathArr[i];
+                if (mTarget == null) return null;
+                if (mTarget is IList array)
+                {
+                    var index = Convert.ToInt32(name);
+                    mTarget = array[index];
+                }
+                else
+                {
+                    var fieldInfo = mTarget.GetType().GetField(name);
+                    mTarget = fieldInfo.GetValue(mTarget);
+                }
+            }
+            return mTarget;
         }
         
         public static void SetObjectValue(object target, object value, string path)

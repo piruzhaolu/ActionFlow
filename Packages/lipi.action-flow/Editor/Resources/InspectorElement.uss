@@ -12,3 +12,11 @@
 .Inspector .title .unity-base-field{
     flex-grow: 0;
 }
+
+.Inspector .unity-label{
+    min-width: 60px;
+}
+
+.Inspector .unity-base-text-field__input{
+    min-width: 80px;
+}

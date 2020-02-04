@@ -107,7 +107,7 @@ namespace ActionFlow
 
             if (element != null)
             {
-                if (_container == null)  Add(element);
+                if (_container == null) Add(element);
                 else _container.Add(element);
                 return true;
             }

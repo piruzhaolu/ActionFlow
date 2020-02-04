@@ -41,6 +41,7 @@ namespace ActionFlow
             item._target = target;
             item.RegisterChangeEvent<TValue>(element);
             element.bindingPath = path;
+            element.value = (TValue) DynamicObjectUtility.GetObjectValue(target, path);
             item.AddElement(element);
             return item;
         }

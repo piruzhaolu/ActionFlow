@@ -22,8 +22,8 @@ MonoBehaviour:
     ParentIndex: -1
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 276, y: 203}
-  ViewPosition: {x: 0, y: 0}
+    Pos: {x: 179, y: 173}
+  ViewPosition: {x: 0, y: 52}
   ViewScale: {x: 1, y: 1, z: 1}
   references:
     version: 1
