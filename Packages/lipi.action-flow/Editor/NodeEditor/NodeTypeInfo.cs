@@ -98,8 +98,8 @@ namespace ActionFlow
 
             buildInputInfo();
             buildOutputInfo();
-            buildFieldInfo();
-            buildOutputParmInfo();
+            BuildFieldInfo();
+            BuildOutputParmInfo();
             buildBTInputInfo();
             buildBTOutputInfo();
         }
@@ -114,7 +114,7 @@ namespace ActionFlow
         private Type _valueType;
 
 
-        private void buildOutputParmInfo()
+        private void BuildOutputParmInfo()
         {
             OutputParm = new List<IOInfo>();
             var methods = _valueType.GetMethods();
@@ -136,7 +136,7 @@ namespace ActionFlow
         }
 
 
-        private void buildFieldInfo()
+        private void BuildFieldInfo()
         {
             FieldInfos = new List<FieldInfo>();
             var fields = _valueType.GetFields();

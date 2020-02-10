@@ -10,9 +10,8 @@ namespace ActionFlow
         {
             var pathArr = path.Split('/');
             var mTarget = target;
-            for (var i = 0; i < pathArr.Length; i++)
+            foreach (var name in pathArr)
             {
-                var name = pathArr[i];
                 if (mTarget == null) return null;
                 if (mTarget is IList array)
                 {

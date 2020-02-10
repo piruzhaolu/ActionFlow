@@ -15,14 +15,32 @@ MonoBehaviour:
   Nodes: []
   m_Nodes:
   - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
     Childs: []
     ParentIndex: -1
+  - CurrentIndex: 1
+    Childs: []
+    ParentIndex: -1
+  - CurrentIndex: 2
+    Childs: []
+    ParentIndex: -1
+  - CurrentIndex: 3
+    Childs: []
+    ParentIndex: -1
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 179, y: 173}
+    Pos: {x: 339, y: 172}
+  - Index: 1
+    Pos: {x: 380, y: 325}
+  - Index: 2
+    Pos: {x: 622.00006, y: 192}
+  - Index: 3
+    Pos: {x: 515.00006, y: 286}
   ViewPosition: {x: 0, y: 52}
   ViewScale: {x: 1, y: 1, z: 1}
   references:
@@ -31,3 +49,16 @@ MonoBehaviour:
       type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
       data:
         LogText: lipi
+    00000001:
+      type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000002:
+      type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
+      data:
+        AnimationClip: {fileID: 0}
+        ToLayer: 0
+        Transition: {x: 0, y: 0}
+        Duration: 1
+    00000003:
+      type: {class: , ns: , asm: }

@@ -48,9 +48,9 @@ namespace ActionFlow
             NodeEditorInfo = nodeEditorInfo;
             Index = index;
 
-            RunningMarker = new VisualElement();
-            RunningMarker.style.width = 4f;
-            titleContainer.hierarchy.Insert(0, RunningMarker);
+            _runningMarker = new VisualElement();
+            _runningMarker.style.width = 4f;
+            titleContainer.hierarchy.Insert(0, _runningMarker);
 
             var infos = node.GetType().GetCustomAttributes(typeof(NodeInfoAttribute), false);
             NodeInfoAttribute info;
@@ -71,7 +71,7 @@ namespace ActionFlow
         
         
 
-        private VisualElement RunningMarker;
+        private VisualElement _runningMarker;
 
         private bool _running = false;
         public bool Running
@@ -82,12 +82,12 @@ namespace ActionFlow
                 _running = value;
                 if (value == true)
                 {
-                    RunningMarker.style.backgroundColor = new StyleColor(new Color(0.446f, 0.811f, 0.344f, 1f));
+                    _runningMarker.style.backgroundColor = new StyleColor(new Color(0.446f, 0.811f, 0.344f, 1f));
                     //this.Q("title").style.backgroundColor = new StyleColor(new Color(0.669f, 0.4f, 0.164f,0.803f));
                 }else
                 {
                     //this.Q("title").style.backgroundColor = new StyleColor(new Color(0.247f, 0.247f, 0.247f,0.803f));
-                    RunningMarker.style.backgroundColor = new StyleColor(new Color(0.446f, 0.811f, 0.344f, 0f));
+                    _runningMarker.style.backgroundColor = new StyleColor(new Color(0.446f, 0.811f, 0.344f, 0f));
                 }
             }
         }
