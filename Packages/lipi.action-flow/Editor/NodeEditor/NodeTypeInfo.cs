@@ -61,8 +61,8 @@ namespace ActionFlow
         {
             switch (mode)
             {
-                case IOMode.Output: return "output" + typeName;
-                case IOMode.Input: return "input" + typeName;
+                case IOMode.Output: return "Out" + typeName;
+                case IOMode.Input: return "In" + typeName;
                 case IOMode.BTInput:return "BTin";
                 case IOMode.BTOutput:return "BTout";
             }
@@ -121,7 +121,7 @@ namespace ActionFlow
             foreach (var item in methods)
             {
                 var attrs = item.GetCustomAttributes(typeof(NodeOutputParmAttribute), false);
-                var attr = (attrs == null || attrs.Length == 0) ? null : attrs[0];
+                var attr = (attrs.Length == 0) ? null : attrs[0];
                 if (attr is NodeOutputParmAttribute a)
                 {
                     OutputParm.Add(new IOInfo()

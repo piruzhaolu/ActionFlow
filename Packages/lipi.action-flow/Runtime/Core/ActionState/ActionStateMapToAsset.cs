@@ -19,8 +19,7 @@ namespace ActionFlow
             {
                 if (_inst == null)
                 {
-                    _inst = new ActionStateMapToAsset();
-                    _inst._map = new Dictionary<int, ActionStateContainer[]>();
+                    _inst = new ActionStateMapToAsset {_map = new Dictionary<int, ActionStateContainer[]>()};
                 }
                 return _inst;
             }

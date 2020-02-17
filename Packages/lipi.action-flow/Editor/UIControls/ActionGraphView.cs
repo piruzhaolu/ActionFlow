@@ -14,14 +14,14 @@ namespace ActionFlow
 
         public ActionGraphView(GraphEditor window)
         {
-            toolbar = new Toolbar();
-            runningEntityMenu = new ToolbarMenu();
-            runningEntityMenu.text = "None";
-            //menu.menu.AppendAction("abc1", action, DropdownMenuAction.Status.Checked );
-            //menu.menu.AppendAction("abc2", action, DropdownMenuAction.Status.Normal);
+            
+            
+            var inst = new VisualElement();
+            inst.style.width = 100;
+            inst.style.left = 0;
+            Add(inst);
 
-            toolbar.Add(runningEntityMenu);
-            Add(toolbar);
+
             this.AddManipulator(new ContentZoomer()
             {
                 minScale = 0.5f,
@@ -30,57 +30,51 @@ namespace ActionFlow
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.StretchToParentSize();
-            CurrentWindow = window;
+            _currentWindow = window;
 
 
             styleSheets.Add(Resources.Load<StyleSheet>("ActionFlowStyle"));
 
-           // this.AddElement(new EditorActionNode());
 
             nodeCreationRequest += creationRequestHandler;
             graphViewChanged += graphViewChangedHandler;
             viewTransformChanged += viewTransformChangedHandler;
         }
 
-        private void runningEntityMenuAction(DropdownMenuAction obj)
+        private void RunningEntityMenuAction(DropdownMenuAction obj)
         {
             var v = obj.name;
             var arr = v.Split('-');
             var intV = Convert.ToInt32(arr[arr.Length - 1]);
-            runningEntityMenu.text = obj.name;
-            SelectedIndex = intV;
+            //_runningEntityMenu.text = obj.name;
+            _selectedIndex = intV;
         }
-        private DropdownMenuAction.Status runningEntityMenuStatusAction(DropdownMenuAction arg)
+        private DropdownMenuAction.Status RunningEntityMenuStatusAction(DropdownMenuAction arg)
         {
             var v = arg.name;
             var arr = v.Split('-');
             var intV = Convert.ToInt32(arr[arr.Length - 1]);
-            if (intV == SelectedIndex)
-            {
-                return DropdownMenuAction.Status.Checked;
-            }else
-            {
-                return DropdownMenuAction.Status.Normal;
-            }
+            return intV == _selectedIndex ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal;
         }
 
 
 
 
-        private GraphEditor CurrentWindow;
-        private Toolbar toolbar;
-        private ToolbarMenu runningEntityMenu;//运行中的Entity
-        private int SelectedIndex = 0;//当前选中的Entity索引
+        private readonly GraphEditor _currentWindow;
+        
+        
+        private int _selectedIndex = 0;//当前选中的Entity索引
 
-        public SerializedObject SerializedGraphAsset { private set; get; }
-        private GraphAsset _GraphAsset;
-        public GraphAsset GraphAsset {
-            private set
+        private SerializedObject SerializedGraphAsset { set; get; }
+        private GraphAsset _graphAsset;
+
+        private GraphAsset GraphAsset {
+            set
             {
                 SerializedGraphAsset = (value == null)?null:new SerializedObject(value);
-                _GraphAsset = value;
+                _graphAsset = value;
             }
-            get => _GraphAsset;
+            get => _graphAsset;
         }
 
         public void Show(GraphAsset graphAsset)
@@ -111,42 +105,42 @@ namespace ActionFlow
             for (int i = count - 1; i >= 0; i--)
             {
                 //DropdownMenuAction.Status status = DropdownMenuAction.Status.Normal;
-                if (SelectedIndex == infos[i].Index)
+                if (_selectedIndex == infos[i].Index)
                 {
                     //status = DropdownMenuAction.Status.Checked;
-                    sIndex = SelectedIndex;
+                    sIndex = _selectedIndex;
                 }
                 if (i == 0 && sIndex == -1)
                 {
                     //status = DropdownMenuAction.Status.Checked;
                     sIndex = 0;
-                    SelectedIndex = 0;
+                    _selectedIndex = 0;
                 }
-                runningEntityMenu.menu.AppendAction($"{infos[i].Name}-{infos[i].Index}", runningEntityMenuAction, runningEntityMenuStatusAction);
+               // _runningEntityMenu.menu.AppendAction($"{infos[i].Name}-{infos[i].Index}", RunningEntityMenuAction, RunningEntityMenuStatusAction);
             }
         }
 
 
-        public List<(EditorActionNode, float)> ps = new List<(EditorActionNode, float)>();
+        public readonly List<(ActionNode, float)> Ps = new List<(ActionNode, float)>();
 
 
         //在编辑器Playing中每帧调用，显示节点状态
         public void PlayingUpdata()
         {
-            var list = this.Query<EditorActionNode>().ToList();
-            var info = RunningGraphAsset.Instance.GetInfo(GraphAsset, SelectedIndex);
+            var list = this.Query<ActionNode>().ToList();
+            var info = RunningGraphAsset.Instance.GetInfo(GraphAsset, _selectedIndex);
             if (info == null) return;
             var t = Time.realtimeSinceStartup;
 
-            ps.Clear();
+            Ps.Clear();
             foreach (var item in list)
             {
                 var v = info.GetNodeCycle(item.Index);
                 var inputTime = RunningGraphAsset.Instance.GetInputTime(GraphAsset,
-                    new ActionStateIndex() { ChunkIndex = SelectedIndex, NodeIndex = item.Index });
+                    new ActionStateIndex() { ChunkIndex = _selectedIndex, NodeIndex = item.Index });
                 if (t - inputTime < 3f)
                 {
-                    ps.Add((item, inputTime));
+                    Ps.Add((item, inputTime));
                     //item.InputTween((t - inputTime));
                 }
 
@@ -158,19 +152,19 @@ namespace ActionFlow
                     item.Running = false;
                 }
             }
-            ps.Sort(psSortFn);
-            for (int i = 0; i < ps.Count; i++)
+            Ps.Sort(psSortFn);
+            for (int i = 0; i < Ps.Count; i++)
             {
-                var tValue = t - (ps[i].Item2 + i * 0.1f);
+                var tValue = t - (Ps[i].Item2 + i * 0.1f);
                 if (tValue >= 0)
                 {
-                    ps[i].Item1.InputTween(tValue);
+                    Ps[i].Item1.InputTween(tValue);
                 }
             }
 
         }
 
-        private int psSortFn((EditorActionNode, float) x, (EditorActionNode, float) y)
+        private int psSortFn((ActionNode, float) x, (ActionNode, float) y)
         {
             if (x.Item2 < y.Item2) return -1;
             else return 1;
@@ -178,7 +172,7 @@ namespace ActionFlow
 
         public void PlayingExit()
         {
-            var list = this.Query<EditorActionNode>().ToList();
+            var list = this.Query<ActionNode>().ToList();
             foreach (var item in list)
             {
                 item.Running = false;
@@ -187,10 +181,9 @@ namespace ActionFlow
         }
 
 
-
-        public EditorActionNode GetNode(int index)
+        private ActionNode GetNode(int index)
         {
-            var list = this.Query<EditorActionNode>().ToList();
+            var list = this.Query<ActionNode>().ToList();
             foreach (var item in list)
             {
                 if (item.Index == index) return item;
@@ -228,7 +221,7 @@ namespace ActionFlow
             }
         }
 
-        private Edge CreateEdge(EditorActionNode cNode, NodeLink link, NodeTypeInfo.IOMode a, NodeTypeInfo.IOMode b)
+        private Edge CreateEdge(ActionNode cNode, NodeLink link, NodeTypeInfo.IOMode a, NodeTypeInfo.IOMode b)
         {
             Port port1 = cNode?.GetPort(link.FromID, a);
             var tNode = GetNode(link.Index);
@@ -246,7 +239,7 @@ namespace ActionFlow
 
         public void CreatedHandler(Type type, Vector2 pos)
         {
-            var nodePos = pos - CurrentWindow.position.min - contentViewContainer.worldBound.position;
+            var nodePos = pos - _currentWindow.position.min - contentViewContainer.worldBound.position;
             var scaleNodePos = new Vector2(nodePos.x / viewTransform.scale.x, nodePos.y / viewTransform.scale.y);
 
 
@@ -290,9 +283,8 @@ namespace ActionFlow
             {
                 if (port.direction != startPort.direction && port.node != startPort.node)
                 {
-                    var _port = port.source as NodeTypeInfo.IOInfo;
-                    var _startPort = startPort.source as NodeTypeInfo.IOInfo;
-                    if (_startPort.Match(_port))
+                    var mport = port.source as NodeTypeInfo.IOInfo;
+                    if (startPort.source is NodeTypeInfo.IOInfo mstartPort && mstartPort.Match(mport))
                     {
                         li.Add(port);
                     }
@@ -300,7 +292,6 @@ namespace ActionFlow
                 }
             });
             return li;
-            //return new List<Port>() { pp };
         }
 
 
@@ -308,24 +299,24 @@ namespace ActionFlow
         {
             if (graphViewChange.edgesToCreate != null)
             {
-                edgesToCreate(graphViewChange.edgesToCreate);
+                EdgesToCreate(graphViewChange.edgesToCreate);
             }
             if (graphViewChange.elementsToRemove != null)
             {
                 var list = graphViewChange.elementsToRemove;
-                for (int i = 0; i < list.Count; i++)
+                for (var i = 0; i < list.Count; i++)
                 {
-                    if (list[i] is Edge) edgeRemove((Edge)list[i]);
-                    else if (list[i] is EditorActionNode) nodeRemove((EditorActionNode)list[i]);
+                    if (list[i] is Edge) EdgeRemove((Edge)list[i]);
+                    else if (list[i] is ActionNode) NodeRemove((ActionNode)list[i]);
                 }
                 
             }
             if (graphViewChange.movedElements != null)
             {
                 var list = graphViewChange.movedElements;
-                for (int i = 0; i < list.Count; i++)
+                for (var i = 0; i < list.Count; i++)
                 {
-                    if (list[i] is EditorActionNode) nodeMoved((EditorActionNode)list[i], graphViewChange.moveDelta);
+                    if (list[i] is ActionNode) NodeMoved((ActionNode)list[i], graphViewChange.moveDelta);
                 }
             }
 
@@ -334,47 +325,43 @@ namespace ActionFlow
         }
 
 
-        private void nodeMoved(EditorActionNode node, Vector2 moveDelta)
+        private void NodeMoved(ActionNode node, Vector2 moveDelta)
         {
             var index = node.Index;
             var item = GraphAsset.NodeEditorInfo[index];
             item.Pos = node.layout.position;
             GraphAsset.NodeEditorInfo[index] = item;
-           // Debug.Log($"OOO==={node.worldBound.position}; ddd -- {item.Pos }");
         }
 
 
-        private void edgeRemove(Edge edge)
+        private void EdgeRemove(Edge edge)
         {
             var inputInfo = edge.input.source as NodeTypeInfo.IOInfo;
             var outputInfo = edge.output.source as NodeTypeInfo.IOInfo;
 
-            var inputNode = edge.input.node as EditorActionNode;
-            var outputNode = edge.output.node as EditorActionNode;
+            var inputNode = edge.input.node as ActionNode;
+            var outputNode = edge.output.node as ActionNode;
+            
+            if (inputNode == null || outputNode==null) return;
+            if (inputInfo == null || outputInfo == null) return;
 
-            bool reverse = false; //对于参数类连接port，input outpu和实际逻辑相反
+            var reverse = outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm; //对于参数类连接port，input outpu和实际逻辑相反
 
-            if (outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
-            {
-                reverse = true;
-            }
             var nodeInfo = reverse? inputNode.NodeInfo: outputNode.NodeInfo;
             for (int i = 0; i < nodeInfo.Childs.Count; i++)
             {
-                var m_id = reverse ? inputInfo.ID : outputInfo.ID;
-                if (nodeInfo.Childs[i].FromID == m_id)
+                var mId = reverse ? inputInfo.ID : outputInfo.ID;
+                if (nodeInfo.Childs[i].FromID == mId)
                 {
                     nodeInfo.Childs.RemoveAt(i);
                     
                     break;
                 }
             }
-            //var mainNode = reverse ? inputNode : outputNode;
-            //mainNode.EdgeAddOrRemove();
         }
 
 
-        private void nodeRemove(EditorActionNode node)
+        private void NodeRemove(ActionNode node)
         {
             var index = node.Index;
             GraphAsset.m_Nodes[index] = null;
@@ -385,20 +372,24 @@ namespace ActionFlow
         }
 
 
-        private void edgesToCreate(List<Edge> lists)
+        private void EdgesToCreate(List<Edge> lists)
         {
-            for (int i = 0; i < lists.Count; i++)
+            for (var i = 0; i < lists.Count; i++)
             {
-                var inputNode = lists[i].input.node as EditorActionNode;
-                var outputNode = lists[i].output.node as EditorActionNode;
+                var inputNode = lists[i].input.node as ActionNode;
+                var outputNode = lists[i].output.node as ActionNode;
 
                 var inputInfo = lists[i].input.source as NodeTypeInfo.IOInfo;
                 var outputInfo = lists[i].output.source as NodeTypeInfo.IOInfo;
 
-                EditorActionNode mainNode = outputNode;
-                EditorActionNode childNode = inputNode;
-                bool reverse = false;
-                if (outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
+                var mainNode = outputNode;
+                var childNode = inputNode;
+                
+                if (mainNode == null || childNode==null) continue;
+                if (inputInfo == null || outputInfo == null) continue;
+                
+                var reverse = false;
+                if ( outputInfo.Mode == NodeTypeInfo.IOMode.OutputParm)
                 {
                     mainNode = inputNode;
                     childNode = outputNode;

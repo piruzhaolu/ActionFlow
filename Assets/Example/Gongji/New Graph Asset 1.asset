@@ -10,67 +10,56 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3f6427a75449f247aea85fb091c55b1, type: 3}
-  m_Name: New Graph Asset
+  m_Name: New Graph Asset 1
   m_EditorClassIdentifier: 
   m_Nodes:
   - id: 0
   - id: 1
+  - id: 1
+  - id: 1
   - id: 2
-  - id: 3
-  - id: 4
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
-    Childs: []
-    ParentIndex: -1
-  - CurrentIndex: 1
     Childs:
     - FromID: 0
       Index: 4
       ToID: 0
     ParentIndex: -1
+  - CurrentIndex: 1
+    Childs: []
+    ParentIndex: -1
   - CurrentIndex: 2
     Childs: []
-    ParentIndex: 1
+    ParentIndex: -1
   - CurrentIndex: 3
     Childs: []
     ParentIndex: -1
   - CurrentIndex: 4
     Childs: []
-    ParentIndex: 1
+    ParentIndex: 0
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 339, y: 172}
+    Pos: {x: 175, y: 207}
   - Index: 1
-    Pos: {x: 380, y: 325}
+    Pos: {x: 463, y: 203}
   - Index: 2
-    Pos: {x: 725, y: 290}
+    Pos: {x: 612, y: 177.00002}
   - Index: 3
-    Pos: {x: 515.00006, y: 286}
+    Pos: {x: 650, y: 220.00002}
   - Index: 4
-    Pos: {x: 717, y: 189}
-  ViewPosition: {x: -53.333332, y: 38}
-  ViewScale: {x: 1, y: 1, z: 1}
+    Pos: {x: 436, y: 240}
+  ViewPosition: {x: -16, y: -76}
+  ViewScale: {x: 1.15, y: 1.15, z: 1}
   references:
     version: 1
     00000000:
-      type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
-      data:
-        LogText: lipi
-    00000001:
       type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
       data:
         _i: 0
-    00000002:
-      type: {class: AnimationClipNode, ns: ActionFlow, asm: ActionFlow.Animators}
-      data:
-        AnimationClip: {fileID: 0}
-        ToLayer: 0
-        Transition: {x: 0, y: 0}
-        Duration: 1
-    00000003:
+    00000001:
       type: {class: , ns: , asm: }
-    00000004:
+    00000002:
       type: {class: LogNodeAsset, ns: ActionFlow, asm: ActionFlow}
       data:
-        Text: 
+        Text: e

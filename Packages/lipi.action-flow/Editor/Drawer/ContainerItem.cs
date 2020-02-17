@@ -17,8 +17,16 @@ namespace ActionFlow
             _target = target;
             _parentPath = path;
             _indent = indent;
-            _container = new VisualElement();
-            Add(_container);
+
+            if (_container == null)
+            {
+                _container = new VisualElement();
+                Add(_container);
+            }
+            else
+            {
+                _container.Clear();
+            }
             DrawChild();
         }
         
@@ -39,6 +47,7 @@ namespace ActionFlow
         
         private void DrawChild()
         {
+            if (_target == null) return;
             var type = _target.GetType();
             var fields = type.GetFields();
             foreach (var field in fields)

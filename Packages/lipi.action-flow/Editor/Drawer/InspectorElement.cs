@@ -15,13 +15,29 @@ namespace ActionFlow
 
         private object _target;
 
-        public InspectorElement(object target)
+        public InspectorElement(object target = null)
         {
-            _target = target;
             AddToClassList("Inspector");
             styleSheets.Add(Resources.Load<StyleSheet>("InspectorElement"));
-            InitContainer(target,"", 0);
+            
+            if (target != null)
+            {
+                SetTarget(target);
+            }
         }
+
+        public void SetTarget(object target)
+        {
+            if (!Equals(_target, target))
+            {
+                _target = target;
+                InitContainer(_target, string.Empty,0);
+            }
+        }
+        
+        
+        
+        
 
 //        public void Draw(object target, string parentPath, int indent = 0, ContainerItem container = null)
 //        {

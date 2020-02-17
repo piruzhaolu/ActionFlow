@@ -16,7 +16,7 @@ namespace ActionFlow
             m_Group = GetEntityQuery(new EntityQueryDesc
             {
                 None = new ComponentType[] { typeof(ActionRunState) },
-                All = new ComponentType[] { ComponentType.ReadOnly<ActionGraphAsset>() }
+                All = new[] { ComponentType.ReadOnly<ActionGraphAsset>() }
             });
         }
 

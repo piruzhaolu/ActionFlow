@@ -15,8 +15,8 @@ namespace ActionFlow
     {
 
         #region 运行时数据
-        [Obsolete]
-        public List<ScriptableObject> Nodes = new List<ScriptableObject>();
+//        [Obsolete]
+//        public List<ScriptableObject> Nodes = new List<ScriptableObject>();
 
         [SerializeReference]
         public List<INode> m_Nodes = new List<INode>();
@@ -38,7 +38,7 @@ namespace ActionFlow
                 if (_runtimeNodes == null)
                 {
                     _runtimeNodes = new INode[m_Nodes.Count];
-                    for (int i = 0; i < m_Nodes.Count; i++)
+                    for (var i = 0; i < m_Nodes.Count; i++)
                     {
                         if (m_Nodes[i] != null) _runtimeNodes[i] = m_Nodes[i];// (m_Nodes[i] as INodeAsset)?.GetValue();
                     }
@@ -87,36 +87,36 @@ namespace ActionFlow
             if (index != -1) m_Nodes[index] = null;
         }
 
-        [Obsolete]
-        public int Add(ScriptableObject so, Vector2 pos)
-        {
-            Nodes.Add(so);
-            var index = Nodes.Count - 1;
-            NodeInfo.Add(new GraphNodeInfo()
-            {
-                CurrentIndex = index
-            });
-            NodeEditorInfo.Add(new GraphNodeEditorInfo()
-            {
-                Index = index,
-                Pos = pos
-            });
-            
-#if UNITY_EDITOR
-            AssetDatabase.AddObjectToAsset(so,this);
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(this));
-#endif
-            return index;
-        }
+//        [Obsolete]
+//        public int Add(ScriptableObject so, Vector2 pos)
+//        {
+//            Nodes.Add(so);
+//            var index = Nodes.Count - 1;
+//            NodeInfo.Add(new GraphNodeInfo()
+//            {
+//                CurrentIndex = index
+//            });
+//            NodeEditorInfo.Add(new GraphNodeEditorInfo()
+//            {
+//                Index = index,
+//                Pos = pos
+//            });
+//            
+//#if UNITY_EDITOR
+//            AssetDatabase.AddObjectToAsset(so,this);
+//            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(this));
+//#endif
+//            return index;
+//        }
 
-        [Obsolete]
-        public void Remove(ScriptableObject so)
-        {
-#if UNITY_EDITOR
-            AssetDatabase.RemoveObjectFromAsset(so);
-            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(this));
-#endif
-        }
+//        [Obsolete]
+//        public void Remove(ScriptableObject so)
+//        {
+//#if UNITY_EDITOR
+//            AssetDatabase.RemoveObjectFromAsset(so);
+//            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(this));
+//#endif
+//        }
 
     }
 
@@ -141,7 +141,7 @@ namespace ActionFlow
     [Serializable]
     public struct NodeLink
     {
-        public static readonly int ParmIDPre = 10000;
+        public const int ParmIDPre = 10000;
         public static readonly int BTIDPre = 100000;
 
         public int FromID;

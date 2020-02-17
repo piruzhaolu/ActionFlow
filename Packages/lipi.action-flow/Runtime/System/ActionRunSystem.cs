@@ -11,10 +11,10 @@ namespace ActionFlow
     public class ActionRunSystem : ComponentSystem
     {
 
-        private EntityQuery m_Group;
+        private EntityQuery _mGroup;
         protected override void OnCreate()
         {
-            m_Group = GetEntityQuery(ComponentType.ReadOnly<ActionGraphAsset>(),ComponentType.ReadOnly<ActionRunState>());
+            _mGroup = GetEntityQuery(ComponentType.ReadOnly<ActionGraphAsset>(),ComponentType.ReadOnly<ActionRunState>());
 
             
         }
@@ -30,7 +30,7 @@ namespace ActionFlow
 
         protected override void OnUpdate()
         {
-            var chunkArray = m_Group.CreateArchetypeChunkArray(Allocator.TempJob);
+            var chunkArray = _mGroup.CreateArchetypeChunkArray(Allocator.TempJob);
             var sComponentType = GetArchetypeChunkSharedComponentType<ActionGraphAsset>();
             var stateComponentType = GetArchetypeChunkComponentType<ActionRunState>(true);
             var entityType = GetArchetypeChunkEntityType();
@@ -41,7 +41,7 @@ namespace ActionFlow
             
             var context = new Context();
            
-            for (int i = 0; i < chunkArray.Length; i++)
+            for (var i = 0; i < chunkArray.Length; i++)
             {
                 var asset = chunkArray[i].GetSharedComponentData(sComponentType, EntityManager);
                 ref ActionStateContainer container = ref ActionStateMapToAsset.Instance.GetContainer(asset.Asset.GetInstanceID());
@@ -53,7 +53,7 @@ namespace ActionFlow
                 context.EntityManager = EntityManager;
                 context.PostUpdateCommands = PostUpdateCommands;
                 context.StateData = container;
-                for (int j = 0; j < runStateArray.Length; j++)
+                for (var j = 0; j < runStateArray.Length; j++)
                 {
                     var chunkIndex = runStateArray[j].ChunkIndex;
                     if (container.AnyActive(chunkIndex) == false && container.AnyWaking(chunkIndex) == false) continue;
@@ -67,16 +67,17 @@ namespace ActionFlow
                     //Profiler.EndSample();
 
                     
-                    for (int k = 0; k < activeCount; k++)
+                    for (var k = 0; k < activeCount; k++)
                     {
                         context.Index = new ActionStateIndex(chunkIndex, actives[k]);
-                        var node = nodeList[actives[k]] as IStatusNode;
-                        //Profiler.BeginSample("lipi_V");
-                        node.OnTick(ref context); //TODO:需要优化 
-                        //Profiler.EndSample();
+                        
+                        if ( nodeList[actives[k]] is IStatusNode node)
+                        {
+                            node.OnTick(ref context);
+                        }
                     }
                    
-                    for (int k = 0; k < wakingCount; k++)
+                    for (var k = 0; k < wakingCount; k++)
                     {
                         var wakingIndex = wakingArray[k];
                         context.Index = new ActionStateIndex(chunkIndex, wakingIndex);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 namespace ActionFlow
 {
@@ -10,9 +11,9 @@ namespace ActionFlow
         public ActionNode(INode node, GraphNodeInfo nodeInfo, GraphNodeEditorInfo nodeEditorInfo, int index)
         {
             _nodeData = node;
-            _nodeInfo = nodeInfo;
+            NodeInfo = nodeInfo;
             _nodeEditorInfo = nodeEditorInfo;
-            _index = index;
+            Index = index;
 
             SetTitle();
             InputDraw(node);
@@ -20,17 +21,34 @@ namespace ActionFlow
         }
 
         private INode _nodeData;
-        private GraphNodeInfo _nodeInfo;
         private GraphNodeEditorInfo _nodeEditorInfo;
-        private int _index;
 
+        public GraphNodeInfo NodeInfo { get; }
+
+        public INode NodeData
+        {
+            get => _nodeData;
+        }
+
+        public int Index { get; }
+        
+        public void EdgeAddOrRemove()
+        {
+        }
 
         private void SetTitle()
         {
             var info = _nodeData.GetType().GetCustomAttribute<NodeInfoAttribute>(false);
             title = info != null ? info.Name : string.Empty;
         }
+
+        public bool Running;
         
+        public void InputTween(float t)
+        {
+            
+        }
+
         
         private void InputDraw(INode asset)
         {
@@ -62,6 +80,22 @@ namespace ActionFlow
                 port.portColor = NodeTypeInfo.IOModeColor(outputInfo.Mode);
                 outputContainer.Add(port);
             }
+        }
+        
+        
+        public Port GetPort(int id, NodeTypeInfo.IOMode mode)
+        {
+            var list = this.Query<Port>().ToList();
+            foreach (var item in list)
+            {
+                var info = (NodeTypeInfo.IOInfo)item.source;
+                if (info != null && info.ID == id && info.Mode == mode)
+                {
+                    return item;
+                }
+
+            }
+            return null;
         }
 
     }

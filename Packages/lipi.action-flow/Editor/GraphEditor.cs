@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
+using UnityEngine.UIElements;
 
 namespace ActionFlow
 {
@@ -32,6 +34,11 @@ namespace ActionFlow
 
         [SerializeField]
         private GraphAsset _GraphAsset;
+        private Toolbar _toolbar;
+        private ToolbarMenu _runningEntityMenu;//运行中的Entity
+        private TwoPaneSplitView _twoPaneSplitView;
+        private InspectorView _inspector;
+        
         public GraphAsset GraphAsset { private set=> _GraphAsset=value; get=> _GraphAsset; }
 
 
@@ -45,11 +52,37 @@ namespace ActionFlow
 
         void RefreshView()
         {
+            
+            if (_toolbar == null)
+            {
+                _toolbar = new Toolbar();
+                _runningEntityMenu = new ToolbarMenu {text = "None"};
+                //menu.menu.AppendAction("abc1", action, DropdownMenuAction.Status.Checked );
+                //menu.menu.AppendAction("abc2", action, DropdownMenuAction.Status.Normal);
+
+                _toolbar.Add(_runningEntityMenu);
+                rootVisualElement.Add(_toolbar);
+            }
+
+            if (_twoPaneSplitView == null)
+            {
+                _twoPaneSplitView = new TwoPaneSplitView(1, 200, TwoPaneSplitView.Orientation.Horizontal);
+                rootVisualElement.Add(_twoPaneSplitView);
+            }
+            
             if (_graphView == null)
             {
                 _graphView = new ActionGraphView(this);
-                rootVisualElement.Add(_graphView);
+                _graphView.style.position = new StyleEnum<Position>(Position.Relative);
+                _twoPaneSplitView.Add(_graphView);
             }
+
+            if (_inspector == null)
+            {
+                _inspector = new InspectorView();
+                _twoPaneSplitView.Add(_inspector);
+            }
+            
             if (GraphAsset != null)
             {
                 _graphView.Show(GraphAsset);
@@ -68,6 +101,7 @@ namespace ActionFlow
         private bool _playing = false;
         void Update()
         {
+            
             if (EditorApplication.isPlaying && !EditorApplication.isPaused)
             {
                 _playing = true;
@@ -93,6 +127,19 @@ namespace ActionFlow
 
                 //}
             }
+
+            if (Selection != null)
+            {
+                if (Selection.Count > 0)
+                {
+                    if (Selection[0] is ActionNode node)
+                    {
+                        _inspector.SetTarget(node.NodeData);
+                    }
+                    
+                }
+            }
+            
         }
 
 
