@@ -79,7 +79,7 @@ namespace ActionFlow
             var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return;
 
-            for (int i = 0; i < nodeInfo.Childs.Count; i++)
+            for (var i = 0; i < nodeInfo.Childs.Count; i++)
             {
                 var child = nodeInfo.Childs[i];
                 if (child.FromID == outputID)
@@ -98,6 +98,80 @@ namespace ActionFlow
             }
         }
 
+        public NextNodeInfo BTNextNode(int arrayIndex = -1, int outputID = 0)
+        {
+            var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
+            if (nodeInfo.Childs == null) return new NextNodeInfo
+            {
+                Valid = false,
+                End = false
+            };
+            
+            var prefix = NodeLink.BTIDPre + outputID * 100;
+            var currentArrayIndex = arrayIndex + 1;
+
+            var returnChildIndex = -1;
+            var returnArrayIndex = -1;
+            var nearValue = 10000;
+            
+            //var id = NodeLink.BTIDPre + outputID * 100 + (arrayIndex+1);
+            
+            for (var i = 0; i < nodeInfo.Childs.Count; i++)
+            {//Childs中的顺序不是执行的顺序，这里根据ID的顺序查找最接近传入索引的Node
+                var child = nodeInfo.Childs[i];
+                var childArrayIndex = child.FromID - prefix;
+                
+                if (currentArrayIndex == childArrayIndex) return new NextNodeInfo
+                {
+                    Valid = true,
+                    End = false,
+                    ChildIndex = i,
+                    ArrayIndex = currentArrayIndex
+                    
+                }; 
+                if (currentArrayIndex < childArrayIndex)
+                {
+                    var nv =  childArrayIndex - currentArrayIndex;
+                    if (nv < nearValue)
+                    {
+                        nearValue = nv;
+                        returnChildIndex = i;
+                        returnArrayIndex = childArrayIndex;
+                    }
+                }
+            }
+
+            var nextNodeInfo = new NextNodeInfo
+            {
+                ChildIndex = returnChildIndex,
+                ArrayIndex = returnArrayIndex,
+                Valid = true,
+                End = returnChildIndex == -1
+            };
+
+            return nextNodeInfo;//(returnChildIndex, returnArrayIndex);
+        }
+        
+        
+        
+
+        public BehaviorStatus BTExecuteChildNode(int nodeIndex)
+        {
+            var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
+            var child = nodeInfo.Childs[nodeIndex];
+            var tIndex = child.Index;
+            if (Graph.RuntimeNodes[tIndex] is IBehaviorNode node)
+            {
+                var copyValue = this;
+                copyValue.Index = Index.NewStateIndex(tIndex);
+#if UNITY_EDITOR
+                RunningGraphAsset.Instance.SetInputTime(Graph, copyValue.Index);
+#endif
+                return node.BehaviorInput(ref copyValue);
+            }
+            return BehaviorStatus.None;
+        }
+
 
 
         public BehaviorStatus BTNodeOutput(int arrayIndex = 0, int outputID = 0)
@@ -105,8 +179,8 @@ namespace ActionFlow
             var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return BehaviorStatus.None;
 
-            var id = NodeLink.BTIDPre + outputID + arrayIndex * 100;
-            for (int i = 0; i < nodeInfo.Childs.Count; i++)
+            var id = NodeLink.BTIDPre + outputID * 100 + arrayIndex;
+            for (var i = 0; i < nodeInfo.Childs.Count; i++)
             {
                 var child = nodeInfo.Childs[i];
                 if (child.FromID == id)
@@ -144,7 +218,7 @@ namespace ActionFlow
             var childs = info.Childs;
             if (childs == null || childs.Count == 0) return defaultValue;
 
-            for (int i = 0; i < childs.Count; i++)
+            for (var i = 0; i < childs.Count; i++)
             {
                 if (childs[i].FromID == id)
                 {

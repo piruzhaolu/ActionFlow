@@ -13,9 +13,9 @@ namespace ActionFlow
             OnTick(ref context);
         }
 
-        [NodeOutputBT(1)]
-        [HideInActionInspector]
-        public NullStatus[] Childs;
+        // [NodeOutputBT(1)]
+        // [HideInActionInspector]
+        // public NullStatus[] Childs;
 
         public BehaviorStatus BehaviorInput(ref Context context)
         {
@@ -36,6 +36,7 @@ namespace ActionFlow
             return (false, BehaviorStatus.None);
         }
 
+        [NodeOutputBT(1)]
         public override void OnTick(ref Context context)
         {
             var res = context.BTNodeOutput();

@@ -15,42 +15,57 @@ MonoBehaviour:
   m_Nodes:
   - id: 0
   - id: 1
-  - id: 1
-  - id: 1
   - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
     Childs:
     - FromID: 0
-      Index: 4
+      Index: 1
       ToID: 0
     ParentIndex: -1
   - CurrentIndex: 1
-    Childs: []
-    ParentIndex: -1
+    Childs:
+    - FromID: 100000
+      Index: 5
+      ToID: 100000
+    ParentIndex: 0
   - CurrentIndex: 2
     Childs: []
-    ParentIndex: -1
+    ParentIndex: 1
   - CurrentIndex: 3
     Childs: []
-    ParentIndex: -1
+    ParentIndex: 5
   - CurrentIndex: 4
     Childs: []
-    ParentIndex: 0
+    ParentIndex: 5
+  - CurrentIndex: 5
+    Childs:
+    - FromID: 100001
+      Index: 3
+      ToID: 100000
+    - FromID: 100000
+      Index: 4
+      ToID: 100000
+    ParentIndex: 1
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 175, y: 207}
+    Pos: {x: 273, y: 201}
   - Index: 1
-    Pos: {x: 463, y: 203}
+    Pos: {x: 401, y: 208}
   - Index: 2
-    Pos: {x: 612, y: 177.00002}
+    Pos: {x: 646, y: -180}
   - Index: 3
-    Pos: {x: 650, y: 220.00002}
+    Pos: {x: 851, y: -76}
   - Index: 4
-    Pos: {x: 436, y: 240}
-  ViewPosition: {x: -16, y: -76}
-  ViewScale: {x: 1.15, y: 1.15, z: 1}
+    Pos: {x: 858, y: -171}
+  - Index: 5
+    Pos: {x: 581, y: 221}
+  ViewPosition: {x: -200, y: 159.33333}
+  ViewScale: {x: 1, y: 1, z: 1}
   references:
     version: 1
     00000000:
@@ -58,8 +73,16 @@ MonoBehaviour:
       data:
         _i: 0
     00000001:
-      type: {class: , ns: , asm: }
+      type: {class: BTRoot, ns: ActionFlow, asm: ActionFlow}
     00000002:
-      type: {class: LogNodeAsset, ns: ActionFlow, asm: ActionFlow}
+      type: {class: BTSelector, ns: ActionFlow, asm: ActionFlow}
+    00000003:
+      type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
       data:
-        Text: e
+        LogText: vvvv
+    00000004:
+      type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
+      data:
+        LogText: 1111
+    00000005:
+      type: {class: BTSequence, ns: ActionFlow, asm: ActionFlow}

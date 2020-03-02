@@ -9,6 +9,8 @@ namespace ActionFlow
         public int Failure;
         public int Running;
     }
+    
+    //TODO:Refactoring
 
     /// <summary>
     /// 并行控制节点。所有子节点返回success则返回success，有一节点返回failure则直接返回failure

@@ -1,7 +1,9 @@
 
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace ActionFlow
@@ -20,15 +22,12 @@ namespace ActionFlow
             OutputDraw(node);
         }
 
-        private INode _nodeData;
+        private readonly INode _nodeData;
         private GraphNodeEditorInfo _nodeEditorInfo;
 
         public GraphNodeInfo NodeInfo { get; }
 
-        public INode NodeData
-        {
-            get => _nodeData;
-        }
+        public INode NodeData => _nodeData;
 
         public int Index { get; }
         
@@ -79,6 +78,28 @@ namespace ActionFlow
                 port.source = outputInfo;
                 port.portColor = NodeTypeInfo.IOModeColor(outputInfo.Mode);
                 outputContainer.Add(port);
+            }
+
+            if (nodeTypeInfo.BTOutput != null)
+            {
+                var count = Math.Min(nodeTypeInfo.BTOutput.MaxLink, 20);
+                for (var i = 0; i < count; i++)
+                {
+                    var capacity = Port.Capacity.Single;
+                    var port = InstantiatePort(Orientation.Horizontal, Direction.Output, capacity, null);
+                    if (count > 1)
+                    {
+                        port.AddToClassList("small-port");
+                    }
+                    
+                    port.portName = i.ToString();
+                    var newIOInfo = nodeTypeInfo.BTOutput.IOInfo.Clone();
+                    newIOInfo.ID += i;
+                    port.source = newIOInfo;
+                    port.portColor = NodeTypeInfo.IOModeColor(NodeTypeInfo.IOMode.BTOutput);
+                    
+                    outputContainer.Add(port);
+                }
             }
         }
         

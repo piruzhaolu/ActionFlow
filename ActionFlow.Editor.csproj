@@ -71,7 +71,7 @@
      <Compile Include="Packages\lipi.action-flow\Editor\UIControls\InspectorView.cs" />
      <Compile Include="Packages\lipi.action-flow\Editor\UIControls\NodeArrayField.cs" />
      <Compile Include="Packages\lipi.action-flow\Editor\UIControls\TwoPaneSplitView.cs" />
-     <None Include="Packages\lipi.action-flow\Editor\Resources\ActionFlowStyle.uss" />
+     <None Include="Packages\lipi.action-flow\Editor\Resources\ActionGraphView.uss" />
      <None Include="Packages\lipi.action-flow\Editor\Resources\ActionInspectorSystem.uss" />
      <None Include="Packages\lipi.action-flow\Editor\ActionFlow.Editor.asmdef" />
      <None Include="Packages\lipi.action-flow\Editor\Resources\TwoPaneSplitView.uss" />

@@ -7,8 +7,8 @@ namespace ActionFlow
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method, AllowMultiple =false)]
     public class NodeOutputBTAttribute : Attribute
     {
-
         public int MaxLink;
+        public int ID;
 
         public NodeOutputBTAttribute(int maxLink)
         {

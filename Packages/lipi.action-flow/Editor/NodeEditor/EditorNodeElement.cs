@@ -42,7 +42,7 @@ namespace ActionFlow
 
                 if (item.FieldType.IsArray && (item.MaxLink != -1)) //|| item.IOInfo != null
                 {
-//                    var arrayField = new NodeArrayField(mSO, item.Path, item, _node);//TODO:Re
+//                    var arrayField = new NodeArrayField(mSO, item.Path, item, _node);
 //                    ve.Add(arrayField);
                 }
                 else

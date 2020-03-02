@@ -16,13 +16,13 @@ namespace ActionFlow
         {
             set
             {
-                ulong v = (ulong)value & 0b1111;
+                var v = (ulong)value & 0b1111;
                 v <<= (i * 4);
                 Value |= v;
             }
             get
             {
-                ulong v = Value >> (i * 4);
+                var v = Value >> (i * 4);
                 return (BehaviorStatus)(v & 0b1111);
             }
         }
@@ -51,19 +51,6 @@ namespace ActionFlow
         {
             return typeof(T);
         }
-
-
-        //public T GetValue(ref Context context)
-        //{
-        //    return context.StateData.GetValue<T>(context.Index);
-        //}
-
-
-        //public void SetValue(ref Context context, T value)
-        //{
-        //    context.StateData.SetValue(context.Index, value);
-        //}
-
         
     }
 }

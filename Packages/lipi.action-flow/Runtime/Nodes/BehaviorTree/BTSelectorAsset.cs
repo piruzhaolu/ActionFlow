@@ -9,41 +9,44 @@ namespace ActionFlow
     }
 
     /// <summary>
-    /// 选择节点。 执行到返回Success节点时结束并返回Success
+    /// 选择节点。 执行到返回Success节点时结束并返回Success，全部节点执行完毕如果没返回Success则Failure
     /// </summary>
     [Serializable]
     [NodeInfo("BT/Selector")]
     public class BTSelector : StatusNodeBase<BTSelectorData>, IBehaviorCompositeNode
     {
+        // [HideInActionInspector]
+        // public NullStatus[] Childs;
 
-        [NodeOutputBT(10)]
-        [HideInActionInspector]
-        public NullStatus[] Childs;
-
+        [NodeOutputBT(5)]
         public BehaviorStatus BehaviorInput(ref Context context)
         {
-            if (Childs != null)
+            return ExecuteNext(ref context, -1);
+        }
+        
+        private BehaviorStatus ExecuteNext(ref Context context, int i)
+        {
+            while (true)
             {
-               // context.SetValue(this, default); 可以不重置，因为不会读出旧数据
-                int index = 0;
-                return ExecuteItem(ref context, ref index);
-                //for (int i = 0; i < Childs.Length; i++)
-                //{
-                //    var b = context.BTNodeOutput(i);
-                //    if (b == BehaviorStatus.Running)
-                //    {
-                //        context.SetValue(this, new BTSelectorData()
-                //        {
-                //            RunningIndex = i
-                //        });
-                //        return BehaviorStatus.Running;
-                //    } else if (b == BehaviorStatus.Success)
-                //    {
-                //        return BehaviorStatus.Success;
-                //    }
-                //}
+                var next = context.BTNextNode(i);
+                if (!next.Valid)
+                {
+                    return BehaviorStatus.Failure;
+                }
+                if (next.End) return BehaviorStatus.Failure;
+
+                var b = context.BTExecuteChildNode(next.ChildIndex);
+                if (b == BehaviorStatus.Success) return BehaviorStatus.Success;
+                if (b == BehaviorStatus.Running)
+                {
+                    context.SetValue(this, new BTSelectorData()
+                    {
+                        RunningIndex = i
+                    });
+                    return BehaviorStatus.Running;
+                }
+                i=next.ArrayIndex;
             }
-            return BehaviorStatus.Failure;
         }
 
         public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
@@ -56,38 +59,14 @@ namespace ActionFlow
                 return (false, nRes);
             }
             return (true, nRes);
-
-
-            //if (result == BehaviorStatus.Success) return (true, result);
-            //var val = context.GetValue(this);
-
-            //for (int i = val.RunningIndex+1; i < Childs.Length; i++)
-            //{
-            //    var b = context.BTNodeOutput(i);
-            //    if (b == BehaviorStatus.Success) return (true, b);
-            //    else if(b == BehaviorStatus.Running)
-            //    {
-            //        context.SetValue(this, new BTSelectorData()
-            //        {
-            //            RunningIndex = i
-            //        });
-            //        return (false, BehaviorStatus.None);
-            //    }
-            //}
-
-            //return (true, BehaviorStatus.Failure);
         }
 
 
         private BehaviorStatus ExecuteItem(ref Context context, ref int itemIndex, BehaviorStatus result = BehaviorStatus.None)
         {
-            BehaviorStatus res = result;
-            if (res == BehaviorStatus.None)
-            {
-                res = context.BTNodeOutput(itemIndex);
-            }
+            var res = result;
             if (res == BehaviorStatus.Success) return BehaviorStatus.Success;
-            else if (res == BehaviorStatus.Running)
+            if (res == BehaviorStatus.Running)
             {
                 context.SetValue(this, new BTSelectorData()
                 {
@@ -95,15 +74,7 @@ namespace ActionFlow
                 });
                 return BehaviorStatus.Running;
             } // else res == BehaviorStatus.failure to Next
-            itemIndex += 1;
-            if (itemIndex >= Childs.Length)
-            {
-                return BehaviorStatus.Failure;
-            }
-            else
-            {
-                return ExecuteItem(ref context, ref itemIndex);
-            }
+            return ExecuteNext(ref context, itemIndex);;
         }
 
 

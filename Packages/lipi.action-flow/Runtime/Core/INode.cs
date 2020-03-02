@@ -97,8 +97,19 @@ namespace ActionFlow {
         Success = 1,
         Failure = 2,
         Running = 3,
-        
     }
+
+    /// <summary>
+    /// 行为树节点中列表的下一个的信息
+    /// </summary>
+    public struct NextNodeInfo
+    {
+        public int ChildIndex; //节点在列表中的索引
+        public int ArrayIndex; //节点的顺序索引
+        public bool Valid; //列表为空
+        public bool End; //已经没有下一个节点
+    }
+    
 
     /// <summary>
     /// 行为树节点
@@ -112,14 +123,6 @@ namespace ActionFlow {
         /// <returns></returns>
         BehaviorStatus BehaviorInput(ref Context context);
 
-        /// <summary>
-        /// 当前Node的子节点从Running状态结束时调用,作用是子节点运行完成时候返回的通知
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="index">Running结束的Node的索引</param>
-        /// <returns>true则继续向上传递</returns>
-        //[Obsolete]
-        //(bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result);
     }
 
     /// <summary>

@@ -33,12 +33,12 @@ namespace ActionFlow
             _currentWindow = window;
 
 
-            styleSheets.Add(Resources.Load<StyleSheet>("ActionFlowStyle"));
+            styleSheets.Add(Resources.Load<StyleSheet>("ActionGraphView"));
 
 
-            nodeCreationRequest += creationRequestHandler;
-            graphViewChanged += graphViewChangedHandler;
-            viewTransformChanged += viewTransformChangedHandler;
+            nodeCreationRequest += CreationRequestHandler;
+            graphViewChanged += GraphViewChangedHandler;
+            viewTransformChanged += ViewTransformChangedHandler;
         }
 
         private void RunningEntityMenuAction(DropdownMenuAction obj)
@@ -56,8 +56,6 @@ namespace ActionFlow
             var intV = Convert.ToInt32(arr[arr.Length - 1]);
             return intV == _selectedIndex ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal;
         }
-
-
 
 
         private readonly GraphEditor _currentWindow;
@@ -116,12 +114,11 @@ namespace ActionFlow
                     sIndex = 0;
                     _selectedIndex = 0;
                 }
-               // _runningEntityMenu.menu.AppendAction($"{infos[i].Name}-{infos[i].Index}", RunningEntityMenuAction, RunningEntityMenuStatusAction);
             }
         }
 
 
-        public readonly List<(ActionNode, float)> Ps = new List<(ActionNode, float)>();
+        private readonly List<(ActionNode, float)> Ps = new List<(ActionNode, float)>();
 
 
         //在编辑器Playing中每帧调用，显示节点状态
@@ -144,16 +141,10 @@ namespace ActionFlow
                     //item.InputTween((t - inputTime));
                 }
 
-                if (v != NodeCycle.Inactive)
-                {
-                    item.Running = true;
-                } else
-                {
-                    item.Running = false;
-                }
+                item.Running = v != NodeCycle.Inactive;
             }
             Ps.Sort(psSortFn);
-            for (int i = 0; i < Ps.Count; i++)
+            for (var i = 0; i < Ps.Count; i++)
             {
                 var tValue = t - (Ps[i].Item2 + i * 0.1f);
                 if (tValue >= 0)
@@ -223,15 +214,12 @@ namespace ActionFlow
 
         private Edge CreateEdge(ActionNode cNode, NodeLink link, NodeTypeInfo.IOMode a, NodeTypeInfo.IOMode b)
         {
-            Port port1 = cNode?.GetPort(link.FromID, a);
+            var port1 = cNode?.GetPort(link.FromID, a);
             var tNode = GetNode(link.Index);
-            Port port2 = tNode?.GetPort(link.ToID, b);
-            if (port1 != null && port2 != null)
-            {
-                var edge = port1.ConnectTo(port2);
-                return edge;
-            }
-            return null;
+            var port2 = tNode?.GetPort(link.ToID, b);
+            if (port1 == null || port2 == null) return null;
+            var edge = port1.ConnectTo(port2);
+            return edge;
         }
 
 
@@ -261,17 +249,16 @@ namespace ActionFlow
 
 
 
-        private void creationRequestHandler(NodeCreationContext context)
+        private void CreationRequestHandler(NodeCreationContext context)
         {
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), EditorNodeCreator.GetCreateor(this));
         }
 
-        private void viewTransformChangedHandler(GraphView graphView)
+        private void ViewTransformChangedHandler(GraphView graphView)
         {
-            if (GraphAsset != null) {
-                GraphAsset.ViewPosition = graphView.viewTransform.position;
-                GraphAsset.ViewScale = graphView.viewTransform.scale;
-            }
+            if (GraphAsset == null) return;
+            GraphAsset.ViewPosition = graphView.viewTransform.position;
+            GraphAsset.ViewScale = graphView.viewTransform.scale;
 
         }
 
@@ -295,7 +282,7 @@ namespace ActionFlow
         }
 
 
-        private GraphViewChange graphViewChangedHandler(GraphViewChange graphViewChange)
+        private GraphViewChange GraphViewChangedHandler(GraphViewChange graphViewChange)
         {
             if (graphViewChange.edgesToCreate != null)
             {

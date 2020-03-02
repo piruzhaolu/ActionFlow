@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ActionFlow
 {
-
+    //TODO:Refactoring
     [Serializable]
     [NodeInfo("BT/Wait")]
     public class BTWait : INode, IBehaviorNode, ISleepable //StatusNodeBase<NullStatus>

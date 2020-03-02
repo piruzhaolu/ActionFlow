@@ -38,7 +38,7 @@ namespace ActionFlow
             return info;
         }
 
-        public static string TypeToString(Type type)
+        private static string TypeToString(Type type)
         {
             if (type == typeof(int)) return "int";
             if (type == typeof(float)) return "float";
@@ -96,12 +96,12 @@ namespace ActionFlow
                 throw new Exception($"{_valueType.Name} no add Serializable Attribute");
             }
 
-            buildInputInfo();
-            buildOutputInfo();
+            BuildInputInfo();
+            BuildOutputInfo();
             BuildFieldInfo();
             BuildOutputParmInfo();
-            buildBTInputInfo();
-            buildBTOutputInfo();
+            BuildBTInputInfo();
+            BuildBTOutputInfo();
         }
 
         public List<IOInfo> Inputs; //输入项列表
@@ -111,7 +111,7 @@ namespace ActionFlow
         public List<IOInfo> BTInputs; //行为树输入
         public BTOutputInfo BTOutput; //行为树输出
 
-        private Type _valueType;
+        private readonly Type _valueType;
 
 
         private void BuildOutputParmInfo()
@@ -172,9 +172,9 @@ namespace ActionFlow
                 IOInfo btIOInfo = null;
 
                 var attrs = item.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-                if (attrs != null && attrs.Length > 0  && attrs[0] is NodeOutputBTAttribute BTAttribute)
+                if (attrs.Length > 0  && attrs[0] is NodeOutputBTAttribute btAttribute)
                 {
-                    maxLink = BTAttribute.MaxLink;
+                    maxLink = btAttribute.MaxLink;
                     btIOInfo = new IOInfo()
                     {
                         ID = NodeLink.BTIDPre,
@@ -199,11 +199,11 @@ namespace ActionFlow
             object Get(System.Reflection.FieldInfo item)
             {
                 var attrs = item.GetCustomAttributes(typeof(NodeInputParmAttribute), false);
-                var attr = (attrs != null && attrs.Length > 0) ? attrs[0] : null;
+                var attr = (attrs.Length > 0) ? attrs[0] : null;
                 if (attr != null) return attr;
 
                 attrs = item.GetCustomAttributes(typeof(NodeOutputParmAttribute), false);
-                attr = (attrs != null && attrs.Length > 0) ? attrs[0] : null;
+                attr = (attrs.Length > 0) ? attrs[0] : null;
 
                 return attr;
             }
@@ -211,17 +211,17 @@ namespace ActionFlow
         }
 
 
-        private void buildOutputInfo()
+        private void BuildOutputInfo()
         {
             Outputs = new List<IOInfo>();
             
             var valueType = _valueType;
 
             var methods = valueType.GetMethods();
-            for (int i = 0; i < methods.Length; i++)
+            for (var i = 0; i < methods.Length; i++)
             {
                 var arris = methods[i].GetCustomAttributes(typeof(NodeOutputAttribute),false);
-                for (int j = 0; j < arris.Length; j++)
+                for (var j = 0; j < arris.Length; j++)
                 {
                     var outputAttri = (NodeOutputAttribute)arris[j];
                     Outputs.Add(new IOInfo()
@@ -248,24 +248,23 @@ namespace ActionFlow
         }
 
 
-        private void buildInputInfo()
+        private void BuildInputInfo()
         {
             Inputs = new List<IOInfo>();
             var valueType = _valueType;
             var methods = valueType.GetMethods();
-            for (int i = 0; i < methods.Length; i++)
+            for (var i = 0; i < methods.Length; i++)
             {
                 if (methods[i].Name == "OnInput")
                 {
                     var parameters = methods[i].GetParameters();
-                    var aInputInfo = new IOInfo();
-                    aInputInfo.Mode = IOMode.Input;
+                    var aInputInfo = new IOInfo {Mode = IOMode.Input};
                     if (parameters.Length > 1)
                     {
                         aInputInfo.Type = parameters[1].ParameterType;
                     }
                     var attri = methods[i].GetCustomAttributes(typeof(NodeInputAttribute), false);
-                    if (attri != null && attri.Length > 0)
+                    if (attri.Length > 0)
                     {
                         var nodeAttri = (NodeInputAttribute)attri[0];
                         aInputInfo.ID = nodeAttri.ID;// TypeInfoHash(aInputInfo.Type, IOMode.Input, nodeAttri.ID);
@@ -278,7 +277,7 @@ namespace ActionFlow
         }
 
 
-        private void buildBTInputInfo()
+        private void BuildBTInputInfo()
         {
             BTInputs = new List<IOInfo>();
             var methods = _valueType.GetMethods();
@@ -286,56 +285,52 @@ namespace ActionFlow
             {
                 if (method.Name == "BehaviorInput")
                 {
-                    var info = new IOInfo();
-                    info.Mode = IOMode.BTInput;
-                    info.ID = NodeLink.BTIDPre;
+                    var info = new IOInfo {Mode = IOMode.BTInput, ID = NodeLink.BTIDPre};
                     BTInputs.Add(info);
                 }
             }
 
         }
 
-        private void buildBTOutputInfo()
+        private void BuildBTOutputInfo()
         {
             BTOutput = null;
 
-            //--------------Field在buildFieldInfo里处理
-            //var fields = _valueType.GetFields();
-            //foreach (var field in fields)
-            //{
-            //    var attri = field.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-            //    if (attri == null || attri.Length == 0) continue;
-            //    if (attri[0] is NodeOutputBTAttribute outputBT)
-            //    {
-            //        var isArray = field.FieldType.IsArray ? 100 : 0;
-            //        BTOutput = new BTOutputInfo()
-            //        {
-            //            MaxLink = outputBT.MaxLink,
-            //            IOInfo = new IOInfo()
-            //            {
-            //                Mode = IOMode.BTOutput,
-            //                ID = NodeLink.BTIDPre + isArray
-            //            }
-            //        };
-            //    }
-            //}
+           // --------------Field在buildFieldInfo里处理
+            var fields = _valueType.GetFields();
+            foreach (var field in fields)
+            {
+                var attri = field.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
+                if ( attri.Length == 0) continue;
+                if (!(attri[0] is NodeOutputBTAttribute outputBT)) continue;
+                //var isArray = field.FieldType.IsArray ? 100 : 0;
+              
+                BTOutput = new BTOutputInfo
+                {
+                    MaxLink = outputBT.MaxLink,
+                    IOInfo = new IOInfo
+                    {
+                        Mode = IOMode.BTOutput,
+                        ID = NodeLink.BTIDPre + outputBT.ID*100
+                    }
+                };
+            }
 
             var methods = _valueType.GetMethods();
             foreach (var method in methods)
             {
                 var attri = method.GetCustomAttributes(typeof(NodeOutputBTAttribute), false);
-                if (attri == null) continue;
                 foreach (var item in attri)
                 {
                     if (item is NodeOutputBTAttribute btAttri)
                     {
                         BTOutput = new BTOutputInfo()
                         {
-                            MaxLink = 1,
+                            MaxLink = btAttri.MaxLink,
                             IOInfo = new IOInfo()
                             {
                                 Mode = IOMode.BTOutput,
-                                ID = NodeLink.BTIDPre
+                                ID = NodeLink.BTIDPre+btAttri.ID*100
                             }
                         };
                     }
@@ -355,14 +350,26 @@ namespace ActionFlow
 
             public string GetName()
             {
-                if (Name != string.Empty) return Name;
+                if (!string.IsNullOrEmpty(Name)) return Name;
                 if (Type == null) return IOModeToString(Mode);
-                else return IOModeToString(Mode, $" ({TypeToString(Type)})");
+                return IOModeToString(Mode, $" ({TypeToString(Type)})");
             }
 
             public bool Match(IOInfo port)
             {
                 return Mode.Match(port.Mode);
+            }
+            
+            
+            public IOInfo Clone()
+            {
+                return new IOInfo
+                {
+                    ID = ID, 
+                    Name = Name,
+                    Mode = Mode,
+                    Type = Type
+                };
             }
         }
 

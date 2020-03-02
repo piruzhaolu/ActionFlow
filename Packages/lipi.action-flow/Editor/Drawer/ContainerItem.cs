@@ -49,9 +49,11 @@ namespace ActionFlow
         {
             if (_target == null) return;
             var type = _target.GetType();
-            var fields = type.GetFields();
+            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
             {
+                if (field.GetCustomAttribute<HideInInspector>() != null) continue;
+                if (field.IsPrivate && field.GetCustomAttribute<SerializeField>() == null) continue;
                 var success = DrawBaseField(field, _parentPath,_indent);
                 if (!success) success = DrawArray(field, _parentPath);
                 if (!success) DrawInstance(field, _parentPath,_indent);
