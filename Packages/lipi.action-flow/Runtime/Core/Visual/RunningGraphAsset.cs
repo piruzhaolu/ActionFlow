@@ -68,20 +68,20 @@ namespace ActionFlow
             return -1000;
         }
 
-        //private int CurrentFrameCount = -1;
-        //private float CurrentFrameFirstTime = 0f;
+        // private int _currentFrameCount = -1;
+        // private float _currentFrameFirstTime = 0f;
         public void SetInputTime(GraphAsset graphAsset, ActionStateIndex index)
         {
             if (Map.TryGetValue(graphAsset, out var infoList))
             {
-                //var rTime = Time.realtimeSinceStartup;
-                //if (CurrentFrameCount != Time.frameCount)
-                //{
-                //    CurrentFrameCount = Time.frameCount;
-                //    CurrentFrameFirstTime = rTime;// Time.realtimeSinceStartup;
-                //}
+                var rTime = Time.realtimeSinceStartup;
+                // if (_currentFrameCount != Time.frameCount)
+                // {
+                //     _currentFrameCount = Time.frameCount;
+                //     _currentFrameFirstTime = rTime;// Time.realtimeSinceStartup;
+                // }
                 //Debug.Log($"Time:{CurrentFrameFirstTime}:{Time.realtimeSinceStartup}");
-                infoList.InputTime[index] = Time.realtimeSinceStartup;// (rTime - CurrentFrameFirstTime) * 100000f + rTime;
+                infoList.InputTime[index] = rTime;//(rTime - _currentFrameFirstTime) * 100000f + rTime;
             }
         }
 

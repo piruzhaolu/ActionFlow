@@ -4,7 +4,6 @@ using ActionFlow;
 
 namespace ActionFlow
 {
-    //TODO:Refactoring
     /// <summary>
     /// 始终返回Failure的节点
     /// </summary>
@@ -12,6 +11,10 @@ namespace ActionFlow
     [NodeInfo("BT/AlwaysFailure")]
     public class BTAlwaysFailure : INode,  IBehaviorCompositeNode
     {
+        [HideInInspector]
+        public int _i; //无意义,暂时处理无数据类型序列化出错
+        
+        
         [NodeOutputBT]
         public BehaviorStatus BehaviorInput(ref Context context)
         {

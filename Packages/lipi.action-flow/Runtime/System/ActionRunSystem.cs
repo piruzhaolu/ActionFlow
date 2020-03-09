@@ -73,6 +73,9 @@ namespace ActionFlow
                         
                         if ( nodeList[actives[k]] is IStatusNode node)
                         {
+#if UNITY_EDITOR
+                            RunningGraphAsset.Instance.SetInputTime(context.Graph, context.Index );
+#endif
                             node.OnTick(ref context);
                         }
                     }

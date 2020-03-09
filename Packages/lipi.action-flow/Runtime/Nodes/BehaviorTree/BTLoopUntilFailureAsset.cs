@@ -3,7 +3,6 @@ using System.Collections;
 
 namespace ActionFlow
 {
-    //TODO:Refactoring
     /// <summary>
     ///  子节点执行失败则返回成功，否则一直处理Running状态
     /// </summary>
@@ -11,58 +10,55 @@ namespace ActionFlow
     [NodeInfo("BT/LoopUntilFailure")]
     public class BTLoopUntilFailure : StatusNodeBase<NullStatus>, IBehaviorCompositeNode
     {
+        [HideInInspector]
+        public int _i; //无意义,暂时处理无数据类型序列化出错
+        
         [NodeOutputBT]
         public BehaviorStatus BehaviorInput(ref Context context)
         {
             var res = context.BTNodeOutput();
-            if (res == BehaviorStatus.Running)
+            switch (res)
             {
-                context.Inactive(this);
-                return BehaviorStatus.Running;
+                case BehaviorStatus.Running:
+                    context.Inactive(this);
+                    return BehaviorStatus.Running;
+                case BehaviorStatus.Failure:
+                    return BehaviorStatus.Success;
+                default:
+                    context.Active(this);
+                    return BehaviorStatus.Running;
             }
-            else if (res == BehaviorStatus.Failure)
-            {
-                return BehaviorStatus.Success;
-            } else
-            {
-                context.Active(this);
-                return BehaviorStatus.Running;
-            }
-
         }
 
         public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
         {
-            if(result == BehaviorStatus.Failure)
+            switch (result)
             {
-
-                return (true, BehaviorStatus.Success);
-            } else if(result == BehaviorStatus.Success)
-            {
-                context.Active(this);
-                return (false, BehaviorStatus.None);
-            }
-            else
-            {
-                return (false, BehaviorStatus.None);
-                //throw new System.Exception("Child node completion cannot be Running ");
+                case BehaviorStatus.Failure:
+                    return (true, BehaviorStatus.Success);
+                case BehaviorStatus.Success:
+                    context.Active(this);
+                    return (false, BehaviorStatus.None);
+                default:
+                    return (false, BehaviorStatus.None);
             }
         }
 
         public override void OnTick(ref Context context)
         {
             var res = context.BTNodeOutput();
-            if (res == BehaviorStatus.Running)
+            switch (res)
             {
-                context.Inactive(this);
-            } else if (res == BehaviorStatus.Failure)
-            {
-                context.Inactive(this);
-                context.BehaviorRunningCompleted(BehaviorStatus.Success);
-            }
-            else
-            {
-                context.Active(this);
+                case BehaviorStatus.Running:
+                    context.Inactive(this);
+                    break;
+                case BehaviorStatus.Failure:
+                    context.Inactive(this);
+                    context.BehaviorRunningCompleted(BehaviorStatus.Success);
+                    break;
+                default:
+                    context.Active(this);
+                    break;
             }
         }
     }

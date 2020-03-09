@@ -55,7 +55,7 @@ namespace ActionFlow
             var nodeInfo = Graph.NodeInfo[Index.NodeIndex];
             if (nodeInfo.Childs == null) return;
 
-            for (int i = 0; i < nodeInfo.Childs.Count; i++)
+            for (var i = 0; i < nodeInfo.Childs.Count; i++)
             {
                 var child = nodeInfo.Childs[i];
                 if (child.FromID == outputID)

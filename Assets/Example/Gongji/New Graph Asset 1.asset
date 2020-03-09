@@ -19,6 +19,11 @@ MonoBehaviour:
   - id: 3
   - id: 4
   - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
+  - id: 10
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -38,19 +43,46 @@ MonoBehaviour:
     ParentIndex: 1
   - CurrentIndex: 3
     Childs: []
-    ParentIndex: 5
+    ParentIndex: 8
   - CurrentIndex: 4
     Childs: []
     ParentIndex: 5
   - CurrentIndex: 5
     Childs:
-    - FromID: 100001
-      Index: 3
-      ToID: 100000
     - FromID: 100000
       Index: 4
       ToID: 100000
+    - FromID: 100003
+      Index: 7
+      ToID: 100000
+    - FromID: 100002
+      Index: 8
+      ToID: 100000
+    - FromID: 100001
+      Index: 9
+      ToID: 100000
+    - FromID: 100004
+      Index: 10
+      ToID: 100000
     ParentIndex: 1
+  - CurrentIndex: 6
+    Childs: []
+    ParentIndex: 5
+  - CurrentIndex: 7
+    Childs: []
+    ParentIndex: 5
+  - CurrentIndex: 8
+    Childs:
+    - FromID: 100000
+      Index: 3
+      ToID: 100000
+    ParentIndex: 5
+  - CurrentIndex: 9
+    Childs: []
+    ParentIndex: 5
+  - CurrentIndex: 10
+    Childs: []
+    ParentIndex: 5
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 273, y: 201}
@@ -59,12 +91,22 @@ MonoBehaviour:
   - Index: 2
     Pos: {x: 646, y: -180}
   - Index: 3
-    Pos: {x: 851, y: -76}
+    Pos: {x: 995, y: 272}
   - Index: 4
-    Pos: {x: 858, y: -171}
+    Pos: {x: 723, y: 82}
   - Index: 5
-    Pos: {x: 581, y: 221}
-  ViewPosition: {x: -200, y: 159.33333}
+    Pos: {x: 580, y: 219}
+  - Index: 6
+    Pos: {x: 903, y: 58}
+  - Index: 7
+    Pos: {x: 741, y: 379}
+  - Index: 8
+    Pos: {x: 727, y: 285}
+  - Index: 9
+    Pos: {x: 796, y: 199}
+  - Index: 10
+    Pos: {x: 731, y: 466}
+  ViewPosition: {x: -220.66667, y: -74}
   ViewScale: {x: 1, y: 1, z: 1}
   references:
     version: 1
@@ -74,8 +116,12 @@ MonoBehaviour:
         _i: 0
     00000001:
       type: {class: BTRoot, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
     00000002:
       type: {class: BTSelector, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
     00000003:
       type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
       data:
@@ -86,3 +132,25 @@ MonoBehaviour:
         LogText: 1111
     00000005:
       type: {class: BTSequence, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000006:
+      type: {class: BTAlwaysFailure, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000007:
+      type: {class: BTLog, ns: ActionFlow, asm: ActionFlow}
+      data:
+        LogText: 3333
+    00000008:
+      type: {class: BTAlwaysSuccess, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000009:
+      type: {class: BTWait, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Time: 4
+    0000000A:
+      type: {class: BTWait, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Time: 3

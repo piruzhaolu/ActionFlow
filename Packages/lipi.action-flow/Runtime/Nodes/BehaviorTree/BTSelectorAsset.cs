@@ -17,6 +17,8 @@ namespace ActionFlow
     {
         // [HideInActionInspector]
         // public NullStatus[] Childs;
+        [HideInInspector]
+        public int _i; //无意义,暂时处理无数据类型序列化出错
 
         [NodeOutputBT(5)]
         public BehaviorStatus BehaviorInput(ref Context context)
@@ -41,7 +43,7 @@ namespace ActionFlow
                 {
                     context.SetValue(this, new BTSelectorData()
                     {
-                        RunningIndex = i
+                        RunningIndex = next.ArrayIndex
                     });
                     return BehaviorStatus.Running;
                 }

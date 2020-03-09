@@ -10,48 +10,46 @@ namespace ActionFlow
         public int Running;
     }
     
-    //TODO:Refactoring
-
     /// <summary>
-    /// 并行控制节点。所有子节点返回failure则返回failure，有一节点返回success则直接返回success
+    /// 并行控制节点,会同时调用子节点。所有子节点返回failure则返回failure，有一节点返回success则直接返回success
     /// </summary>
     [System.Serializable]
     [NodeInfo("BT/ParallelSel")]
     public class BTParallelSelector : StatusNodeBase<BTParallelSelectorData>, IBehaviorCompositeNode
     {
-        [NodeOutputBT(10)]
-        public NullStatus[] Childs;
-
-
+        [HideInInspector]
+        public int _i; //无意义,暂时处理无数据类型序列化出错
+        
+        [NodeOutputBT(5)]
         public BehaviorStatus BehaviorInput(ref Context context)
         {
             var status = new BTParallelSelectorData();
 
-            for (int i = 0; i < Childs.Length; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var v = context.BTNodeOutput(i);
-                if (v == BehaviorStatus.Success)
+                switch (v)
                 {
-                    status = new BTParallelSelectorData();
-                    context.SetValue(this, status);
-                    return BehaviorStatus.Success;
-                } else if (v == BehaviorStatus.Success)
-                {
-                    status.Success += 1;
-                }else if(v == BehaviorStatus.Running)
-                {
-                    status.Running += 1;
+                    case BehaviorStatus.Success:
+                        status.Success += 1;
+                        break;
+                    case BehaviorStatus.Failure:
+                        status.Failure += 1;
+                        break;
+                    case BehaviorStatus.Running:
+                        status.Running += 1;
+                        break;
                 }
             }
+
+            if (status.Success >= 0)
+            {
+                context.SetValue(this, default);
+                return BehaviorStatus.Success;
+            }
+            
             context.SetValue(this, status);
-            if (status.Running > 0)
-            {
-                return BehaviorStatus.Running;
-            }
-            else
-            {
-                return BehaviorStatus.Failure;
-            }
+            return status.Running > 0 ? BehaviorStatus.Running : BehaviorStatus.Failure;
         }
 
         public (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result)
@@ -63,21 +61,12 @@ namespace ActionFlow
             }
             if (result == BehaviorStatus.Success)
             {
-                context.SetValue(this, new BTParallelSelectorData());
+                context.SetValue(this, default);
                 return (true, BehaviorStatus.Success);
-            } else
-            {
-                status.Running -= 1;
-                context.SetValue(this, status);
-                if (status.Running <= 0)
-                {
-                    return (true, BehaviorStatus.Failure);
-                }
-                else
-                {
-                    return (false, BehaviorStatus.Running);
-                }
             }
+            status.Running -= 1;
+            context.SetValue(this, status);
+            return status.Running <= 0 ? (true, BehaviorStatus.Failure) : (false, BehaviorStatus.Running);
 
         }
 

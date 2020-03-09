@@ -118,7 +118,7 @@ namespace ActionFlow
         }
 
 
-        private readonly List<(ActionNode, float)> Ps = new List<(ActionNode, float)>();
+        private readonly List<(ActionNode, float time)> Ps = new List<(ActionNode, float)>();
 
 
         //在编辑器Playing中每帧调用，显示节点状态
@@ -134,24 +134,26 @@ namespace ActionFlow
             {
                 var v = info.GetNodeCycle(item.Index);
                 var inputTime = RunningGraphAsset.Instance.GetInputTime(GraphAsset,
-                    new ActionStateIndex() { ChunkIndex = _selectedIndex, NodeIndex = item.Index });
-                if (t - inputTime < 3f)
-                {
-                    Ps.Add((item, inputTime));
-                    //item.InputTween((t - inputTime));
-                }
+                    new ActionStateIndex { ChunkIndex = _selectedIndex, NodeIndex = item.Index });
+                
+                // if (t - inputTime <= 1f)
+                // {
+                //     //Ps.Add((item, inputTime));
+                //     item.InputTween((t - inputTime));
+                // }
 
                 item.Running = v != NodeCycle.Inactive;
+                item.InputTween(inputTime);
             }
-            Ps.Sort(psSortFn);
-            for (var i = 0; i < Ps.Count; i++)
-            {
-                var tValue = t - (Ps[i].Item2 + i * 0.1f);
-                if (tValue >= 0)
-                {
-                    Ps[i].Item1.InputTween(tValue);
-                }
-            }
+            // Ps.Sort(psSortFn);
+            // for (var i = 0; i < Ps.Count; i++)
+            // {
+            //     var tValue = t - (Ps[i].time + i * 0.1f);
+            //     if (tValue >= 0)
+            //     {
+            //         Ps[i].Item1.InputTween(tValue);
+            //     }
+            // }
 
         }
 
@@ -167,7 +169,7 @@ namespace ActionFlow
             foreach (var item in list)
             {
                 item.Running = false;
-                item.InputTween(1f);
+                item.InputTweenEnd();
             }
         }
 

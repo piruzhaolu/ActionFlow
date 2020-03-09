@@ -16,12 +16,16 @@ namespace ActionFlow
             NodeInfo = nodeInfo;
             _nodeEditorInfo = nodeEditorInfo;
             Index = index;
+            _statusBar = new ActionNodeStatusBar();
+            titleContainer.Add(_statusBar);
+            
 
             SetTitle();
             InputDraw(node);
             OutputDraw(node);
         }
 
+        private ActionNodeStatusBar _statusBar;
         private readonly INode _nodeData;
         private GraphNodeEditorInfo _nodeEditorInfo;
 
@@ -40,12 +44,20 @@ namespace ActionFlow
             var info = _nodeData.GetType().GetCustomAttribute<NodeInfoAttribute>(false);
             title = info != null ? info.Name : string.Empty;
         }
+        
+        
 
         public bool Running;
         
         public void InputTween(float t)
         {
-            
+            _statusBar.SetStatus(Running, t);
+            //_statusBar;
+        }
+
+        public void InputTweenEnd()
+        {
+            _statusBar.End();
         }
 
         
