@@ -61,9 +61,6 @@ MonoBehaviour:
     - FromID: 100001
       Index: 9
       ToID: 100000
-    - FromID: 100004
-      Index: 10
-      ToID: 100000
     ParentIndex: 1
   - CurrentIndex: 6
     Childs: []
@@ -106,8 +103,8 @@ MonoBehaviour:
     Pos: {x: 796, y: 199}
   - Index: 10
     Pos: {x: 731, y: 466}
-  ViewPosition: {x: -220.66667, y: -74}
-  ViewScale: {x: 1, y: 1, z: 1}
+  ViewPosition: {x: 130, y: 204}
+  ViewScale: {x: 0.5, y: 0.5, z: 1}
   references:
     version: 1
     00000000:

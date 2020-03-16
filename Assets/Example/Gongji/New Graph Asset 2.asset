@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f6427a75449f247aea85fb091c55b1, type: 3}
+  m_Name: New Graph Asset 2
+  m_EditorClassIdentifier: 
+  m_Nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  Entry: 0
+  NodeInfo:
+  - CurrentIndex: 0
+    Childs:
+    - FromID: 0
+      Index: 1
+      ToID: 0
+    ParentIndex: -1
+  - CurrentIndex: 1
+    Childs:
+    - FromID: 100000
+      Index: 2
+      ToID: 100000
+    ParentIndex: 3
+  - CurrentIndex: 2
+    Childs:
+    - FromID: 100000
+      Index: 3
+      ToID: 100000
+    ParentIndex: 1
+  - CurrentIndex: 3
+    Childs:
+    - FromID: 0
+      Index: 4
+      ToID: 0
+    ParentIndex: 2
+  - CurrentIndex: 4
+    Childs: []
+    ParentIndex: 3
+  NodeEditorInfo:
+  - Index: 0
+    Pos: {x: 188, y: 192}
+  - Index: 1
+    Pos: {x: 350, y: 246}
+  - Index: 2
+    Pos: {x: 501, y: 245}
+  - Index: 3
+    Pos: {x: 658, y: 236}
+  - Index: 4
+    Pos: {x: 846, y: 248}
+  ViewPosition: {x: 0, y: 0}
+  ViewScale: {x: 1, y: 1, z: 1}
+  references:
+    version: 1
+    00000000:
+      type: {class: EntryNode, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000001:
+      type: {class: BTRoot, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000002:
+      type: {class: BTSelector, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000003:
+      type: {class: BridgeToUniversalAsset, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000004:
+      type: {class: LogNodeAsset, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Text: NNN

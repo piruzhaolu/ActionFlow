@@ -97,8 +97,10 @@
      <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSelectorAsset.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTSequenceAsset.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\BehaviorTree\BTWaitNodeAsset.cs" />
+     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Bridge\BridgeToBehavioTreeAsset.cs" />
+     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Bridge\BridgeToUniversalAsset.cs" />
+     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Debug\LogNodeAsset.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\EntryNodeAsset.cs" />
-     <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\LogNodeAsset.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\Nodes\Parm\ParmFloatNodeAsset.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionCreateSystem.cs" />
      <Compile Include="Packages\lipi.action-flow\Runtime\System\ActionRemoveSystem.cs" />

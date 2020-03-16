@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.Graphs;
 using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Graphs;
 #endif
 
 namespace ActionFlow
 {
 
-    [CreateAssetMenu(menuName = "GraphAsset")]
+    [CreateAssetMenu(menuName = "ActionFlow/GraphAsset")]
     public class GraphAsset : ScriptableObject
     {
 
