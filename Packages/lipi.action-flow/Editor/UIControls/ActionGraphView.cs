@@ -392,7 +392,15 @@ namespace ActionFlow
                     Index = reverse?outputNode.Index:inputNode.Index,
                     ToID = reverse?outputInfo.ID: inputInfo.ID
                 });
-                childNode.NodeInfo.ParentIndex = mainNode.Index;
+                if (mainNode.NodeData is IBehaviorNode)
+                {
+                    childNode.NodeInfo.ParentIndex = mainNode.Index;
+                }
+                else
+                {
+                    //非行为树的父节点暂时无意义
+                }
+                
 
                 mainNode.EdgeAddOrRemove();
             }

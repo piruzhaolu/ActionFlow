@@ -18,6 +18,10 @@ MonoBehaviour:
   - id: 2
   - id: 3
   - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -35,7 +39,10 @@ MonoBehaviour:
   - CurrentIndex: 2
     Childs:
     - FromID: 100000
-      Index: 3
+      Index: 7
+      ToID: 100000
+    - FromID: 100001
+      Index: 5
       ToID: 100000
     ParentIndex: 1
   - CurrentIndex: 3
@@ -47,19 +54,48 @@ MonoBehaviour:
   - CurrentIndex: 4
     Childs: []
     ParentIndex: 3
+  - CurrentIndex: 5
+    Childs:
+    - FromID: 0
+      Index: 6
+      ToID: 0
+    ParentIndex: 2
+  - CurrentIndex: 6
+    Childs:
+    - FromID: 0
+      Index: 5
+      ToID: 0
+    ParentIndex: 5
+  - CurrentIndex: 7
+    Childs:
+    - FromID: 100000
+      Index: 8
+      ToID: 100000
+    ParentIndex: 2
+  - CurrentIndex: 8
+    Childs: []
+    ParentIndex: 7
   NodeEditorInfo:
   - Index: 0
     Pos: {x: 188, y: 192}
   - Index: 1
     Pos: {x: 350, y: 246}
   - Index: 2
-    Pos: {x: 501, y: 245}
+    Pos: {x: 501, y: 246}
   - Index: 3
     Pos: {x: 658, y: 236}
   - Index: 4
     Pos: {x: 846, y: 248}
-  ViewPosition: {x: 0, y: 0}
-  ViewScale: {x: 1, y: 1, z: 1}
+  - Index: 5
+    Pos: {x: 629, y: 324}
+  - Index: 6
+    Pos: {x: 861, y: 347}
+  - Index: 7
+    Pos: {x: 639, y: 147}
+  - Index: 8
+    Pos: {x: 817, y: 137}
+  ViewPosition: {x: 125.333336, y: -26.666666}
+  ViewScale: {x: 0.8695652, y: 0.8695652, z: 1}
   references:
     version: 1
     00000000:
@@ -82,3 +118,19 @@ MonoBehaviour:
       type: {class: LogNodeAsset, ns: ActionFlow, asm: ActionFlow}
       data:
         Text: NNN
+    00000005:
+      type: {class: BridgeToUniversalRunningAsset, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000006:
+      type: {class: Wait, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Time: 3
+    00000007:
+      type: {class: BTAlwaysFailure, ns: ActionFlow, asm: ActionFlow}
+      data:
+        _i: 0
+    00000008:
+      type: {class: BTWait, ns: ActionFlow, asm: ActionFlow}
+      data:
+        Time: 3

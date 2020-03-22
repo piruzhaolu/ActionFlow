@@ -134,7 +134,8 @@ namespace ActionFlow {
         /// 当前Node的子节点从Running状态结束时调用,作用是子节点运行完成时候返回的通知
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="index">Running结束的Node的索引</param>
+        /// <param name="childIndex"></param>
+        /// <param name="result"></param>
         /// <returns>true则继续向上传递</returns>
         (bool, BehaviorStatus) Completed(ref Context context, int childIndex, BehaviorStatus result);
     }
