@@ -1,58 +1,34 @@
-﻿//using UnityEngine;
-//using System.Collections;
-//using ActionFlow;
-//using Unity.Transforms;
-//using Unity.Mathematics;
-//
-//public struct RotateNodeData
-//{
-//    public float Value;
-//    public float StartTime;
-//}
-//
-//[System.Serializable]
-//public class RotateNode : StatusNodeBase<RotateNodeData>, INodeInput, IBehaviorNode
-//{
-//    [NodeInputParm]
-//    public float RotateValue = 0.1f;
-//
-//    public float TimeLength = 1;
-//
-//    public BehaviorStatus BehaviorInput(ref Context context)
-//    {
-//        context.Active(this);
-//        context.SetValue(this, new RotateNodeData()
-//        {
-//            Value = 0,//UnityEngine.Random.Range(0.1f, 0.2f),
-//            StartTime = Time.time
-//        });
-//        return BehaviorStatus.Running;
-//    }
-//
-//    public void OnInput(ref Context context)
-//    {
-//        context.Active(this);
-//        context.SetValue(this, new RotateNodeData()
-//        {
-//            Value = UnityEngine.Random.Range(0.1f, 0.2f)
-//        });
-//    }
-//
-//    public override void OnTick(ref Context context)
-//    {
-//        var rv = context.GetParameter(RotateValue);
-//        var data = context.GetValue(this);
-//        var r = context.EntityManager.GetComponentData<Rotation>(context.CurrentEntity);
-//       
-//        r.Value = math.mul(r.Value, quaternion.RotateY(rv + data.Value));
-//        context.EntityManager.SetComponentData(context.CurrentEntity, r);
-//        if (Time.time - data.StartTime > TimeLength)
-//        {
-//            context.BehaviorRunningCompleted(BehaviorStatus.Success);
-//            context.Inactive(this);
-//        }
-//
-//    }
-//
-//    
-//}
+﻿using UnityEngine;
+using System.Collections;
+using ActionFlow;
+using Unity.Transforms;
+using Unity.Mathematics;
+using Random = Unity.Mathematics.Random;
+
+
+[NodeInfo("Game/Rotate")]
+[System.Serializable]
+public class RotateNode : INode, IBehaviorNode
+{
+    public float RotateValueS;
+    public float RotateValueE;
+    
+    private Random _random;
+    
+    public BehaviorStatus BehaviorInput(ref Context context)
+    {
+        if (_random.state == 0 || _random.state == 0x6E624EB7u)
+        {
+            _random= new Random(5584);
+        }
+        
+        var rValue = _random.NextFloat(RotateValueS, RotateValueE);
+        var r = context.EntityManager.GetComponentData<Rotation>(context.CurrentEntity);
+        r.Value = math.mul(r.Value, quaternion.RotateY(rValue));
+        context.EntityManager.SetComponentData(context.CurrentEntity, r);
+        
+        return BehaviorStatus.Success;
+    }
+
+    
+}

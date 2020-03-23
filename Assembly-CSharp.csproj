@@ -50,6 +50,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Example\Scripts\MoveNodeAsset.cs" />
      <Compile Include="Assets\Example\Scripts\RotateNodeAsset.cs" />
      <Compile Include="Assets\Example\Scripts\SleepComponentSystem.cs" />
      <Compile Include="Assets\Example\Scripts\SleepingNodeAsset.cs" />

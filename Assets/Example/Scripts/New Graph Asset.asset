@@ -19,7 +19,6 @@ MonoBehaviour:
   - id: 3
   - id: 4
   - id: 5
-  - id: 6
   Entry: 0
   NodeInfo:
   - CurrentIndex: 0
@@ -43,7 +42,7 @@ MonoBehaviour:
       Index: 4
       ToID: 100000
     - FromID: 100002
-      Index: 6
+      Index: 5
       ToID: 100000
     ParentIndex: 1
   - CurrentIndex: 3
@@ -54,25 +53,20 @@ MonoBehaviour:
     ParentIndex: 2
   - CurrentIndex: 5
     Childs: []
-    ParentIndex: -1
-  - CurrentIndex: 6
-    Childs: []
     ParentIndex: 2
   NodeEditorInfo:
   - Index: 0
-    Pos: {x: 99, y: 181}
+    Pos: {x: 236, y: 188}
   - Index: 1
-    Pos: {x: 208, y: 168}
+    Pos: {x: 372, y: 179}
   - Index: 2
-    Pos: {x: 353, y: 169}
+    Pos: {x: 509, y: 177}
   - Index: 3
-    Pos: {x: 511.00003, y: 165}
+    Pos: {x: 678, y: 148}
   - Index: 4
-    Pos: {x: 519, y: 253}
+    Pos: {x: 680, y: 236}
   - Index: 5
-    Pos: {x: 531, y: 410}
-  - Index: 6
-    Pos: {x: 513, y: 341}
+    Pos: {x: 679, y: 323}
   ViewPosition: {x: 0, y: 0}
   ViewScale: {x: 1, y: 1, z: 1}
   references:
@@ -93,16 +87,14 @@ MonoBehaviour:
       type: {class: RotateNode, ns: , asm: Assembly-CSharp}
       data:
         RotateValueS: 0
-        RotateValueE: 0
+        RotateValueE: 100
     00000004:
       type: {class: BTWait, ns: ActionFlow, asm: ActionFlow}
       data:
-        Time: 0
+        Time: 0.5
     00000005:
-      type: {class: , ns: , asm: }
-    00000006:
       type: {class: MoveNodeAsset, ns: , asm: Assembly-CSharp}
       data:
-        DurationRangeS: 0
-        DurationRangeE: 0
-        Speed: 1
+        DurationRangeS: 1
+        DurationRangeE: 5
+        Speed: 5
